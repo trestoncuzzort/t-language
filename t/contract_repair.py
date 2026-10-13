@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""t/contract_repair.py: proved specification repair (programme R1, internal/RESEARCH-2026-10-07-zoom-out.md section 8).
+"""t/contract_repair.py: proved specification repair.
 
 `t/audit.py` finds survivors: one-edit mutants that compute something different from the real program while meeting
 its `ensures` everywhere on the bounded domain. This module proposes the missing clauses, picks a set that kills every

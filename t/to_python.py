@@ -22,7 +22,7 @@ its code points and leaves as a `str`, a `list` arrives as a tuple and leaves as
 The proof covers the inputs the program's `requires` admits, of the types it declares, and nothing else, so the
 Python refuses the rest instead of answering it: a `ValueError` outside the `requires`, a `TypeError` for an
 argument that is not of the declared type ("a runtime wrapper enforces the proved input domain",
-internal/ENTERPRISE-PLAN-2026-09-19.md; Meyer's design by contract, where a violated precondition is the caller's
+the design notes; Meyer's design by contract, where a violated precondition is the caller's
 fault and is reported at the call). The check runs the guard beside the interpreter too: on drawn inputs the
 `requires` excludes, the Python must refuse.
 
@@ -465,7 +465,7 @@ def translate(task: dict, tests: list[str] | None = None, fn_name: str | None = 
     else:
         result = _OUT[out].format(v="_t_result")
     spec = [surface.pexpr(c) for c in task.get("requires", [])], [surface.pexpr(c) for c in task.get("ensures", [])]
-    doc = [f'{INDENT}"""The program dawnr proved in `t`, written in Python (checked against `t`, not itself proved).',
+    doc = [f'{INDENT}"""The program proved in `t`, written in Python (checked against `t`, not itself proved).',
            ""]
     doc += [f"{INDENT}requires {r}" for r in spec[0]] + [f"{INDENT}ensures  {e}" for e in spec[1]]
     if spec[0]:

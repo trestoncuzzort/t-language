@@ -1,5 +1,5 @@
 """t/test_refute_at.py: refute_at.witness_at, the interpreter half of refuting a finding at a named input. No kernel
-is invoked here; t/FLIGHT-FINDINGS.md has the kernels' verdicts.
+is invoked here.
 
 Run: python3 t/test_refute_at.py
 """

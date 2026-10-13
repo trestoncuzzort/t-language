@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_datatype_fields.py: datatypes with fields (SPEC.md "Datatypes (v2): fields", PREDICT T23, 2026-10-07).
+"""test_datatype_fields.py: datatypes with fields (SPEC.md "Datatypes (v2): fields", 2026-10-07).
 Text-level checks only, no kernel runs: the notation (parse, print, the `X.y` rule), the interpreter (field values,
 definedness, the witness ladder and its shown form), the three lowerings that state the construct (Dafny, Verus,
 Lean), the four that refuse it by name, the name sanitizer, and the Python hand-back's refusal."""
@@ -173,7 +173,7 @@ def test_lean():
 
 
 def test_every_kernel_lowers_fields():
-    # Rocq, F*, SPARK and Frama-C lower datatypes since PREDICT T34-T37 (test_rocq_datatypes.py,
+    # Rocq, F*, SPARK and Frama-C lower datatypes since 2026-10-07-T37 (test_rocq_datatypes.py,
     # test_fstar_datatypes.py, test_spark_datatypes.py, test_framac_datatypes.py)
     import lower_fstar
     import lower_rocq

@@ -20,7 +20,7 @@ value, which is only correct in EXACT mode; under CAPACITY mode (a
 later append into the same buffer, `ctx.seq_len[target]` set) it must
 use `src`'s own logical length instead, or it silently over-reads `src`
 and lies about how much of the buffer the copy actually filled. Measured
-directly on the real cell this traces to: t/COVERAGE-lifted-785.md's
+directly on the real cell this traces to: the coverage census's
 appendArrayToSeq (dafny-synthesis task 106), whose `r := s;` precedes a
 capacity-tracked append loop; before this fix framac timed out on the
 loop's own `len(r) == len(s) + i_v2` establishment goal (the invariant

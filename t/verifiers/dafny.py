@@ -298,8 +298,8 @@ _CERT_HEAD = re.compile(r"^lemma t_refutation_certificate\(\)\s*$")
 
 
 def _solver() -> str:
-    """Boogie's SMT solver: the bundled Z3 unless T_DAFNY_SOLVER=cvc5. Set only for the common-mode audit (PREDICT
-    T22's Dafny half, internal/RESEARCH-2026-10-07-zoom-out.md D6), never for the matrix of record; a non-default
+    """Boogie's SMT solver: the bundled Z3 unless T_DAFNY_SOLVER=cvc5. Set only for the common-mode audit (design
+    decision D6), never for the matrix of record; a non-default
     solver is named in version(), so a table built under it says so."""
     s = os.environ.get("T_DAFNY_SOLVER", "z3")
     if s not in ("z3", "cvc5"):
@@ -704,7 +704,6 @@ def verify(path: Path, budget: int = DEFAULT_RLIMIT) -> Result:
         # after) and downWhileGreater plus two mult tasks (a dropped bound
         # invariant dafny's own inference recovers, which _Admissible's
         # havoc rule does not model).
-        #
         # Exit 0 and no "out of resource" are part of the test, not
         # decoration: dafny's tally does not count a starved method as an
         # error, so "1 verified, 0 errors, 1 out of resource" (measured on

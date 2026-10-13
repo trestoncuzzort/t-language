@@ -3,7 +3,7 @@
 
 `t/nl_stdin.py` built the signature extractor and measured the result:
 **3,058 of 20,509 stdin-shaped problems accepted, 1,038 of them in the pool**
-(APPS 480, CodeContests 558, `t/COVERAGE-nl-stdin.md:19-21`). Nothing ever
+(APPS 480, CodeContests 558, `the coverage census:19-21`). Nothing ever
 imported it. `spec_experiment.pool()` never called it, so those 1,038 existed as
 a measurement and nothing else, while `LIMITS.md` said the corpus was exhausted.
 

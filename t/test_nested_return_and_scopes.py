@@ -1,5 +1,5 @@
-"""t/test_nested_return_and_scopes.py: PREDICT T69's lowering fixes, read from the emitted text. No kernel is invoked
-here; the kernels' verdicts are in t/FLIGHT.md.
+"""t/test_nested_return_and_scopes.py: the lowering fixes, read from the emitted text. No kernel is invoked
+here.
 
 PX4's Ringbuffer::push_back returns `(false, _end)` two `if`s deep and declares `available` in both arms of an `if`.
 That one function found four lowering faults:

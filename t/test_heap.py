@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_heap.py: SPEC.md "Heap (v1)" (PREDICT T46), arrays by reference: the notation, the checker, the
+"""test_heap.py: SPEC.md "Heap (v1)" , arrays by reference: the notation, the checker, the
 interpreter, the twins, the Python hand-back, Dafny's native lowering and the other kernels' refusal by name.
 Standard library only, no kernel runs."""
 from __future__ import annotations
@@ -125,7 +125,7 @@ def test_dafny():
 
 
 def test_framac():
-    # PREDICT T50: C pointers natively; old(a)[i] read at Pre through a \let-bound index; a whole old array refused
+    # C pointers natively; old(a)[i] read at Pre through a \let-bound index; a whole old array refused
     src = tlib.lower(load("swap_at"), "framac")
     ok("int swap_at_t(int *a, int a_n, int i, int j)" in src and "requires \\valid(a + (0 .. a_n - 1));" in src
        and "assigns a[0 .. a_n - 1];" in src, "a written pointer: valid, assigns its elements")
@@ -143,7 +143,7 @@ def test_framac():
 
 
 def test_copy_in_copy_out():
-    # PREDICT T53: the value kernels take the heap through tshape.desugar_heap; the rewrite computes what the in-place
+    # the value kernels take the heap through tshape.desugar_heap; the rewrite computes what the in-place
     # program computes (result and final array) on every domain point
     import tshape
     for n in TASKS + ("scale_all", "offset_all", "relu_all"):

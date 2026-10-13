@@ -3,7 +3,7 @@
 For each problem: the source (`algoveri_data/<id>/dafny_spec.dfy` in AlgoVeri at commit
 8e313b0e8110a781009d4b67ca93b3771b5dc9db), how each clause of its Dafny contract is stated in t (`Dafny => t`), any
 restatement, and how the program in `<id>.t` was proved in Dafny while it was written. The verdicts in all seven
-kernels are in `../ALGOVERI.md`.
+kernels come from `python3 t/cli.py verify t/algoveri`.
 
 The rule the programs were written under: every `requires` and `ensures` of the Dafny method appears in t with the
 same meaning, the preamble's predicates and functions become spec functions, and no clause is weakened, dropped or
@@ -482,7 +482,7 @@ Notes: Task is named trial_division_optimized (the id); the Dafny method name wa
 
 ## llrbt_rotateleft
 
-Status: stated (2026-10-07, PREDICT T38). Task is named rotate_left; the Dafny method name was fixup_rotate_left.
+Status: stated (2026-10-07). Task is named rotate_left; the Dafny method name was fixup_rotate_left.
 
 ```
 datatype Option<T> = Some(value: T) | None; datatype Node = Node(val: int, is_red: bool, left: Option<Node>, right: Option<Node>) => datatype Tree = Nil | Node(val: int, is_red: bool, left: Tree, right: Tree)
@@ -505,7 +505,7 @@ Notes: Body: the standard left rotation, `Node(rv, c, Node(v, true, l, rl), rr)`
 
 ## llrbt_rotateright
 
-Status: stated (2026-10-07, PREDICT T38). Task is named rotate_right; the Dafny method name was fixup_rotate_right.
+Status: stated (2026-10-07). Task is named rotate_right; the Dafny method name was fixup_rotate_right.
 
 ```
 datatype Option<T> = Some(value: T) | None; datatype Node = Node(val: int, is_red: bool, left: Option<Node>, right: Option<Node>) => datatype Tree = Nil | Node(val: int, is_red: bool, left: Tree, right: Tree)
@@ -528,7 +528,7 @@ Notes: Body: the mirror of rotate_left, `Node(lv, c, ll, Node(v, true, lr, r))`;
 
 ## llrbt_flipcolor
 
-Status: stated (2026-10-07, PREDICT T38). Task is named flip_colors, as the Dafny method.
+Status: stated (2026-10-07). Task is named flip_colors, as the Dafny method.
 
 ```
 datatype Option<T> = Some(value: T) | None; datatype Node = Node(val: int, is_red: bool, left: Option<Node>, right: Option<Node>) => datatype Tree = Nil | Node(val: int, is_red: bool, left: Tree, right: Tree)

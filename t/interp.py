@@ -703,7 +703,7 @@ def ev(e: dict, env: dict, funs: dict, st: St):
             raise Undef(f"{e['var']} read before assignment", expr=e)
         return v
     if "old" in e:
-        # SPEC.md "Heap (v1)" (PREDICT T46): e in the task's entry state, which the run that set OLD_KEY recorded
+        # SPEC.md "Heap (v1)" : e in the task's entry state, which the run that set OLD_KEY recorded
         o = env.get(OLD_KEY)
         if o is None:
             raise Budget("old(...) outside a task run that recorded its entry state")
@@ -1028,7 +1028,7 @@ def ev(e: dict, env: dict, funs: dict, st: St):
     if op == "endswith":
         return _str_endswith(a[0], a[1])
     if op in ("+", "-", "*", "div") and isinstance(a[0], float):
-        # SPEC.md "Floats (v1)" (PREDICT T48): binary64, rounded to nearest even (Python's float is exactly that);
+        # SPEC.md "Floats (v1)" : binary64, rounded to nearest even (Python's float is exactly that);
         # DEFINED IFF the result is finite: a zero divisor, an overflow or a NaN has no value, as SPARK makes each a
         # check
         x, y = a[0], a[1]
@@ -1182,7 +1182,7 @@ def exec_body(body: list, env: dict, funs: dict, st: St, hook=None,
             name, e = s["assign"]
             env[name] = ev(e, env, funs, st)
         elif "par" in s:
-            # SPEC.md "Concurrency (v1)" (PREDICT T47): the iterations in REVERSE order, a second schedule beside the
+            # SPEC.md "Concurrency (v1)" : the iterations in REVERSE order, a second schedule beside the
             # kernels' sequential one; `par-race` makes every schedule compute the same thing, so a disagreement
             # with a kernel would expose a gap in the rule
             w = s["par"]
@@ -1193,7 +1193,7 @@ def exec_body(body: list, env: dict, funs: dict, st: St, hook=None,
                 exec_body(w["body"], env, funs, st, hook, trace=trace, path=(*location, "par", "body"))
             env.pop(w["var"], None)
         elif "aset" in s:
-            # SPEC.md "Heap (v1)" (PREDICT T46): one element written; the array is a seq value replaced whole, which
+            # SPEC.md "Heap (v1)" : one element written; the array is a seq value replaced whole, which
             # is the same program as writing in place because nothing aliases it
             name, ie, ve = s["aset"]
             cur = env[name]
@@ -1653,7 +1653,7 @@ DT_BOOL_VARIANTS_CAP = 3 * DT_SHAPE_CAP   # bool variants of the labelled shapes
 
 
 def _bool_variants(shapes: list, name: str, recs: list) -> list:
-    """SPEC.md "Datatypes (v3): recursion" (PREDICT T38): a labelled shape fixes every bool field at its ladder's first
+    """SPEC.md "Datatypes (v3): recursion" : a labelled shape fixes every bool field at its ladder's first
     value, so a red-black node is always black and no shape meets a red-child precondition (measured on
     llrbt_rotate_left: no input satisfied `requires`). For a recursive constructor with a bool field, each shape
     also enters with one node's bools flipped, every node in turn, then with all of them flipped; after the plain

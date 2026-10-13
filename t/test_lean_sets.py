@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_lean_sets.py: finite sets in Lean (SPEC.md "Finite sets", PREDICT T29, 2026-10-07). Text-level checks only,
+"""test_lean_sets.py: finite sets in Lean (SPEC.md "Finite sets", 2026-10-07). Text-level checks only,
 no kernel runs. A set is core Std's extensional tree set of ints, `Std.ExtTreeSet Int compare`, whose `=` is
 extensional; the lowering imports exactly that module, which the Lean adapter allows and nothing else."""
 from __future__ import annotations
@@ -66,7 +66,7 @@ def test_what_is_still_refused_by_name():
 
 
 def test_set_ranged_quantifiers():
-    # PREDICT T30: in a Prop, membership is the range; computed as a Bool, the set's list of members; a connective
+    # in a Prop, membership is the range; computed as a Bool, the set's list of members; a connective
     # over one is a Bool; the closers carry the simp bridge
     src = lean("all_pos_set")
     ok(".toList.all (fun (" in src, "computed as toList.all")

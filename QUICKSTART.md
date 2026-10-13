@@ -62,43 +62,12 @@ With only `lo <= r and r <= hi`, Dafny proves a program that returns 1 where cla
     clamp: 10 mutants, 10 killed, 0 same, 0 diverge, 0 survivor(s)
       dafny: real verified
 
-Over 316 Dafny-verified DafnyBench programs, the audit finds 44 where Dafny proves such a second program, and 23
-of those are gaps in the specification ([t/AUDIT-DAFNYBENCH.md](t/AUDIT-DAFNYBENCH.md)).
 
-## 5. Prove real flight code
-
-`t/flight/` holds 27 functions from PX4-Autopilot, the open-source drone autopilot, restated statement by
-statement (`t/flight/README.md` gives the file and line of each). `Ringbuffer::push_back` is the byte queue under
-MAVLink's message buffer:
-
-    $ t verify t/flight/px4_rb_push_back.t
-    dafny: COUNTS, real is a real proof; collapse-if twin is refuted, the kernel found this wrong
-    verus: COUNTS, real is a real proof; collapse-if twin is refuted, the kernel found this wrong
-    spark: COUNTS, real is a real proof; collapse-if twin is refuted, the kernel found this wrong
-    framac: COUNTS, real is a real proof; collapse-if twin is refuted, the kernel found this wrong
-    lean: COUNTS, real is a real proof; collapse-if twin is refuted, the kernel found this wrong
-    rocq: COUNTS, real is a real proof; collapse-if twin is refuted, the kernel found this wrong
-    fstar: COUNTS, real is a real proof; collapse-if twin is refuted, the kernel found this wrong
-
-21 s. To check that the t program is PX4's program, the harness compiles PX4's own sources at the pinned commit and
-runs them on every domain point (it needs `g++` and the network once, to fetch the headers):
-
-    $ python3 t/flight/px4_diff.py
-    ...
-    px4_rb_push_back: agrees (104 points)
-    ...
-    finding px4_wrap_bin_any: PX4 breaks the contract here, as t's body does
-      {"input": {"bin": -2147483648, "bin_count": 2147483647}, "t": "-1", "px4": "-1", "breaks_contract": true}
-      {"input": {"bin": -73, "bin_count": 72}, "t": "-1", "px4": "-1", "breaks_contract": true}
-
-The last lines are a defect the kernels found in PX4 (the first input is the kernels' own certificate): collision prevention's bin index goes negative below
-`-bin_count` (`t/flight/README.md`, "Contracts PX4's callers do not establish").
-
-## 6. Read a verdict
+## 5. Read a verdict
 
     $ t explain refuted
     dafny: refuted is refuted, the kernel found this wrong
     ...
 
 Next: [t/TUTORIAL.md](t/TUTORIAL.md) teaches the language, [t/SYNTAX.md](t/SYNTAX.md) has one example per construct,
-and [REPORT.md](REPORT.md) is the method and its measurements.
+and [t/SPEC.md](t/SPEC.md) is the normative specification.

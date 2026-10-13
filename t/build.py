@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""t/build.py: ship what was proved (programme R4, internal/RESEARCH-2026-10-07-zoom-out.md section 8).
+"""t/build.py: ship what was proved.
 
 A kernel proves a lowering of the routine; a backend and a toolchain then turn that lowering into a program that
 runs. Neither step is verified (receipt cdec03946087: Dafny's backends and the target toolchains are in its trusted

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_datatype_recursion.py: recursive datatypes (SPEC.md "Datatypes (v3): recursion", PREDICT T25, 2026-10-07).
+"""test_datatype_recursion.py: recursive datatypes (SPEC.md "Datatypes (v3): recursion", 2026-10-07).
 Text-level checks only, no kernel runs:
 - the rules (recursive fields, the base case, datatype measures);
 - the interpreter (the ladder's rounds, the size measure);
@@ -109,7 +109,7 @@ def test_dafny():
     ok(re.search(r"match tr \{\n\s+case Leaf =>\n\s+s := 0;\n\s+case Node\(v, l, r\) =>\n\s+var t0 := Tree_sum\(l\);",
                  src), "a self-call in a case arm is hoisted inside a match statement")
     src = text(lower_dafny, "tree_insert")
-    ok(re.search(r"if \(x < v\) \{\n\s+var t\d+ := Tree_insert\(l, x, lo, v\);", src),   # PREDICT T60: the bounded form
+    ok(re.search(r"if \(x < v\) \{\n\s+var t\d+ := Tree_insert\(l, x, lo, v\);", src),   # the bounded form
        "a self-call in an if branch is hoisted inside an if statement")
     src = text(lower_dafny, "tree_mirror")
     ok("function mirror(q: Tree): Tree" in src, "a datatype spec_fun result is spelled by name")
@@ -167,7 +167,7 @@ def _is_bst(v) -> bool:
 
 
 def test_labelled_shapes():
-    # G12, PREDICT T27: after the near corner, every shape of up to five nodes, int fields labelled in order
+    # G12, after the near corner, every shape of up to five nodes, int fields labelled in order
     lad = interp.ladders(load("tree_sum"))["datatype:Tree"]
     shapes = lad[13:]
     ok(len(shapes) >= 60 and all(_is_bst(v) for v in shapes),
@@ -195,7 +195,7 @@ def test_tree_certificates_g12():
 
 
 def test_two_kernels_refuse_by_name():
-    # Rocq and F* lower datatypes since PREDICT T34 and T35 (test_rocq_datatypes.py, test_fstar_datatypes.py)
+    # Rocq and F* lower datatypes since 2026-10-07 (test_rocq_datatypes.py, test_fstar_datatypes.py)
     task = load("tree_sum")
     for mod in (lower_spark, lower_framac):
         try:
@@ -206,7 +206,7 @@ def test_two_kernels_refuse_by_name():
 
 
 def test_bool_variants_reach_a_red_child():
-    # PREDICT T38: a recursive datatype with a bool field gets each labelled shape with one node's bools flipped
+    # a recursive datatype with a bool field gets each labelled shape with one node's bools flipped
     import interp
     rb = surface.parse("datatype Tree = Nil | Node(val: int, is_red: bool, left: Tree, right: Tree)\nt 1\n"
                        "task f(x: Tree) returns (r: int)\n  ensures r == 0\n{\n  r := 0;\n}\n")

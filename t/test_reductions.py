@@ -111,7 +111,7 @@ def test_twins_handback_and_kernel_text():
        "any over a comprehension is the quantifier in Verus: %s" % v)
     v = lowered("members_upto", "verus")
     ok(".to_set()" in v and "broadcast use t_toset_sub;" in v, "toset in Verus with its membership lemmas: %s" % v)
-    # SPARK and F* carry max/min of one argument since PREDICT T21 (test_extrema_of_one.py)
+    # SPARK and F* carry max/min of one argument since 2026-10-07 (test_extrema_of_one.py)
     sp = lowered("largest", "spark")
     ok("T_Maxs (S, Len (S))" in sp, "largest in SPARK: the prefix-form T_Maxs: %s" % sp[-400:])
     fs = lowered("largest", "fstar")

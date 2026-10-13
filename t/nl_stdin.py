@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""nl_stdin.py: the missing instrument COVERAGE-nl.md names but does not
+"""nl_stdin.py: the missing instrument the coverage census names but does not
 
 build. That file found 20509 of nl/'s 24748 problems are stdin-shaped
 (APPS and CodeContests: whole-program text I/O, no function signature) and
@@ -13,7 +13,7 @@ mbpp_dfy.parse_assertion and spec_experiment.pool() produce for MBPP,
 built here from raw stdin text instead of a Python assert.
 
     python3 nl_stdin.py --json ~/tup/t-corpora/nl-census/nl-stdin.json \\
-                         --out COVERAGE-nl-stdin.md
+                         --out the coverage census
 
 For every stdin-shaped problem (an APPS record whose input_output carries
 no fn_name; every CodeContests record -- the same split nl_census.py
@@ -45,7 +45,7 @@ required to be exactly one integer token (`multi-value-output`,
 `non-integer-output`). A problem is `accepted` only when every sample
 clears both checks; it is additionally `in_pool` when its first Python
 solution parses and nl_census.solution_tags tags no gap on it (the same
-detectors COVERAGE-nl.md's AST census uses, imported rather than
+detectors the coverage census's AST census uses, imported rather than
 reimplemented).
 
 This is a lexical instrument over SAMPLES, not a solver: it does not run
@@ -365,7 +365,7 @@ def cc_first_solution(rec: dict) -> str | None:
 def attach_solution(result: dict, first_sol: str | None) -> None:
     """Mutates an `accepted` result in place with has_solution,
     solution_gaps (nl_census.GAPS tags on the first Python solution, read
-    with nl_census.solution_tags -- the same detectors COVERAGE-nl.md's
+    with nl_census.solution_tags -- the same detectors the coverage census's
     solution-construct census uses) and in_pool."""
     has_solution = first_sol is not None
     solution_gaps: list[str] = []

@@ -306,7 +306,7 @@ from .discover import find, missing
 GNATPROVE = find("T_GNATPROVE", ['gnatprove'], [".local/gnatprove/**/bin/gnatprove", ".alire/**/bin/gnatprove"])
 _GNATPROVE_WHY = missing("spark", "T_GNATPROVE", ['gnatprove'], [".local/gnatprove/**/bin/gnatprove", ".alire/**/bin/gnatprove"])
 # ROADMAP 16.2, spark round 2 (2026-09-12, wf_092dca46-e41-4, spark-2): the
-# r20 sweep (t/COVERAGE-lifted-785.md, 32 jobs) marked two cells FLAKED --
+# r20 sweep (the coverage census, 32 jobs) marked two cells FLAKED --
 # 282 elementWiseSubtraction (real=verified twin=timeout) and 445
 # multiplyElements (real=timeout twin=timeout) -- both closed already by
 # wave G. Re-measured alone (--jobs 2 --flake 3, nothing else running) on
@@ -333,7 +333,7 @@ _GNATPROVE_WHY = missing("spark", "T_GNATPROVE", ['gnatprove'], [".local/gnatpro
 # only load-induced misreads on quiet re-check.
 DEFAULT_STEPS = 20_000
 WALL_S = 180
-# PREDICT T58: a program over Long_Float gets 100x the steps. Raising a limit helps only where the prover reports
+# a program over Long_Float gets 100x the steps. Raising a limit helps only where the prover reports
 # reaching it (SPARK UG 7.8, read under receipt eeffe70f487e), and floats were measured to do exactly that: rate_limit
 # proves at 10x; pid_step's non-linear goal reports the limit at 100x too and stays a timeout. Integer programs keep
 # DEFAULT_STEPS, so no other cell's budget moves.
@@ -344,7 +344,7 @@ FLOAT_STEPS = 2_000_000
 # ROADMAP 15.1, t/BUDGETS-2026-09-19.md). That table made this kernel the
 # most expensive of the seven by 18x -- median 21.88 s against the
 # next-slowest kernel's 1.23 s, and ZERO of 35 committed tasks inside ten
-# seconds -- and t/COVERAGE-apps-2026-09-19.md made `spark`/`timeout` the
+# seconds -- and the coverage census made `spark`/`timeout` the
 # commonest kernel/outcome pair in the whole corpus (196 answers). So the
 # cost was PROFILED rather than guessed, on this box (24 cores, idle, FSF
 # 16.1.0 / Why3 1.8.2), against t/tasks/is_prime.t, a median lowering:
@@ -1034,8 +1034,8 @@ def _escalate_variant_timeout(src_text: str, unit: str, audit: dict,
 
 def _prover() -> str:
     """The prover gnatprove runs: the pinned Z3 unless T_SPARK_PROVER names another of its built-ins (cvc5, altergo;
-    gnatprove's own default is cvc5). Set only for the common-mode audit (PREDICT T22, internal/RESEARCH-2026-10-07-
-    zoom-out.md D6), never for the matrix of record; a non-default prover is named in version(), so a table built
+    gnatprove's own default is cvc5). Set only for the common-mode audit (design decision D6),
+    never for the matrix of record; a non-default prover is named in version(), so a table built
     under it says so."""
     p = os.environ.get("T_SPARK_PROVER", "z3")
     if p not in ("z3", "cvc5", "altergo"):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """test_rocq_datatypes.py: datatypes in Rocq (SPEC.md "Datatypes (v1)", "(v2): fields", "(v3): recursion", the Rocq
-note of 2026-10-07, PREDICT T34). Text-level checks only, no kernel runs:
+note of 2026-10-07). Text-level checks only, no kernel runs:
 - a datatype is an Inductive, with a `decide equality` decider and a projection per field;
 - `case` is Rocq's match, a field read owes its constructor, `==` is Leibniz in a Prop and decided in a bool;
 - recursion on a datatype parameter is a structural Fixpoint, proved by induction;
@@ -93,7 +93,7 @@ def test_certificate_grounds_constructors():
 
 
 def test_refused_by_name():
-    # PREDICT T42: a seq field lowers (bag_size); `==` on a datatype holding one refuses by name (checked_tail)
+    # a seq field lowers (bag_size); `==` on a datatype holding one refuses by name (checked_tail)
     task = load("checked_tail")
     try:
         lower_rocq.lower(task, task["body"])
@@ -110,7 +110,7 @@ def test_seq_field():
 
 
 def test_loop_state_alternative():
-    # PREDICT T41: a datatype task's t_dis and t_side split matched variables as their last alternative
+    # a datatype task's t_dis and t_side split matched variables as their last alternative
     src = rocq("some_negative")
     ok("| solve [ t_dt_cases; t_vc0 ] ]" in src, "t_dis's last alternative")
     ok(src.count("solve [ t_dt_cases; t_vc0 ]") >= 2, "and t_side's")

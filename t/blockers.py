@@ -4,7 +4,7 @@
 The Lean Kernel Arena makes each checker's gap legible by naming, per
 checker, how many tasks it alone keeps out of the all-checkers bar. This
 is the same instrument over t's own sweep tables (AGREEMENT.md,
-COVERAGE-lifted-785.md): a table has one row per task and one cell per
+the coverage census): a table has one row per task and one cell per
 kernel reading "real / twin"; a cell counts when it reads exactly
 "verified / refuted" (anything else, including a "(FLAKED)" suffix,
 "no-twin / no-twin", "abstain / abstain" and "lower-error / lower-error",
@@ -146,7 +146,7 @@ def render_section(col_names: list[str], cell_rows: dict[str, dict[str, str]]) -
 
 
 def render_kernels(col_names: list[str], cell_rows: dict[str, dict[str, str]]) -> str:
-    """The '## Per kernel' section (internal/RESEARCH-2026-10-06-landscape.md, decision D3): per kernel, the tasks it
+    """The '## Per kernel' section (decision D3): per kernel, the tasks it
     carries (does not abstain on by name), the tasks whose real program it verifies, how many of those it also
     refutes the twin of (the share is the headline beside the proof count: a verified real whose twin is not refuted
     proves a spec that cannot tell right from wrong), and its refusals by name; then the all-columns count. Cells are

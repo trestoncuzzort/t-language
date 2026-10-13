@@ -1,5 +1,5 @@
-"""t/test_bool_compare_and_lean_cascade.py: PREDICT T68's two lowering changes, read from the emitted text. No kernel
-is invoked here; the kernels' verdicts are in t/FLIGHT.md.
+"""t/test_bool_compare_and_lean_cascade.py: the two lowering changes, read from the emitted text. No kernel
+is invoked here.
 
 - Frama-C: a t bool is carried by a C int, so a bool `==`/`!=` in executable C compares the negations (`!a != !b`)
   and never the ints themselves, which would call 1 and 2 different (CERT EXP20-C's class).

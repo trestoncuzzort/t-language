@@ -224,8 +224,7 @@ driver WP is about to use.
 ships tkinter and Tcl/Tk 8.6 but `Tk()` dies with `Can't find a usable
 init.tcl` unless `TCL_LIBRARY` and `TK_LIBRARY` point into its own `lib/`.
 Homebrew's `python@3.12` (3.12.14) with `python-tk@3.12` (Tk 9.0) needs
-nothing, registers as the app "Python" on the desktop, and is what
-`internal/MACHINES.md` describes, so the venv is built on it:
+nothing, registers as the app "Python" on the desktop, so the venv is built on it:
 
 ```bash
 brew install python@3.12 python-tk@3.12
@@ -241,15 +240,6 @@ by the adapters' globs, and the two PATH entries that matter on this Mac
 With the matrix running under `T_WATCH=~/.cache/t-watch/events.jsonl` (the
 app's default), the Live checks tab showed each cell as it started and ended.
 
-**Two more lines for the loop on a Mac.** `locallm/model.py` now takes the
-plain attention path when training with dropout on MPS, because torch 2.14's
-fused kernel there raises `scaled_dot_product_attention for MPS does not
-support dropout` (same math, no fusion; the first `t/loop_filter.py` round
-died on it). And `t/loop_filter.py` resolves `--work` to an absolute path,
-because it runs `locallm/train.py` from `locallm/` and a relative work
-directory was read from the wrong place. With both, round 0 trains on the
-M3 Max's GPU (the bench: 26.6 ms per step on the default preset, 2,000 steps
-in 53 s).
 
 Two things that were not the machine: the network lost DNS for a few minutes
 mid-install (`curl: (6) Could not resolve host` for github.com, opam.ocaml.org,

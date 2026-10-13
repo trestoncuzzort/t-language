@@ -60,7 +60,7 @@ V1_OPS well-formedness case needed beyond arity and type: every member's
 only definedness obligation is its own arguments', per SPEC.md.
 
 DATED NOTE 2026-09-11: added `f_v1strlib`, the fuzz family for the string
-library above (COVERAGE-string-lib.md's own census: the nl/ greedy order
+library above (the coverage census's own census: the nl/ greedy order
 over the sole blockers), eleven shapes, plus five hand-built probes
 (`fz_p_str_splitempty`, `fz_p_str_countempty`, `fz_p_str_findempty`,
 `fz_p_str_tab`, `fz_p_str_lowernonletter`) for SPEC.md's own stated
@@ -2546,7 +2546,7 @@ def f_v1nested(rng, idx):
 
 def f_v1strlib(rng, idx):
     """SPEC.md "The string library (v1)" (2026-09-11): 17 polymorphic seq
-    operators over COVERAGE-string-lib.md's own census (the nl/ greedy
+    operators over the coverage census's own census (the nl/ greedy
     order: split, str(), join, count, strip, replace, find, lower, upper,
     isdigit, isalpha). No new Expr forms and no new well-formedness case
     (`check_wf`'s `_ty` already types every member), so this family's job

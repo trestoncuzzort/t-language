@@ -362,7 +362,7 @@ class CommittedTasksUnaffectedTest(unittest.TestCase):
         for path in sorted(glob.glob(os.path.join(here, "tasks", "*.t"))):
             task = tasks_io.load_task(path)
             if task.get("datatypes"):
-                # F* lowers datatypes since PREDICT T35 (test_fstar_datatypes.py checks them); this shape check is
+                # F* lowers datatypes since 2026-10-07 (test_fstar_datatypes.py checks them); this shape check is
                 # about the tasks before them
                 continue
             try:

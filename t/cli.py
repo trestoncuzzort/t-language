@@ -509,7 +509,7 @@ def cmd_explain(args) -> int:
 
 
 def cmd_audit(args) -> int:
-    import audit   # NORTH-STAR.md target 3 (D8): the spec's room for wrong programs
+    import audit   # the spec's room for wrong programs
     argv = [str(args.target), "--jobs", str(args.jobs)]
     argv += ["--kernel", args.kernel] if args.kernel else []
     argv += ["--table", args.table] if args.table else []

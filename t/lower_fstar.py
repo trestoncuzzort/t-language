@@ -276,7 +276,7 @@ read byte-for-byte the same as t/AGREEMENT.md's dafny AND fstar columns
 split_join's unproved -- unchanged); the conformance suite's fstar column
 (conformance.py's own build_manifest/run_items/grade, restricted to the
 fstar column) reads 66/66 PASS both before and after, byte-identical but
-for the timestamp; every dafny_synthesis row in t/COVERAGE-lifted-785.md
+for the timestamp; every dafny_synthesis row in the coverage census
 whose fstar cell already reads `verified / refuted` (75 of 75) relowers
 BYTE-IDENTICAL real and twin F* source before and after this change (the
 short-circuit only ever fires on `pre_rc == "true"`, which none of these
@@ -1015,7 +1015,7 @@ fuzz-nested-residual-fstar.txt. Four causes, three fixed here:
   m=[[], [0]], i=2, r=0).
 
 ZERO-OBLIGATION MALFORMED, THE CONTRACT-LEMMA FIX (2026-09-10). The tenth
-sweep's lifted census (COVERAGE-lifted-785.md, "Sole blockers") named 19
+sweep's lifted census (the coverage census, "Sole blockers") named 19
 lifted tasks fstar alone kept out of the seven-column bar: the real is
 accepted by F* at exit 0, "All verification conditions discharged
 successfully", with ZERO entries in `queries-*.smt2`, because every one of
@@ -1577,7 +1577,7 @@ _LIB_TEXT = {
              "let t_gcd (a:int) (b:int) : Tot int = t_gcdn (FStar.Math.Lib.abs a) (FStar.Math.Lib.abs b)\n",
     "t_isqrt": "let rec t_isqrt (n:nat) : Tot (r:nat{r * r <= n /\\ n < (r + 1) * (r + 1)}) (decreases n)\n"
                "= if n = 0 then 0 else (let r = t_isqrt (n - 1) in if (r + 1) * (r + 1) <= n then r + 1 else r)\n",
-    # SPEC.md "Reductions (v1)" (PREDICT T21, 2026-10-07): the extremum of the first n elements, in prefix form, with
+    # SPEC.md "Reductions (v1)" (2026-10-07): the extremum of the first n elements, in prefix form, with
     # one SMT-patterned lemma per function stating the two facts the SPEC states: a member (as an index existential,
     # which FStar.Seq.Properties' seq_mem_k, itself SMTPat'd, carries to `Seq.mem`) and a bound on every element
     "t_maxs": "".join(
@@ -1604,7 +1604,7 @@ def _lib_defs() -> list:
     return [_LIB_TEXT[n] for n in _LIB_ORDER if n in _LIB_USED]
 
 
-# SPEC.md "Comprehensions (v1)" in F* (PREDICT T16, 2026-10-06): one function per comprehension SHAPE in the file
+# SPEC.md "Comprehensions (v1)" in F* (2026-10-06): one function per comprehension SHAPE in the file
 # (lower_dafny._comp_key: the bound variable, the condition, the body, and whether the source is a seq or a range),
 # in Dafny's prefix form, over the source (or the range's start and count) and every free variable of the body. A map
 # needs no recursion here: `Seq.init` builds it, and one call of FStar.Seq.Base's `init_index` (which carries no SMT
@@ -1613,7 +1613,7 @@ def _lib_defs() -> list:
 # over a range the index is written `t_a + t_ix t_i` through the identity `t_ix`, the term that precondition's
 # quantifier is triggered on (F* runs Z3 without MBQI; Dafny's t_ix, the same measured reason). A comprehension
 # inside a spec_fun, method or lemma refuses by name (`_comp_refusal`).
-# PREDICT T45: a FILTER is Dafny's own shape (lower_dafny's filter `t_comp`), a prefix-form recursion that keeps the
+# a FILTER is Dafny's own shape (lower_dafny's filter `t_comp`), a prefix-form recursion that keeps the
 # last element when the condition holds of it: `t_comp k s n = let p = t_comp k s (n - 1) in if cond(s[n - 1]) then
 # p ++ [body(s[n - 1])] else p`. Its postcondition is the length bound and, for a pure filter (the body is the bound
 # variable), the condition at every element; a call site needing more (a count over a growing prefix) gets it by
@@ -1630,7 +1630,7 @@ def _comp_defs_f() -> list:
 
 
 def _comp_refusal(task: dict, body: list) -> None:
-    """PREDICT T16: F* carries a comprehension that is a map (no filter) over a seq or an int range, in the task's
+    """F* carries a comprehension that is a map (no filter) over a seq or an int range, in the task's
     requires, ensures and body; a filter, or a comprehension inside a spec_fun, method or lemma, refuses by name."""
     def walk(x, inside_task: bool) -> None:
         if isinstance(x, dict):
@@ -1704,7 +1704,7 @@ def _has_rat(x) -> bool:
     return isinstance(x, list) and any(_has_rat(v) for v in x)
 
 
-# DATATYPES in F* (PREDICT T35, 2026-10-07; SPEC.md "Datatypes (v1)", "(v2): fields", "(v3): recursion"). A t datatype
+# DATATYPES in F* (2026-10-07, SPEC.md "Datatypes (v1)", "(v2): fields", "(v3): recursion"). A t datatype
 # is F*'s own inductive type (the F* book, "Inductive types and pattern matching"): `dt_<D>` the type (an F* type name
 # begins in lower case), `Dt_<D>_<C>` a constructor (upper case), a field `f_<f>` its argument. A type whose fields are
 # int, bool or such datatypes is an eqtype, so `==` is `=` in a bool and `==` in a Prop. `case` is F*'s `match`, which
@@ -1743,14 +1743,14 @@ def _dt_check(task: dict) -> None:
     for d in task.get("datatypes", []):
         for k in d["ctors"]:
             for fd in k.get("fields", []):
-                if fd["type"] not in ("int", "bool", "seq") and _dt_of(fd["type"]) is None:   # seq: PREDICT T42
+                if fd["type"] not in ("int", "bool", "seq") and _dt_of(fd["type"]) is None:   # seq
                     raise NotImplementedError(
                         f"fstar lowering: a datatype field of type {fd['type']!r} (SPEC.md 'Datatypes (v2): fields'): "
                         "only int, bool, seq and datatype fields are lowered yet")
 
 
 def _dt_has_seq(d: str, seen: frozenset = frozenset()) -> bool:
-    """PREDICT T42: whether `d` (or a datatype it holds) has a seq field, so is not an F* eqtype (`Seq.seq int` has
+    """whether `d` (or a datatype it holds) has a seq field, so is not an F* eqtype (`Seq.seq int` has
     no decidable `=`): its `==` is propositional only."""
     for k in _DTS[d]["ctors"]:
         for fd in k.get("fields", []):
@@ -1840,7 +1840,7 @@ def _tystr(t) -> str:
     of the pair branch's own reasoning right above, where application
     binding tighter than infix `&` was what let it skip the parens."""
     if _dt_of(t) is not None:
-        return _fdt(_dt_of(t))                            # PREDICT T35
+        return _fdt(_dt_of(t))                            # the landing
     if isinstance(t, dict):
         if "seq" in t:
             return f"Seq.seq ({_tystr(t['seq'])})"
@@ -1937,7 +1937,6 @@ def _ck(name: str) -> str:
     # spelling reason and every claim resting on that row was quietly weaker
     # than it read. A lowering may refuse what it cannot express; it may not
     # refuse a name it can rename.
-    #
     # KEYWORD RENAME (2026-09-10). This same principle applies to a task
     # identifier that IS a legal t name but happens to spell an F* keyword
     # ("val", "type", "and", ...) or carry an uppercase initial: `lower()`
@@ -2026,7 +2025,6 @@ def has_self_call(node, name: str) -> bool:
 # exactly the failure mode the `_loop`-suffix note above already named and
 # fixed for a DIFFERENT identifier class. The fix is the same one: rename,
 # don't refuse.
-#
 # `_rename_reserved(task, body)` renames every identifier `_ck` would
 # refuse -- a reserved F* word (RESERVED) or an uppercase initial -- to a
 # fresh `t_`-prefixed spelling, BEFORE `Ctx` or any `gen_*`/`exec_*`
@@ -2039,7 +2037,6 @@ def has_self_call(node, name: str) -> bool:
 # `t_`-spelling collides (with the task or with an EARLIER rename in the
 # same pass) gets a numeric suffix, exactly `fresh_named`'s own collision
 # rule.
-#
 # RENAMED, CONSISTENTLY: every place this file calls `_ck` today --
 # task/spec_fun names, param/return names, spec_fun param names, a local
 # `var` declaration's name, a quantifier's bound `var` -- is a DECLARATION
@@ -2062,7 +2059,6 @@ def has_self_call(node, name: str) -> bool:
 # and an op tag, a type tag, or a `_shape`/`_family`/`_twin_op` fuzz-
 # harness label is never touched because none of them is ever read out of
 # one of those six shapes.
-#
 # NOT renamed: the twin's own measured witness `w` and the refutation
 # certificate built from it. `_certificate`'s `lower_verus.certificate_
 # formula(task, twin_body, w)` call and its own `cx.prop(formula, {}, {})`
@@ -2078,7 +2074,6 @@ def has_self_call(node, name: str) -> bool:
 # renames to itself), so the split costs nothing on every task that does
 # not itself need a rename, and only a second cheap `Ctx(task)` construction
 # on the few that do.
-#
 # MEASURED (out/agent-fstar-pairs2/, F* 2026.08.30): all 7 `val`-abstaining
 # v1pairs tasks now LOWER (no more `_ck` ABSTAIN); see this file's
 # 2026-09-10 dated note below (module docstring) for the fstar column's
@@ -2209,7 +2204,7 @@ class Ctx:
     # ---------------------------------------------------------- typing ----
     def ty(self, e: dict, local: dict) -> str:
         if "ctor" in e:
-            return {"datatype": e["ctor"]["dtype"]}          # PREDICT T35
+            return {"datatype": e["ctor"]["dtype"]}          # the landing
         if "field" in e:
             return _dt_field_type(_dt_of(self.ty(e["field"]["of"], local)), e["field"]["name"])
         if "match" in e:
@@ -2234,7 +2229,7 @@ class Ctx:
         if "_set" in e:
             return "set"   # SPEC.md "Finite sets" (2026-09-27): a ground set witness
         if "comp" in e:
-            return "seq"   # SPEC.md "Comprehensions (v1)", PREDICT T16: a map whose elements are ints (comp_call)
+            return "seq"   # SPEC.md "Comprehensions (v1)", a map whose elements are ints (comp_call)
         if "var" in e:
             return local.get(e["var"]) or self.tys[e["var"]]
         if "forall" in e or "exists" in e:
@@ -2374,7 +2369,7 @@ class Ctx:
         raise ValueError(f"t -> fstar: not a real expression: {op!r}")
 
     def comp_call(self, e: dict, env: dict, local: dict) -> str:
-        """SPEC.md "Comprehensions (v1)" in F* (PREDICT T16): the call of this shape's function (registered, with its
+        """SPEC.md "Comprehensions (v1)" in F* : the call of this shape's function (registered, with its
         text, on first sight) in prefix form: a source `s` is `(s, Seq.length s)`, a source `s[0..e]` is `(s, e)`, a
         range `[a, b)` is `(a, b - a)`, then the free variables of the body by name."""
         c = e["comp"]
@@ -2471,7 +2466,7 @@ class Ctx:
                 f"  Seq.init {size} t_f\n")
 
     def _filter_text(self, k: int, c: dict, fvs: list, ftys: dict, local2: dict) -> str:
-        """PREDICT T45: a filtered comprehension's function (the comment above `_COMP_F`)."""
+        """a filtered comprehension's function (the comment above `_COMP_F`)."""
         v = c["var"]
         is_seq = "seq" in c
         el = (lambda i: f"(Seq.index t_s {i})") if is_seq else (lambda i: f"(t_a + t_ix {i})")
@@ -2547,7 +2542,7 @@ class Ctx:
         if "var" in e and (local.get(e["var"]) or self.tys.get(e["var"])) == "seq":
             return env.get(e["var"], e["var"])
         if "field" in e:
-            return self._field_txt(e, env, local)          # PREDICT T42: a seq field
+            return self._field_txt(e, env, local)          # a seq field
         if "match" in e:
             return self._match_txt(e, env, local, self.sx)
         if "comp" in e:
@@ -2557,7 +2552,7 @@ class Ctx:
             # below produces (a witness substituting a concrete sequence
             # into a seq-typed parameter or return) or a `fill`/`update`
             # tree that bottoms out at one.
-            # PREDICT T71: a long constant one (a real input's buffer, 64 or 70 bytes of 0) is `Seq.create`. The
+            # a long constant one (a real input's buffer, 64 or 70 bytes of 0) is `Seq.create`. The
             # normalizer cannot unfold `Seq.length (seq_of_list l)`, and the SMT residual needs fuel past 8 for a long
             # list; `create`'s length and index lemmas fire at once. Witnesses the bounded search finds (at most 5
             # long) keep the literal, byte-identical to before.
@@ -2686,11 +2681,11 @@ class Ctx:
         raise NotImplementedError(f"seq position holds non-variable {e!r}")
 
     def _arm_types(self, d: str, arm: dict) -> dict:
-        """PREDICT T35: a match arm's binders, each at its field's type."""
+        """a match arm's binders, each at its field's type."""
         return {b: fd["type"] for b, fd in zip(arm["binders"], _dt_fields(d, arm["ctor"]), strict=True)}
 
     def _match_txt(self, e: dict, env: dict, local: dict, render) -> str:
-        """PREDICT T35: `case` as F*'s match, a binder shadowing any outer name of its spelling."""
+        """`case` as F*'s match, a binder shadowing any outer name of its spelling."""
         m = e["match"]
         d = _dt_of(self.ty(m["scrutinee"], local))
         scr = self.dx(m["scrutinee"], env, local)
@@ -2708,7 +2703,7 @@ class Ctx:
         return f"({_fdt(_dt_of(self.ty(f['of'], local)))}_f_{f['name']} {self.dx(f['of'], env, local)})"
 
     def dx(self, e: dict, env: dict, local: dict) -> str:
-        """PREDICT T35: a datatype-valued term."""
+        """a datatype-valued term."""
         if "var" in e:
             return env.get(e["var"], e["var"])
         if "ite" in e:
@@ -2942,7 +2937,7 @@ class Ctx:
                 # spec_fun or itself with a nested-seq argument yet.
                 parts.append(self.nx(a, env, local))
             elif _dt_of(ft) is not None:
-                parts.append(self.dx(a, env, local))       # PREDICT T35
+                parts.append(self.dx(a, env, local))       # the landing
             else:
                 parts.append(self.zx(a, env, local))
         return "(" + " ".join(parts) + ")"
@@ -2963,7 +2958,7 @@ class Ctx:
         if "call" in e:
             return self.call(e, env, local)
         if "field" in e:
-            return self._field_txt(e, env, local)          # PREDICT T35
+            return self._field_txt(e, env, local)          # the landing
         if "match" in e:
             return self._match_txt(e, env, local, self.zx)
         op = e.get("op")
@@ -3031,7 +3026,7 @@ class Ctx:
             raise NotImplementedError(
                 f"fstar lowering: {op}: FStar.Real has no floor or ceiling (SPEC.md 'Exact rationals (v1)')")
         if op in ("min", "max") and len(e["args"]) == 1:
-            # SPEC.md "Reductions (v1)" in F* (PREDICT T21): max(s)/min(s) of one argument, the prefix-form t_maxs/
+            # SPEC.md "Reductions (v1)" in F* : max(s)/min(s) of one argument, the prefix-form t_maxs/
             # t_mins over the whole seq; its refinement `0 < n` is the definedness obligation at this call
             _LIB_USED.add("t_maxs")
             sq = self.sx(e["args"][0], env, local)
@@ -3072,7 +3067,7 @@ class Ctx:
         if "call" in e:
             return self.call(e, env, local)
         if "field" in e:
-            return self._field_txt(e, env, local)          # PREDICT T35
+            return self._field_txt(e, env, local)          # the landing
         if "match" in e:
             return self._match_txt(e, env, local, self.bx)
         if "forall" in e or "exists" in e:
@@ -3183,9 +3178,9 @@ class Ctx:
             return f"(FSet.mem {self.zx(x, env, local)} {self.stx(st, env, local)})"
         if op in ("==", "!=") and _dt_of(self.ty(e["args"][0], local)) is not None:
             if _dt_has_seq(_dt_of(self.ty(e["args"][0], local))):
-                raise NotImplementedError("fstar lowering: `==` computed on a datatype with a seq field (PREDICT T42): "
+                raise NotImplementedError("fstar lowering: `==` computed on a datatype with a seq field: "
                                           "Seq.seq int is not an eqtype")
-            a, b = (self.dx(x, env, local) for x in e["args"])   # PREDICT T35: an eqtype's decidable equality
+            a, b = (self.dx(x, env, local) for x in e["args"])   # an eqtype's decidable equality
             return f"({a} = {b})" if op == "==" else f"({a} <> {b})"
         if op in ("==", "!=") and self.ty(e["args"][0], local) == "set":
             # SPEC.md "Finite sets": extensional equality in a computational
@@ -3328,7 +3323,7 @@ class Ctx:
         def walk(n, inner=frozenset()):
             # a nested quantifier's own bound variable is not in scope at this helper's level: an `at` that mentions
             # it is the nested quantifier's own helper's obligation, never this one's (AlgoVeri's binary_search,
-            # `forall i . forall j . q[i] <= q[j]`, emitted `0 <= j` here with `j` unbound: Error 72, PREDICT T13)
+            # `forall i . forall j . q[i] <= q[j]`, emitted `0 <= j` here with `j` unbound: Error 72)
             if isinstance(n, dict) and ("forall" in n or "exists" in n):
                 q = n.get("forall") or n.get("exists")
                 walk(q["lo"], inner)
@@ -3478,7 +3473,7 @@ class Ctx:
         if "call" in e:
             return self.call(e, env, local)
         if "field" in e:
-            return self._field_txt(e, env, local)          # PREDICT T35
+            return self._field_txt(e, env, local)          # the landing
         if "match" in e:
             return self._match_txt(e, env, local, self.prop)
         op = e["op"]
@@ -3524,7 +3519,7 @@ class Ctx:
             x, st = e["args"]
             return f"(FSet.mem {self.zx(x, env, local)} {self.stx(st, env, local)})"
         if op in ("==", "!=") and _dt_of(self.ty(e["args"][0], local)) is not None:
-            a, b = (self.dx(x, env, local) for x in e["args"])   # PREDICT T35
+            a, b = (self.dx(x, env, local) for x in e["args"])   # the landing
             return f"({a} == {b})" if op == "==" else f"(~ ({a} == {b}))"
         if op in ("==", "!=") and self.ty(e["args"][0], local) == "set":
             a, b = (self.stx(x, env, local) for x in e["args"])
@@ -3655,7 +3650,7 @@ class Ctx:
 
 
 # --------------------------------------------------------------------------
-# statement-level symbolic execution (per-var if-merge, as in lower_rocq)
+# statement-level symbolic execution (per-var if-merge
 # --------------------------------------------------------------------------
 
 def _decls(stmts: list) -> set[str]:
@@ -3753,7 +3748,7 @@ def _render(cx: "Ctx", e: dict, t, env: dict, local: dict) -> str:
     if t == "real":
         return cx.rx(e, env, local)    # SPEC.md "Exact rationals (v1)" (2026-10-06)
     if _dt_of(t) is not None:
-        return cx.dx(e, env, local)    # PREDICT T35
+        return cx.dx(e, env, local)    # the landing
     if isinstance(t, dict):
         if "seq" in t:
             return cx.nx(e, env, local)
@@ -3784,7 +3779,7 @@ def _dummy(t) -> str:
     if t == "real":
         return "0.0R"                   # SPEC.md "Exact rationals (v1)" (2026-10-06)
     if _dt_of(t) is not None:
-        return _dt_default(_dt_of(t))   # PREDICT T35
+        return _dt_default(_dt_of(t))   # the landing
     if isinstance(t, dict):
         if "seq" in t:
             return "(Seq.createL #(Seq.seq int) [])"
@@ -4045,7 +4040,7 @@ def exec_flow(cx: Ctx, stmts: list, env: dict, local: dict, dummy: str,
             # likewise the other way; this is the shape both committed
             # early-exit tasks hit (`if cond { return } else {}`), so it
             # keeps the emitted term legible instead of double-wrapping.
-            # PREDICT T69: the one-sided collapse holds only when that arm ALWAYS returns. An arm that returns
+            # the one-sided collapse holds only when that arm ALWAYS returns. An arm that returns
             # under its own nested condition (`if x > 0 { if y > 0 { return 1; } }`) returns where both hold;
             # collapsing to `cb` alone lowered that task to `if x > 0 then 1 else 2`.
             if rc_t == "true" and rc_e == "true":
@@ -4304,14 +4299,14 @@ def emit_spec_fun(cx: Ctx, sf: dict) -> str:
     # any type; `FStar.Seq` is the same sequence the params already use).
     body = (cx.bx(sf["body"], {}, local) if sf["result"] == "bool"
             else cx.sx(sf["body"], {}, local) if sf["result"] == "seq"
-            else cx.dx(sf["body"], {}, local) if _dt_of(sf["result"]) is not None   # PREDICT T35
+            else cx.dx(sf["body"], {}, local) if _dt_of(sf["result"]) is not None   # the landing
             else cx.zx(sf["body"], {}, local))
     # `Tot Seq.seq int (decreases n)` parses as `Tot` applied to three
     # arguments ("Effect Prims.Tot does not take a requires or ensures
     # clause", measured 2026-09-27 on double_all, F* 2026.08.30); the
     # two-token seq type is parenthesized, the one-token int/bool types
     # are spelled exactly as before.
-    rty = _tystr(sf["result"])                       # PREDICT T35: a datatype result too (TY's own values otherwise)
+    rty = _tystr(sf["result"])                       # a datatype result too (TY's own values otherwise)
     if " " in rty:
         rty = f"({rty})"
     if has_self_call(sf["body"], sf["name"]):
@@ -4413,7 +4408,7 @@ def _lemma_src(cx: "Ctx", l: dict, ptys: dict) -> str:
             if not _free_vars(c, set()) <= set(local):
                 # a call under the ensures' own quantifier mentions its bound variable, which is not in scope in an
                 # SMTPat (Error 72 on AlgoVeri's bubble_sort and insertion_sort, `occn(s[i := e], w[k], n)` under
-                # `forall k`, PREDICT T13's read): only calls over the lemma's own parameters can be patterns
+                # `forall k`): only calls over the lemma's own parameters can be patterns
                 continue
             txt = _render(cx, c, _fun_result(cx, c), {}, local)
             if txt not in seen:
@@ -4692,7 +4687,6 @@ def gen_fun(cx: Ctx, task: dict, body: list) -> str:
     # isEven, hasOppositeSign, kthElement, quotient and six more), so the
     # column's honest reading of the zero-obligation shape stays the
     # verifier's own MALFORMED, a documented residual, not an abstain here.
-    #
     # `_vacuous_ensures` (this file's own note, 2026-09-10 reproduction) is
     # a DIFFERENT shape: `ensures true` costs the BARE contract lemma
     # nothing (MEASURED, `_contract_lemma`'s own docstring, `= ()`), but
@@ -4738,7 +4732,6 @@ def gen_fun(cx: Ctx, task: dict, body: list) -> str:
 # escape hatch needed, this is exactly the kind of query Z3's own theory
 # of integers already closes once handed the ONE nonlinear fact isPrime's
 # invariant never states.
-#
 # `_divisor_bound_target` recognizes the shape from the task's own AST,
 # so a task with no such ensures/invariant/cond triple is untouched
 # (every one of the 34 committed tasks and the other 17 of this session's
@@ -5011,7 +5004,6 @@ def _converse_invariant(task: dict, w: dict):
 # SPARK and Frama-C already take t/tasks/has_duplicate.t, a `while` inside a
 # `while`, each with its own invariants and its own `decreases` written in
 # the source; this section is what lets F* take it too.
-#
 # THE ENCODING, in one line: every loop, at every depth, becomes exactly the
 # same object it already became when there was only one of them -- a `let
 # rec` over the loop's own state variables, `requires` the task's `requires`
@@ -5021,7 +5013,6 @@ def _converse_invariant(task: dict, w: dict):
 # forward declarations for `let`), and its call is `let`-bound at the point
 # in the OUTER loop's body where the inner `while` stands, so the outer
 # loop's recursive step reads the state the inner loop returned.
-#
 # WHAT IS PROVED, and what is therefore NOT weakened. The inner helper's
 # `requires` is the inner loop's own invariants, so the call site inside the
 # outer body owes F* an ESTABLISHMENT proof of them from the outer
@@ -5039,7 +5030,6 @@ def _converse_invariant(task: dict, w: dict):
 # obligations property `verifiers/fstar.py` mints MALFORMED on is untouched:
 # a nested-loop file carries strictly MORE obligations than a single-loop
 # one, never fewer.
-#
 # WHAT STILL ABSTAINS is named in `_check_nestable` (a loop under a
 # conditional, at any depth) and in `_plain_loop` (a `return` inside a loop
 # that is itself nested or chained -- see its own note).
@@ -5723,14 +5713,12 @@ def gen_loop_chain(cx: Ctx, task: dict, segs: list, suffix: list) -> str:
 # programs read REFUTED that dafny verifies, every one a nat-typed loop. The
 # door the 2026-09-02 purge closed in the other six columns was still open
 # here because the fuzz corpus never failed an F* proof.
-#
 # So Error 19 now mints UNPROVED, and a twin earns REFUTED back the way every
 # other column does: when the measured witness is expressible as a GROUND
 # formula, this lowering appends one lemma named exactly
 # t_refutation_certificate stating it, and verifiers/fstar.py mints REFUTED
 # only when a targeted kernel run discharges that one lemma. A file carrying
 # the name can never mint VERIFIED.
-#
 # The formula is not rebuilt here. It is `lower_verus`'s, imported, so the
 # seven columns certify one formula and not seven readings of it: requires at
 # the witness, and the ensures conjunction false at (input, r := the twin's
@@ -5743,7 +5731,6 @@ def gen_loop_chain(cx: Ctx, task: dict, segs: list, suffix: list) -> str:
 # `lower_verus._undef_obligation` finds by re-walking the twin's statements
 # with `interp.ev`. Preservation is still not certificated and honestly
 # reads unproved.
-#
 # Measured 2026-09-09 on swap's canonical twin (OFF-BY-ONE on the `at(s, i)`
 # in `tmp := s[i]`, mutated to `s[i+1]`; witness s=[0], i=0, j=0, undefined
 # because `s[1]` is out of range): before lower_verus.py's undefined-kind
@@ -5760,7 +5747,6 @@ def gen_loop_chain(cx: Ctx, task: dict, segs: list, suffix: list) -> str:
 # own `len(s)` here, not by anything the undefined case itself needed: no
 # new rendering code in this file, the same `cx.prop(formula, {}, {})` call
 # below carries it, because the formula is still an ordinary t Expr tree.
-#
 # F*'s ground evaluator is `assert_norm`, the analogue of verus's
 # compute_only: it normalises the proposition with no SMT fallback. Measured
 # 2026-09-06 on F* 2026.08.30, Darwin arm64:
@@ -5773,7 +5759,6 @@ def gen_loop_chain(cx: Ctx, task: dict, segs: list, suffix: list) -> str:
 #     certificate alone.
 # So the certificate discriminates in both directions, which a give-up signal
 # never did.
-#
 # Seq-valued spec_funs (SPEC.md "Seq-valued spec_funs (v1)", 2026-09-27, the
 # review's seeded faults): `assert_norm` cannot evaluate a seq-valued call,
 # `Seq.seq` being abstract (`new val` in FStar.Seq.Base.fsti), so the
@@ -5978,7 +5963,7 @@ def _certificate(cx: Ctx, task: dict, twin_body: list, w: dict, mapping: dict | 
     if formula is None:
         return None
     if mapping:
-        # PREDICT T35: the formula is built from the original task, whose witness keys it reads; its spec fun calls
+        # the formula is built from the original task, whose witness keys it reads; its spec fun calls
         # are then renamed with the file's own names (tree_sum's `total` is F*'s keyword, `t_total` in the file),
         # and `cx` is the renamed context
         formula = names._rename_walk(formula, mapping)
@@ -5988,7 +5973,7 @@ def _certificate(cx: Ctx, task: dict, twin_body: list, w: dict, mapping: dict | 
         uneq = _seq_uneq_ground_pairs(cx, formula)
         rungs = _seq_rungs(cx, task, formula)
         helpers = []
-        # PREDICT T71: a long ground literal that is not constant (a real input's buffer after 63 stores) is bound by
+        # a long ground literal that is not constant (a real input's buffer after 63 stores) is bound by
         # `Seq.createL` first. Its postcondition carries the normalized length and `seq_of_list l == s`, which the SMT
         # residual of `assert_norm` needs: the normalizer cannot unfold `Seq.length (seq_of_list l)`, and the solver's
         # fuel does not reach a 64-element list. Literals of at most 8 (every bounded-search witness) add nothing.
@@ -6051,9 +6036,9 @@ _STR_OPS = frozenset({
 
 
 # `in` is not here: membership in a seq is the library's (FSTAR_LIB), and a set's membership is reached through the
-# set type or a set operation, as in Lean, Rocq and Frama-C since PREDICT T9-T11. Counting it put a task with seq
+# set type or a set operation, as in Lean, Rocq and Frama-C since 2026-10-07-T11. Counting it put a task with seq
 # membership into the Ghost effect, where its Tot spec functions could not call their helpers (Error 34 on AlgoVeri's
-# bubble_sort, insertion_sort and kmp, PREDICT T13's read).
+# bubble_sort, insertion_sort and kmp).
 _SET_OPS_F = {"set", "card", "union", "inter", "diff"}
 
 
@@ -6475,7 +6460,7 @@ def _method_src(task: dict, m: dict, used: set) -> tuple[Ctx, str]:
 
 
 def lower(task: dict, body: list, witness: dict | None = None) -> str:
-    # PREDICT T35: the task's datatype declarations, for the module-level helpers, for exactly this call
+    # the task's datatype declarations, for the module-level helpers, for exactly this call
     prev = dict(_DTS)
     _DTS.clear()
     _DTS.update({d["name"]: d for d in task.get("datatypes", [])})
@@ -6489,19 +6474,19 @@ def lower(task: dict, body: list, witness: dict | None = None) -> str:
 def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     import tshape
     task, body = tshape.desugar_seq_quants(task, body)   # SPEC.md "Quantifiers over a collection": seq ranges as indices
-    task, body = tshape.desugar_par(task, body)          # PREDICT T47: a parallel loop as its sequential `for`
-    task, body = tshape.desugar_exits(task, body)        # PREDICT T44: break/continue rewritten; `while true` stays
-    task, body, witness = tshape.desugar_heap(task, body, witness)   # PREDICT T53: copy-in/copy-out
-    tshape.abstain_on_floats(task, body, "fstar")           # SPEC.md "Floats (v1)" (PREDICT T48)
+    task, body = tshape.desugar_par(task, body)          # a parallel loop as its sequential `for`
+    task, body = tshape.desugar_exits(task, body)        # break/continue rewritten; `while true` stays
+    task, body, witness = tshape.desugar_heap(task, body, witness)   # copy-in/copy-out
+    tshape.abstain_on_floats(task, body, "fstar")           # SPEC.md "Floats (v1)" 
     tshape.abstain_unless_carried(task, body, "fstar", carried=frozenset({"real", "comp", "exit"}), lib=FSTAR_LIB)
-    _comp_refusal(task, body)                              # PREDICT T16: maps carried, the rest refused by name
+    _comp_refusal(task, body)                              # maps carried, the rest refused by name
     _LIB_USED.clear()
     _COMP_F.clear()
     if tshape.uses_ops(body, task, {"floor", "ceil"}):
         # SPEC.md "Exact rationals (v1)" (2026-10-06): FStar.Real has neither
         raise NotImplementedError(
             "fstar lowering: floor/ceil: FStar.Real has no floor or ceiling (SPEC.md 'Exact rationals (v1)')")
-    _dt_check(task)                                        # PREDICT T35: datatypes lowered; the rest by name
+    _dt_check(task)                                        # datatypes lowered; the rest by name
     # KEYWORD RENAME (2026-09-10, through the shared names.py pass since
     # 2026-09-11 -- see the note above `_needs_rename`): fix up every
     # `_ck`-refused identifier ONCE, before Ctx or any gen_*/exec_*
@@ -6512,7 +6497,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     r_body = r_task["body"]
     if r_task.get("datatypes"):
         _DTS.clear()
-        _DTS.update({d["name"]: d for d in r_task["datatypes"]})   # PREDICT T35: the renamed declarations
+        _DTS.update({d["name"]: d for d in r_task["datatypes"]})   # the renamed declarations
     cx = Ctx(r_task)
     name = r_task["name"]
     mod = name[0].upper() + name[1:]
@@ -6558,7 +6543,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     if strlib_prelude:
         parts.append(strlib_prelude)
     if r_task.get("datatypes"):
-        parts.append(_dt_decls(r_task))                    # PREDICT T35
+        parts.append(_dt_decls(r_task))                    # the landing
     lib_slot = len(parts)   # SPEC.md "The library (v1)": the definitions the task turns out to use go here
     # QUANTIFIER-HELPER EMISSION ORDER (2026-09-15, ROADMAP r27 fstar-
     # closure item, "the malformed seq-of-array rows": dafny-synthesis 2
@@ -6659,7 +6644,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
         cert_cx = cx if r_task is task else Ctx(task, check=False)
         cert = _certificate(cert_cx, task, body, witness)
         if cert is not None and r_task is not task and r_task.get("datatypes"):
-            # PREDICT T35: for a datatype task the formula's calls are renamed to the file's own names and rendered
+            # for a datatype task the formula's calls are renamed to the file's own names and rendered
             # in the renamed context (the un-renamed one names functions the file does not define)
             cert = _certificate(cx, task, body, witness, mapping=renames, r_task=r_task)
         if cert is not None:

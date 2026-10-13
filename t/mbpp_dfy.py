@@ -104,7 +104,7 @@ def _literal(node: ast.AST, strings: bool = False, nested_strings: bool = False,
     list-of-strings; else raise.
 
     `tuples` and `nested_ints` (default False, every pool to v5 unchanged;
-    the wider reader of 2026-10-05, t/PREDICT-2026-10-05-wider-reader.md):
+    the wider reader of 2026-10-05):
     with `tuples` a Python tuple is read as the list of the same elements,
     at any depth, because t has one sequence type and the tuple's
     immutability says nothing a specification uses; with `nested_ints` a

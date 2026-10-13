@@ -1,9 +1,0 @@
-{
-  "task": "locallm_epoch_count",
-  "witness": "n=1, b=2 -> real 1, twin 1",
-  "kind": "value",
-  "outcomes": {
-    "dafny": "refuted",
-    "lean": "refuted"
-  }
-}

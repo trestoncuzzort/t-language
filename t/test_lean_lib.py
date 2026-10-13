@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """test_lean_lib.py: the library (v1), the reductions any/all/max/min of one argument, and fold/max_by/min_by in the
-Lean lowering (PREDICT T9, 2026-10-06; internal/RESEARCH-2026-10-06-landscape.md decision D1). Text-level checks only,
+Lean lowering (2026-10-06, decision D1). Text-level checks only,
 no kernel runs: the prelude is emitted only for what a task uses, every definition is structurally recursive (no
 `termination_by`, so the kernel's `decide` evaluates ground values), grind is handed the lemmas the call needs, and the
 refusals are by name (sets, the string library's second wave, sort_by)."""
@@ -77,7 +77,7 @@ def test_grind_hints_and_patterns():
 
 
 def test_refusals_by_name():
-    # since PREDICT T29 (2026-10-07) Lean carries finite sets of ints, toset included (ExtTreeSet.ofList)
+    # since 2026-10-07 Lean carries finite sets of ints, toset included (ExtTreeSet.ofList)
     ok(refusal("members_upto") == "", "toset is lowered since T29: %r" % refusal("members_upto"))
     ok("second wave" in refusal("pad_right_len") or "not lowered yet" in refusal("pad_right_len"),
        "the second string wave stays refused: %r" % refusal("pad_right_len"))
@@ -102,7 +102,7 @@ def test_shared_rules():
 
 
 def test_comprehensions():
-    # SPEC.md "Comprehensions (v1)" in Lean (PREDICT T12)
+    # SPEC.md "Comprehensions (v1)" in Lean 
     src = lean("doubled")
     ok("def t_comp1 (t_s : List Int) : Nat → List Int" in src and "theorem t_comp1_get" in src
        and "(t_comp1 s (s).length)" in src, "a map over a seq: prefix form, the whole seq by its length")
@@ -115,7 +115,7 @@ def test_comprehensions():
     ok("∀ (t_dk" in src or "(∀ (t_dk" in src, "a partial body owes its definedness at every index of the range")
     prelude = src[:src.find("def diffs_t")]
     ok("termination_by" not in prelude, "the comprehension's function is structurally recursive")
-    # PREDICT T44: an early exit is rewritten away (tshape.desugar_exits), so the filter's task lowers
+    # an early exit is rewritten away (tshape.desugar_exits), so the filter's task lowers
     ok(refusal("count_evens_skip") == "", "a comprehension task with an early exit lowers: %r" % refusal("count_evens_skip"))
 
 

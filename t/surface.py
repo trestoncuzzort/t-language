@@ -586,11 +586,11 @@ class Parser:
             name = self.eat("id", production="Type").text
             return self.mark(start, {"datatype": name})
         if self.tok.kind == "id" and self.tok.text == "float" and "float" not in self.datatypes:
-            # SPEC.md "Floats (v1)" (2026-10-07, PREDICT T48): IEEE-754 binary64. Contextual, as `array` is
+            # SPEC.md "Floats (v1)" (2026-10-07): IEEE-754 binary64. Contextual, as `array` is
             self.eat("id", production="Type")
             return "float"
         if self.tok.kind == "id" and self.tok.text == "array" and "array" not in self.datatypes:
-            # SPEC.md "Heap (v1)" (2026-10-07, PREDICT T46): a seq of ints passed by reference; check_wf keeps it to
+            # SPEC.md "Heap (v1)" (2026-10-07): a seq of ints passed by reference; check_wf keeps it to
             # task parameters (`array-param-only`). Contextual, so an existing name `array` still reads as a name
             self.eat("id", production="Type")
             return "array"
@@ -698,7 +698,7 @@ class Parser:
                 self.tok.kind == "id" and self.tok.text == "modifies"):
             self.production = "Task"
             if self.tok.kind == "id":
-                # SPEC.md "Heap (v1)" (PREDICT T46): `modifies a, b`, the arrays the task may write (contextual)
+                # SPEC.md "Heap (v1)" : `modifies a, b`, the arrays the task may write (contextual)
                 mtok = self.eat("id")
                 if modifies is not None:
                     self.err(mtok, "a task has at most one modifies clause")
@@ -966,7 +966,7 @@ class Parser:
             return self.mark(t, {"lemma": {"name": name, "args": args}})
         if (t.kind == "id" and t.text == "parallel" and self.i + 1 < len(self.toks)
                 and self.toks[self.i + 1].kind == "kw" and self.toks[self.i + 1].text == "for"):
-            # SPEC.md "Concurrency (v1)" (PREDICT T47): `parallel for i in [lo, hi) invariant ... { ... }`, contextual
+            # SPEC.md "Concurrency (v1)" : `parallel for i in [lo, hi) invariant ... { ... }`, contextual
             self.eat("id")
             self.eat("kw", "for")
             var = self.name("Stmt")
@@ -986,7 +986,7 @@ class Parser:
             return self.mark(t, {"par": {"var": var, "lo": lo, "hi": hi, "invariants": invs, "body": body}})
         if (t.kind == "id" and self.i + 1 < len(self.toks) and self.toks[self.i + 1].kind == "sym"
                 and self.toks[self.i + 1].text == "["):
-            # SPEC.md "Heap (v1)" (PREDICT T46): `a[i] := e;`, one element of an array written in place
+            # SPEC.md "Heap (v1)" : `a[i] := e;`, one element of an array written in place
             target = self.name()
             self.eat("sym", "[", "Stmt")
             idx = self.expr()
@@ -1669,7 +1669,7 @@ class Parser:
                                           for cp in self.eat("str").text]})
         if (t.kind == "id" and t.text == "old" and self.i + 1 < len(self.toks)
                 and self.toks[self.i + 1].kind == "sym" and self.toks[self.i + 1].text == "("):
-            # SPEC.md "Heap (v1)" (PREDICT T46): old(e), e in the task's entry state (contextual)
+            # SPEC.md "Heap (v1)" : old(e), e in the task's entry state (contextual)
             self.eat("id")
             self.eat("sym", "(")
             inner = self.expr()

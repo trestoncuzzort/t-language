@@ -1,6 +1,6 @@
 """judge.py: run a proved t solution on a judge's test data and compare the output with the judge's.
 
-    python3 t/judge.py problems/uva/p495.t --tests DIR [--io problems/uva/p495_io.py] [--show]
+    python3 t/judge.py p495.t --tests DIR [--io p495_io.py] [--show]
 
 DIR holds the judge's cases as NNNN.in.txt / NNNN.out.txt pairs (uDebug's layout). The arithmetic is the task's
 Dafny lowering, the same program Dafny verified (six other kernels verify their own lowerings of the same t

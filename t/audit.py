@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""t/audit.py: how much room a specification leaves for wrong programs (NORTH-STAR.md target 3, D8).
+"""t/audit.py: how much room a specification leaves for wrong programs (D8).
 
 A kernel proves a program against its specification. Nothing in that proof says the specification can tell the
 program from a wrong one. This audit asks, for one task or a directory of them: of the one-edit mutants of the

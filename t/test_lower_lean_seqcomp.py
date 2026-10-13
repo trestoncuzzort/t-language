@@ -334,7 +334,7 @@ class SeqAppendReadScriptTest(unittest.TestCase):
     `_seq_update2_script` template one level down -- READ-after-`++`/
     slice instead of READ-after-chained-`.set`. Pure-Python checks on
     the emitted TEXT (the `.lean` file itself is exercised by
-    `t/grade.py`, not here; see `t/COVERAGE-lifted-785.md`'s
+    `t/grade.py`, not here; see `the coverage census`'s
     dafny_synthesis rows for the kernel-checked measurement) -- these
     catch a regression in the GATE (`None` exactly when `self.seq_new`
     is False, unchanged for every other task) and in the two things
@@ -500,7 +500,7 @@ class SeqAppendReadScriptDischTest(unittest.TestCase):
     rewrite first. These are pure-Python checks on the emitted TEXT --
     the kernel-checked measurement (240/586/262, lean+dafny, flake 3;
     262 held as the standing regression bar named in this method's own
-    docstring) lives in t/COVERAGE-lifted-785.md's own dafny_synthesis
+    docstring) lives in the coverage census's own dafny_synthesis
     rows and this session's dated docstring note, not here.
 
     A `| grind` (and a `t_seq_singleton_get` lemma) were ALSO tried at

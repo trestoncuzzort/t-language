@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """test_fstar_datatypes.py: datatypes in F* (SPEC.md "Datatypes (v1)", "(v2): fields", "(v3): recursion", the F* note
-of 2026-10-07, PREDICT T35). Text-level checks only, no kernel runs:
+of 2026-10-07). Text-level checks only, no kernel runs:
 - a datatype is F*'s own inductive type, a field read a function refined to the constructors that declare it;
 - `case` is F*'s match, `==` is `=` in a bool and `==` in a Prop;
 - recursion on a datatype parameter decreases by the subterm ordering;
@@ -70,7 +70,7 @@ def test_certificate_uses_the_files_names():
 
 
 def test_seq_fields():
-    # PREDICT T42: a seq field is `Seq.seq int`; such a type is no eqtype, so `==` is propositional only
+    # a seq field is `Seq.seq int`; such a type is no eqtype, so `==` is propositional only
     src = fstar("bag_size")
     ok("| Dt_Bag_Bag : f_items:Seq.seq int -> f_active:bool -> dt_Bag" in src, "a seq field")
     ok("(Seq.length (dt_Bag_f_items b))" in src, "its length")

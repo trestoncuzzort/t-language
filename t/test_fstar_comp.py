@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""test_fstar_comp.py: comprehensions in the F* lowering (PREDICT T16, 2026-10-06; SPEC.md "Comprehensions (v1)").
+"""test_fstar_comp.py: comprehensions in the F* lowering (2026-10-06, SPEC.md "Comprehensions (v1)").
 Text-level checks only, no kernel runs. Each map shape is one function `t_compK` in Dafny's prefix form, built by
 `Seq.init` with one call of `Seq.init_index`, its postcondition stating the length and every element. The body's
 definedness is its precondition: element-free conjuncts once, as `t_n > 0 ==> ...`, the rest as a quantifier
 triggered on the element (`Seq.index t_s t_di`, or `t_ix t_di` over a range). A filter is a prefix-form recursion
-(PREDICT T45). A comprehension inside a
+. A comprehension inside a
 spec_fun, method or lemma, refuse by name."""
 from __future__ import annotations
 
@@ -62,7 +62,7 @@ def test_partial_body_owes_definedness_per_element_and_once():
 
 
 def test_filter():
-    # PREDICT T45: Dafny's filter shape, a prefix-form recursion keeping the last element when the condition holds
+    # Dafny's filter shape, a prefix-form recursion keeping the last element when the condition holds
     src = fstar("evens")
     assert "let rec t_comp1 (t_s:Seq.seq int) (t_n:nat)" in src and "(decreases t_n)" in src
     assert "(ensures (fun t_r -> Seq.length t_r <= t_n /\\ (forall (t_i:nat).{:pattern (Seq.index t_r t_i)}" in src
@@ -87,8 +87,8 @@ spec fun dbl(q: seq): int
 
 
 def test_framac_refuses_a_filter_by_name():
-    # SPARK and Frama-C carry maps since PREDICT T18, T19 (test_spark_comp.py, test_framac_comp.py)
-  # PREDICT T55: evens' spec now states the comprehension too, so the refusal can name it in a spec position
+    # SPARK and Frama-C carry maps since 2026-10-07 (test_spark_comp.py, test_framac_comp.py)
+  # evens' spec now states the comprehension too, so the refusal can name it in a spec position
     e = refusal(load("evens"), lower_framac)
     assert "comprehension" in e and "not lowered yet" in e, e
 

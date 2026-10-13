@@ -10,7 +10,7 @@ also gained a nested-seq (`{"seq": "seq"}`) PARAMETER declaration (the
 flat data+offsets pair `lower()`'s own signature already gives it).
 
 Measures the actual lifted sweep tasks these three fixes were traced to
-(t/COVERAGE-lifted-785.md r20: 610 removeElement, 591/625
+(the coverage census r20: 610 removeElement, 591/625
 swapFirstAndLast, 792 countLists), not a reimplementation of the fix.
 The task JSON files are the sweep's own set (t/out/lifted-tasks/, not
 tracked in this repo); a run on a checkout without that directory skips

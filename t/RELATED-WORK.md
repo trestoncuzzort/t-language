@@ -1058,8 +1058,7 @@ functionally correct code **72.6%** of the time and proves it **4.9%** of the ti
 and its best model, o4-mini, reads 61.4% correct code, 51.0% sound-and-complete
 specifications and **3.6%** proofs.
 
-This is the third independent measurement of the shape `SCOREBOARD.md` reports as
-"converts", after PostcondBench's ρ band of 0.33 to 0.53 and the Oracle-Conversion
+This is the third independent measurement of the same shape, after PostcondBench's ρ band of 0.33 to 0.53 and the Oracle-Conversion
 Efficiency gap of 11.83 points in [arXiv:2609.05879](https://arxiv.org/abs/2609.05879).
 The reading that matters for this project: collapsing correctness and provability
 into one number is about a fifteenfold error on that benchmark, which is the same
@@ -1171,8 +1170,7 @@ than the corroboration.
 examples give 0.42 pass@1. Nearly doubling the domain data to 93K gives 0.48, +6.
 Adding 80K of *general* code (Magicoder-Evol-Instruct) to the original 54K gives
 **0.52, +10**. The full mixture, 93K F\* plus 20K Lean plus 50K Evol plus 15K
-CodeAlpaca plus 15K RunBugRun, reaches 0.58. locallm trains on a corpus that is
-100% `t` and, at the supervised pool's current size, about 90 examples; this says
+CodeAlpaca plus 15K RunBugRun, reaches 0.58. For a model trained on `t` alone, this says
 the next lever is a mixture, not more `t`.
 
 **Rule-based synthetic negatives actively hurt them.** AST-mutation repair data

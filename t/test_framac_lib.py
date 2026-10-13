@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""test_framac_lib.py: the library (v1) and max/min of one argument in the Frama-C lowering (PREDICT T11, 2026-10-06;
-internal/RESEARCH-2026-10-06-landscape.md decision D1). Text-level checks only, no kernel runs: specification positions
+"""test_framac_lib.py: the library (v1) and max/min of one argument in the Frama-C lowering (2026-10-06;
+decision D1). Text-level checks only, no kernel runs: specification positions
 use ACSL's own \\min/\\max/\\abs and the prelude's logic definitions, each recursive one with its termination lemma (the
 adapter's structural backstop reads a missing one as vacuous); executable positions call the prelude's C helpers;
 definedness is asserted where the SPEC owes it; the certificate replay evaluates the library and renders min, max and
@@ -75,7 +75,7 @@ def test_certificates():
 
 
 def test_refusals_by_name():
-    # rev is lowered since PREDICT T31 (test_framac_seq_locals.py); sort and all still refuse by name
+    # rev is lowered since 2026-10-07 (test_framac_seq_locals.py); sort and all still refuse by name
     for name, word in (("first_sorted", "sort"), ("all_positive", "all")):
         task = tasks_io.load_task(str(HERE / "tasks" / f"{name}.t"))
         try:

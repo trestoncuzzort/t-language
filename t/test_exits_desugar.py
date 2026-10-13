@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_exits_desugar.py: the rewrite of `break` and `continue` away (SPEC.md "Early exits (v1)", PREDICT T44,
+"""test_exits_desugar.py: the rewrite of `break` and `continue` away (SPEC.md "Early exits (v1)",
 `tshape.desugar_exits`), checked against the interpreter: on every input of a small domain, the rewritten body
 computes what the original computes (the same return value, or undefined where it is undefined), for the committed
 tasks, their twins and programs written to reach each case of the rewrite. Standard library only, no kernel runs."""

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_rocq_comp.py: comprehensions in the Rocq lowering (PREDICT T14, 2026-10-06; SPEC.md "Comprehensions (v1)").
+"""test_rocq_comp.py: comprehensions in the Rocq lowering (2026-10-06, SPEC.md "Comprehensions (v1)").
 Text-level checks only, no kernel runs. A map is its own (function, length) pair: over a seq `(fun k => body(s k))`
 with the source's length; over a range `(fun k => body(lo + k))` with `Z.max 0 (hi - lo)`, the index alone when lo is
 the literal 0. The body owes its definedness at every element. A filter, and a comprehension inside a spec_fun,
@@ -69,7 +69,7 @@ def test_body_definedness_at_every_element():
 
 def test_refusals_by_name():
     e = refusal(load("evens"))
-    ok("comprehension" in e and "not lowered yet" in e, f"evens (a filter) refuses by name: {e}")  # PREDICT T55
+    ok("comprehension" in e and "not lowered yet" in e, f"evens (a filter) refuses by name: {e}")  # the landing
     e = refusal(load("count_evens_skip"))
     ok("not lowered yet" in e, f"count_evens_skip refuses by name: {e}")
     task = surface.parse("""t 1
@@ -87,7 +87,7 @@ spec fun dbl(q: seq): int
 
 
 def test_other_kernels_refuse_a_filter_by_name():
-    # every kernel carries maps since PREDICT T16, T18, T19; a filter is still refused by name in Frama-C
+    # every kernel carries maps since 2026-10-07; a filter is still refused by name in Frama-C
     e = refusal(load("evens"), lower_framac)
     ok("comprehension" in e and "not lowered yet" in e, f"lower_framac refuses evens by name: {e}")
 

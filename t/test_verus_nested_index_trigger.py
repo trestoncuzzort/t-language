@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_verus_nested_index_trigger.py: PREDICT T15 (2026-10-06). A quantifier whose bound variable is read only inside a
+"""test_verus_nested_index_trigger.py (2026-10-06). A quantifier whose bound variable is read only inside a
 nested quantifier, in its bounds or under a base that is not a plain variable, gets an explicit trigger on that
 index term. Verus does not look inside a nested quantifier for the outer one's trigger and refused outright ("Could
 not automatically infer triggers"): AlgoVeri's matrix_multiplication (`A[i]` only in `A[i].len()` and `A[i][j]`),

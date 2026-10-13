@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """test_framac_seq_locals.py: seq locals in Frama-C (SPEC.md "The library (v1)", the Frama-C note of 2026-10-07,
-PREDICT T31). Text-level checks only, no kernel runs:
+the landing). Text-level checks only, no kernel runs:
 - a seq local whose initializer the lowering writes gets a workspace buffer, with the reverse_copy contract;
 - `rev` is a write loop in code and an element rewrite in a specification;
 - the refutation certificate replays the local cell by cell and decides a seq equality as a goal;

@@ -218,7 +218,7 @@ lands it as a return and local type, plus `update` (`s[i := v]`) and
                  byte-identical to before this landed.
 
 THE DECREASING-BY GAP (2026-09-09, second sweep). The lifted sweep
-(COVERAGE-lifted-785.md rows added 2026-09-09) measured most loops that
+(the coverage census rows added 2026-09-09) measured most loops that
 update a seq reading lean unproved even though `update`/`fill` themselves
 were already handled above: clover_replace, clover_double_array_elements
 and absIt (reproduced first, `python3 -c "harness.run_task(...)"` against
@@ -437,7 +437,7 @@ False for every one of them (none touches `seq`/`slice`/seq-`+`), so
 nothing about their tactic scripts or termination bridges changed.
 
 THE SEQ-LOOP RESIDUAL (2026-09-09, fourth sweep). The five lifted tasks
-COVERAGE-lifted-785.md names as this column's own residual --
+the coverage census names as this column's own residual --
 clover_rotate__rotate, dafny_synthesis_task_id_625__swapFirstAndLast,
 clover_linear_search1__linearSearch,
 dafny_tmp_tmpmvs2dmry_pancakesort_flip__flip and
@@ -448,7 +448,7 @@ four's actual open goals turn out to be three distinct, genuine gaps, not
 one, and only the first was closable within this sweep.
 
 CLOSED: clover_rotate__rotate. Two separate defects, both found by
-lowering it, neither previously measured (COVERAGE-lifted-785.md's own
+lowering it, neither previously measured (the coverage census's own
 "unproved/refuted" row predates the "Sequences: literals, concatenation,
 slices (v1)" wave landing the same day):
   crash    lowering rotate at all raised `KeyError: 'i'` inside `sort()`,
@@ -595,7 +595,7 @@ allowance, none forced.
   Left unproved rather than hand-rolling a one-task lemma.
 
   seng2011_tmp_tmpgk5jq85q_ass1_ex8__getEven times out (the exact
-  behaviour COVERAGE-lifted-785.md recorded) inside `_t_loop_spec` itself
+  behaviour the coverage census recorded) inside `_t_loop_spec` itself
   -- `(deterministic) timeout at isDefEq`/`whnf`, 200000 heartbeats,
   never reaching a `grind failed` report at all. Its invariant combines
   an `if`-guarded seq write with a `mod`-inside-`forall` value invariant
@@ -616,7 +616,7 @@ above (verdicts unchanged); `digit_sum`/`remainder` byte-identical (the
 chained-bridge gate holds). `clover_rotate__rotate` is the only one of
 the five residual tasks that moved cells, unproved/refuted ->
 verified/refuted; the other four's cells are unchanged from
-COVERAGE-lifted-785.md (unproved/unproved for linear_search and flip,
+the coverage census (unproved/unproved for linear_search and flip,
 unproved/refuted for swapFirstAndLast, timeout/timeout for getEven).
 
 PAIRS (2026-09-10, SPEC.md "Pairs (v1)", ROADMAP 12.7): a pair `{"pair":
@@ -1018,7 +1018,7 @@ full diff of the OTHER 15 pre-existing tasks' regenerated output against
 their own committed `out/*.lean` also finds zero differences -- this
 construct changes nothing about a task that doesn't use it.
 
-THE 14 LOOP-TASK RESIDUAL (2026-09-10, COVERAGE-lifted-785.md "Sole
+THE 14 LOOP-TASK RESIDUAL (2026-09-10, the coverage census "Sole
 blockers"): the fourteen lifted loop tasks lean alone still keeps off the
 seven-column bar (clover_cal_sum__sum, clover_linear_search1__linearSearch,
 dafny_synthesis_task_id_304__elementAtIndexAfterRotation,
@@ -1241,7 +1241,7 @@ preservation, above); `elementAtIndexAfterRotation`'s own unrelated
 div/mod-bridge gap ("STAYS OPEN" above, untouched this wave).
 
 BOOLEANS AS COMPUTATIONAL VALUES (2026-09-10, "sole blockers" wave).
-COVERAGE-lifted-785.md named 13 lifted tasks and three v1nested
+the coverage census named 13 lifted tasks and three v1nested
 fuzz-family members (fz_v1nested_026, fz_p_nest_eq, fz_p_nest_lit) as
 lean's own residual, all under one stated reason: "boolean operator '==' /
 'and' in computational position is not lowered for lean" -- term()'s own
@@ -1369,7 +1369,7 @@ expression for the return value, and had no way to express a branch
 that contributes nothing to that expression, or a statement that
 follows a branch whose own arms merely continue.
 
-MEASURED FIRST, the seven tasks COVERAGE-lifted-785.md names as lean's
+MEASURED FIRST, the seven tasks the coverage census names as lean's
 sole remaining blockers (harness-shaped: lower + cell_pair, flake 3,
 directly against out/lifted-tasks.r14/, before touching anything): all
 seven read ABSTAIN, matching the two reasons named above --
@@ -1474,7 +1474,7 @@ divmod_pair 0.4s, factorial 0.4s, fib 0.5s, filter_pos 1.2s, first_even
 sum_upto 0.5s, swap 1.0s, swap_rows 1.0s, tail 0.9s.
 
 STAYS OPEN. Nothing named by this wave's own target list remains open:
-all seven of COVERAGE-lifted-785.md's lean sole-blockers now count. The
+all seven of the coverage census's lean sole-blockers now count. The
 two residuals this file already carries stay exactly as measured before
 tonight and are untouched here: THE 14 LOOP-TASK RESIDUAL's nine
 direction-class loop tasks (`_t_loop`'s bare decreasing_by needing an
@@ -2087,7 +2087,7 @@ Measured (`python3 t/grade.py --tasks <dir> --kernels lean,dafny --flake
     conformance slice (probe_manifest()+metamorphic items, restricted to
     the lean column via run_par.probe_backends()) reads 0 FAIL both
     before and after (t/CONFORMANCE.md's own baseline is also 0 FAIL for
-    lean); the 75 dafny_synthesis rows of t/COVERAGE-lifted-785.md that
+    lean); the 75 dafny_synthesis rows of the coverage census that
     read `verified / refuted` in lean (63 of 75) ALL still do (none
     moved); as a side effect of fix (b), three more of those 75 rows
     (task_id_3 isNonPrime, task_id_106 appendArrayToSeq, task_id_414
@@ -2159,7 +2159,7 @@ MEASURED (`lean` on each emitted file, this machine, lean 4.33.1):
     lean column matches t/AGREEMENT.md byte-for-byte (count_vowels
     unchanged, unproved/unproved); lean's own 66-task conformance slice
     reads 0 FAIL (unchanged); all 63 of the dafny_synthesis rows in
-    t/COVERAGE-lifted-785.md reading `verified / refuted` in lean still
+    the coverage census reading `verified / refuted` in lean still
     do (none moved) -- `python3 t/grade.py --tasks t/tasks
     --kernels dafny,lean --flake 3 --jobs 8` and a `conformance.py`
     probe restricted to the lean column via `run_par.probe_backends()`,
@@ -2339,7 +2339,7 @@ remaining gap). Neither move is a regression under the bar (`_loop_zero`
 only fires where it previously raised, ABSTAIN was never a kernel
 verdict to begin with).
 
-2026-09-15 (lean-sole, ROADMAP 16.2/COVERAGE-lifted-785.md's "Sole
+2026-09-15 (lean-sole, ROADMAP 16.2/the coverage census's "Sole
 blockers": "lean alone: 9"). `Lower._param_state_bridge_lines` (new,
 see its own docstring at `lower_loop`) fixes two of the nine: pow's own
 REAL (`0 <= a * x`, a param times a loop-state accumulator, both
@@ -2579,7 +2579,7 @@ DIV_MOD = {"div": "/", "mod": "%"}
 # theorems emit_strlib_helpers() proves once, always offered to grind
 # alongside the sfun list (self.ga) whenever any member is used, exactly
 # the way seq_thms are named lemmas offered per-task above.
-# SPEC.md "The library (v1)" in Lean (2026-10-06, PREDICT T9; internal/RESEARCH-2026-10-06-landscape.md decision D1):
+# SPEC.md "The library (v1)" in Lean (2026-10-06, the landing; decision D1):
 # the library functions this column carries, as structurally recursive definitions in core Lean (no Mathlib), so the
 # kernel's own `decide` evaluates a ground value (measured on a hand probe: a well-founded `termination_by` definition,
 # core's `List.mergeSort` among them, does not reduce under `decide`, and `native_decide` is banned by the adapter).
@@ -3023,7 +3023,7 @@ class Lower:
                        or self._has_any(body, STRLIB_OPS))
         sfun_ga_names = [f"{f}_s" for f in self.sfuns]
         ga_names = list(sfun_ga_names)
-        # SPEC.md "The library (v1)" in Lean (PREDICT T9): the library functions used, the lemmas grind is handed for
+        # SPEC.md "The library (v1)" in Lean : the library functions used, the lemmas grind is handed for
         # them (only those, as for the string library: an unrelated pattern competes in E-matching), and the
         # definitions a certificate unfolds
         self.lib_used = _lib_used(task) | _lib_used(body)
@@ -3036,12 +3036,12 @@ class Lower:
             lib_ga.remove("t_sum_append")
         ga_names += lib_ga
         self.lib_fns = [n for op in sorted(self.lib_used) for n in LEAN_LIB_FNS.get(op, [])]
-        # SPEC.md "Higher-order calls (v1)" in Lean (PREDICT T9): each call shape, its index, the lemmas grind is
+        # SPEC.md "Higher-order calls (v1)" in Lean : each call shape, its index, the lemmas grind is
         # handed and the definitions a certificate unfolds (the shape key is lower_verus's: parameters renamed)
         self.hof: dict = {}
         _hof_collect([task.get("requires", []), task.get("ensures", []), task.get("spec_funs", []), body or [],
                       task.get("methods", [])], self.hof)
-        # SPEC.md "Comprehensions (v1)" in Lean (PREDICT T12): each comprehension shape, its lemmas for grind, its
+        # SPEC.md "Comprehensions (v1)" in Lean : each comprehension shape, its lemmas for grind, its
         # definition for a certificate's unfolding
         self.comps: dict = {}
         _comp_collect([task.get("requires", []), task.get("ensures", []), task.get("spec_funs", []), body or [],
@@ -3054,10 +3054,10 @@ class Lower:
             else:
                 ga_names += [f"{nm}_length"] + ([f"{nm}_all"] if c["body"] == {"var": c["var"]} else [])
                 if "seq" in c:
-                    ga_names.append(f"{nm}_step")   # PREDICT T45: a count over a growing prefix
+                    ga_names.append(f"{nm}_step")   # a count over a growing prefix
             self.lib_fns += [nm]
         if self.comps and (self._has(task, "op", "slice") or self._has(body, "op", "slice")):
-            ga_names += ["t_seq_slice_get", "t_seq_slice_get_r"]   # PREDICT T12: a comprehension over a slice
+            ga_names += ["t_seq_slice_get", "t_seq_slice_get_r"]   # a comprehension over a slice
         for _key, (k, node) in sorted(self.hof.items(), key=lambda kv: kv[1][0]):
             if node["op"] == "fold":
                 ga_names += [f"t_fold{k}_zero", f"t_fold{k}_step"]
@@ -3113,7 +3113,7 @@ class Lower:
                 ga_names += ["t_str_upper", "t_str_islowerletter"]
             ga_names += ["List.drop_zero", "List.take_length"]
         if _uses_sets(task) or _uses_sets(body):
-            # SPEC.md "Finite sets" in Lean (PREDICT T29): the tree-set lemmas grind needs, membership through each
+            # SPEC.md "Finite sets" in Lean : the tree-set lemmas grind needs, membership through each
             # operation and size through insert/erase (mem_ofList is grind-annotated in core already)
             # (mem_insert, mem_erase, mem_iff_contains, contains_insert/erase/empty, size_insert/erase/empty and
             # mem_ofList are grind-annotated in core already: naming them again only draws "redundant" warnings)
@@ -3288,7 +3288,7 @@ class Lower:
     # ---------- SPEC.md "Datatypes (v2): fields" ----------
 
     def _set_term(self, e: dict, env: dict, types: dict, dep: bool) -> str:
-        """SPEC.md "Finite sets" in Lean (2026-10-07, PREDICT T29): a set is core Std's extensional tree set of ints,
+        """SPEC.md "Finite sets" in Lean (2026-10-07): a set is core Std's extensional tree set of ints,
         whose `=` is extensional (ExtTreeSet.ext_mem), so t's `==` is Lean's own equality. A display is an insert
         chain; a union or difference with a singleton display is `insert`/`erase` (the same set, extensionally), which
         the size lemmas speak about; card is the size as an Int."""
@@ -3410,7 +3410,7 @@ class Lower:
             return self.sfuns[f]["result"]
         op = e["op"]
         if op in ("set", "union", "inter", "diff", "toset"):
-            return "set"   # SPEC.md "Finite sets" in Lean (PREDICT T29)
+            return "set"   # SPEC.md "Finite sets" in Lean 
         if op == "card":
             return "int"
         if op == "+":
@@ -3489,7 +3489,7 @@ class Lower:
         if op in ("count", "find"):
             return "int"
         if op in ("min", "max", "abs", "sum", "gcd", "pow", "isqrt"):
-            return "int"     # SPEC.md "The library (v1)" (PREDICT T9); max/min of one seq argument an int too
+            return "int"     # SPEC.md "The library (v1)" ; max/min of one seq argument an int too
         if op in ("rev", "sort"):
             return self.sort(e["args"][0], types)
         if op in ("any", "all", "in"):
@@ -3687,7 +3687,7 @@ class Lower:
             args = " ".join(self.term(a, env, types, dep) for a in c["args"])
             if c["fun"] == self.name:
                 pre = " (by first | omega | grind)" if (self.task.get(
-                    "requires") and not getattr(self, "_struct_nopre", False)) else ""   # PREDICT T66
+                    "requires") and not getattr(self, "_struct_nopre", False)) else ""   # the landing
                 return f"({self.name}_t {args}{pre})"
             if c["fun"] in self.methods:
                 # SPEC.md "Methods (v1)": the callee's own `{m}_t`,
@@ -3705,7 +3705,7 @@ class Lower:
                 return f"({c['fun']}_t {args})"
             return f"({c['fun']}_s {args})"
         if ("forall" in e or "exists" in e) and "in" in (e.get("forall") or e.get("exists")):
-            # SPEC.md "Quantifiers over a collection" in Lean (PREDICT T30): a set range computed as a Bool over the
+            # SPEC.md "Quantifiers over a collection" in Lean : a set range computed as a Bool over the
             # set's list of members; the closers carry the bridge (List.all_eq_true, ExtTreeSet.mem_toList)
             q = e.get("forall") or e.get("exists")
             b = self.fresh(q["var"])
@@ -3717,7 +3717,7 @@ class Lower:
                 "bounded quantifier in computational position "
                 "is not lowered for lean")
         if "comp" in e:
-            return self._comp_call(e, env, types, dep)      # SPEC.md "Comprehensions (v1)" (PREDICT T12)
+            return self._comp_call(e, env, types, dep)      # SPEC.md "Comprehensions (v1)" 
         op = e["op"]
         if op == "len":
             s = self.term(e["args"][0], env, types, dep)
@@ -3836,7 +3836,7 @@ class Lower:
         if op in ("fold", "max_by", "min_by", "sort_by"):
             return self._hof_call(e, env, types, dep)
         if op in ("any", "all"):
-            # SPEC.md "Reductions (v1)" in Lean (PREDICT T9): core's List.all/List.any over a predicate; a
+            # SPEC.md "Reductions (v1)" in Lean : core's List.all/List.any over a predicate; a
             # comprehension over a seq that is the argument is the predicate (its filter as an implication for all,
             # a conjunction for any), a plain seq<bool> the identity
             a = e["args"][0]
@@ -3862,7 +3862,7 @@ class Lower:
                 op == "in" and self.sort(e["args"][1], types) == "set"):
             return self._set_term(e, env, types, dep)
         if op in LEAN_LIB_TERM or op == "in":
-            # SPEC.md "The library (v1)" in Lean (PREDICT T9): the prelude's definitions, applied
+            # SPEC.md "The library (v1)" in Lean : the prelude's definitions, applied
             args = [self.term(a, env, types, dep) for a in e.get("args", [])]
             if op == "in":
                 if not self._is_seqsort(self.sort(e["args"][1], types)):
@@ -3905,7 +3905,7 @@ class Lower:
         # decidable Props makes `decide` exact for it too, and `dcond`
         # already owns its short-circuit definedness.
         if op in ("and", "or", "not", "implies") and tshape.collection_quantified({}, [e]):
-            # SPEC.md "Quantifiers over a collection" in Lean (PREDICT T30): a connective over a set range is
+            # SPEC.md "Quantifiers over a collection" in Lean : a connective over a set range is
             # computed as a Bool from its operands' terms, so the range reaches its `toList.all` form; `decide`
             # over the Prop form has no Decidable instance for `∀ x, x ∈ s → ...` (measured on is_bst)
             ts = [self.term(a, env, types, dep) for a in e["args"]]
@@ -3942,7 +3942,7 @@ class Lower:
             assert types[e["var"]] == "bool", f"int var {e['var']} as Prop"
             return f"({v} = true)"
         if ("forall" in e or "exists" in e) and "in" in (e.get("forall") or e.get("exists")):
-            # SPEC.md "Quantifiers over a collection" in Lean (PREDICT T30): a set range (a seq range was desugared
+            # SPEC.md "Quantifiers over a collection" in Lean : a set range (a seq range was desugared
             # to indices before any lowering), membership as the range
             q = e.get("forall") or e.get("exists")
             b = self.fresh(q["var"])
@@ -4038,12 +4038,12 @@ class Lower:
             assert self.sort(e, types) == "bool", f"non-bool {op} as Prop"
             return f"({self.term(e, env, types)} = true)"
         if op in ("any", "all"):
-            return f"({self.term(e, env, types)} = true)"   # PREDICT T9: the bridge lemmas carry it to the quantifier
+            return f"({self.term(e, env, types)} = true)"   # the bridge lemmas carry it to the quantifier
         if op == "in" and self.sort(e["args"][1], types) == "set":
             x, st = (self.term(a, env, types) for a in e["args"])
-            return f"({x} ∈ {st})"   # SPEC.md "Finite sets" in Lean (PREDICT T29)
+            return f"({x} ∈ {st})"   # SPEC.md "Finite sets" in Lean 
         if op == "in":
-            # SPEC.md "The library (v1)" in Lean (PREDICT T9): membership in a seq is List membership
+            # SPEC.md "The library (v1)" in Lean : membership in a seq is List membership
             if not self._is_seqsort(self.sort(e["args"][1], types)):
                 raise NotImplementedError("lean: membership in a non-seq is not lowered here")
             x, sq = (self.term(a, env, types) for a in e["args"])
@@ -4078,7 +4078,7 @@ class Lower:
             return None
         guard = lambda p, d: None if d is None else f"({p} → {d})"  # noqa: E731
         if "comp" in e:
-            # SPEC.md "Comprehensions (v1)" (PREDICT T12): the source defined; at every index of it the filter
+            # SPEC.md "Comprehensions (v1)" : the source defined; at every index of it the filter
             # defined, and the body defined where the filter holds (Dafny's comprehension precondition, per element)
             c = e["comp"]
             k = self.fresh("t_dk")
@@ -4241,14 +4241,14 @@ class Lower:
                 parts.append(f"((0 : Int) < ((({self.term(sq, env, types)}).length : Int)))")
             return self._conj(parts)
         if op in ("any", "all") and isinstance(e["args"][0], dict) and "comp" in e["args"][0]:
-            # SPEC.md "Reductions (v1)" (PREDICT T9): over a comprehension, defined iff its source is; a partial
+            # SPEC.md "Reductions (v1)" : over a comprehension, defined iff its source is; a partial
             # body or filter is refused where the predicate is written (term())
             c = e["args"][0]["comp"]
             if "seq" not in c:
                 raise NotImplementedError(f"lean: {op} over a range comprehension is not lowered yet")
             return self.dcond(c["seq"], env, types)
         if op in ("pow", "isqrt"):
-            # SPEC.md "The library (v1)": pow(a, n) DEFINED IFF n >= 0, isqrt(n) IFF n >= 0 (PREDICT T9)
+            # SPEC.md "The library (v1)": pow(a, n) DEFINED IFF n >= 0, isqrt(n) IFF n >= 0 
             k = self.term(e["args"][-1], env, types)
             return self._conj([self.dcond(a, env, types) for a in e["args"]]
                               + [f"({k} ≥ (0 : Int))"])
@@ -4504,7 +4504,7 @@ class Lower:
                 re_, obs_r = self.to_expr(rest, merged, types)
                 if ret_t == "False" and ret_e == "False":
                     return re_, obs + obs_r
-                # PREDICT T69: a `return` nested inside a branch that does not itself always return (PX4's
+                # a `return` nested inside a branch that does not itself always return (PX4's
                 # Ringbuffer::push_back returns `(false, _end)` two `if`s deep). sym() reports the path condition
                 # under which a branch returned and freezes the return value there; the statements after the `if`
                 # run only on the other paths. This was discarded, so the return was lost: `if x > 0 { if y > 0
@@ -5853,7 +5853,7 @@ class Lower:
         quantifier surfaces, not just the loop-preservation site the
         five committed timeout rows happened to hit it at first."""
         if self.set_quants:
-            # SPEC.md "Quantifiers over a collection" in Lean (PREDICT T30): a set range computed as `toList.all`
+            # SPEC.md "Quantifiers over a collection" in Lean : a set range computed as `toList.all`
             # reaches grind only through `all = true`, whose iff grind does not instantiate forward (measured);
             # simp states it as the quantifier first. Spec funs recursive on an int stay out (their equation loops)
             names = ", ".join(self.sfun_names_ga + ["List.all_eq_true", "List.any_eq_true",
@@ -5977,7 +5977,6 @@ class Lower:
             # default simp set (measured, parallel to `length_set`/
             # `length_replicate`), but named here too since `grind only`
             # drops the default set entirely.
-            #
             # `Nat.min_def` (2026-09-12, ROADMAP 16.2, lean's own item,
             # splitArray/splitAndAppend): `List.length_take`'s own
             # CONCLUSION is `(l.take n).length = min n l.length` -- under
@@ -6133,7 +6132,7 @@ class Lower:
             # grind closes, 0.35 s)
             alts.append("((simp (disch := omega) only [t_seq_update_get]); "
                         + self._gr() + ")")
-        # PREDICT T68: grind can derive `i = 0` from an invariant's disjunction and the branch facts and still not carry
+        # grind can derive `i = 0` from an invariant's disjunction and the branch facts and still not carry
         # it through `s[i.toNat]!` to meet `s[0]!` (px4_hysteresis_switches' first iteration, measured: grind fails).
         # simp_all substitutes the derived equality everywhere and normalizes `Int.toNat 0`. Last, after every other
         # alternative, so a goal that proved before proves by the same branch (arXiv 2607.22972's failure-triggered
@@ -6216,7 +6215,7 @@ class Lower:
             # own "THE INVARIANT-APPLICATION LEAF" docstring for what was
             # tried there and reverted. Confirmed harmless: none of the
             # 34 AGREEMENT tasks or the 15 `seq_new` dafny_synthesis rows
-            # of COVERAGE-lifted-785.md moved (this session's own dated
+            # of the coverage census moved (this session's own dated
             # note, below, carries the full regression run) -- every one
             # of those either has no loop at all (so never reaches this
             # call site) or already closed on an earlier alternative.
@@ -6704,7 +6703,7 @@ class Lower:
             "  have hb2 : (a.toNat + j.toNat) < s.length := by omega\n"
             "  have heq : a.toNat + j.toNat = (a + j).toNat := by omega\n"
             "  rw [← getElem!_pos s (a.toNat + j.toNat) hb2, heq]\n"
-            # the same read with the index's sum in the other order (PREDICT T12, measured: odd_positions' ensures
+            # the same read with the index's sum in the other order (measured: odd_positions' ensures
             # read s[(2 * k + 1).toNat]! where the lemma gives s[(1 + 2 * k).toNat]!, and grind does not reorder
             # under toNat); emitted only beside a comprehension, so every other file stays byte-identical
             + ("\n"
@@ -6897,7 +6896,7 @@ class Lower:
     # ---------- the string library (v1) ----------
 
     def _hof_call(self, e: dict, env: dict, types: dict, dep: bool) -> str:
-        """A higher-order call as its shape's definition applied (SPEC.md "Higher-order calls (v1)", PREDICT T9): the
+        """A higher-order call as its shape's definition applied (SPEC.md "Higher-order calls (v1)"): the
         base sequence and a count (a prefix `s[0..e]` is `(s, e.toNat)`, any other `s` is `(s, s.length)`), fold's
         initial value, then the lambda's free names."""
         import lower_verus as _lv
@@ -6920,7 +6919,7 @@ class Lower:
         return f"({name}{k} {' '.join(args)} {count})"
 
     def _comp_call(self, e: dict, env: dict, types: dict, dep: bool) -> str:
-        """A comprehension as its shape's function applied (SPEC.md "Comprehensions (v1)", PREDICT T12): a seq source
+        """A comprehension as its shape's function applied (SPEC.md "Comprehensions (v1)"): a seq source
         `s` is `(s, s.length)`, a prefix `s[0..e]` is `(s, e.toNat)`, a range `[lo, hi)` is `(lo, (hi - lo).toNat)`,
         then the free names."""
         import lower_verus as _lv
@@ -6979,7 +6978,7 @@ class Lower:
                 at_n, at_i, call = "(t_a + (t_n : Int))", "(t_a + t_i)", f"t_compr{k} t_a{fargs}"
                 at_m = "(t_a + (n : Int))"
             btypes = {**self.types, v: elem}
-            # PREDICT T39: the body's VALUE reads a slice's element as the base's, `s[a..b][j]` as `s[a + j]` (equal
+            # the body's VALUE reads a slice's element as the base's, `s[a..b][j]` as `s[a + j]` (equal
             # wherever defined; the definedness theorems still state the slice's bounds from the task's own AST).
             # grind normalizes the nested `drop`/`take` a stepped slice desugars to past every lemma pattern
             # (odd_positions, T32's read); the flat read matches the ensures' own `s[2 * k + 1]`. The very same
@@ -7016,7 +7015,7 @@ class Lower:
                     f"      simp only [hl, he, Nat.sub_self, List.getElem?_cons_zero, Option.getD_some]\n"
                     f"      all_goals (first | rfl | (rw [he2]) | simp [he2])\n")
                 thms += [f"{nm}_length", f"{nm}_get"]
-                # PREDICT T32: the element at a Nat index too. grind normalizes a literal `(0 : Int).toNat` to `0`, which
+                # the element at a Nat index too. grind normalizes a literal `(0 : Int).toNat` to `0`, which
                 # `_get`'s pattern `[t_i.toNat]!` then never matches (measured: doubled_head's `u[0]` unproved); this
                 # pattern ranges over the Nat itself. Proved from `_get` at `(t_i : Int)`, rewriting only the cast.
                 at_nat = "(t_s[t_i]!)" if "seq" in c else "(t_a + (t_i : Int))"
@@ -7048,7 +7047,7 @@ class Lower:
                 f"    rw [hcomp]; split <;> simp <;> omega\n")
             thms.append(f"{nm}_length")
             if "seq" in c:
-                # PREDICT T45: the length one step on, at an Int index, the step a count over a growing prefix needs
+                # the length one step on, at an Int index, the step a count over a growing prefix needs
                 # (count_evens_skip's invariant `c == len([y for y in s[0..i] if ...])`: grind did not unfold the
                 # definition through `(i + 1).toNat`, measured); seq sources only
                 out.append(
@@ -7535,7 +7534,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         header = (f"-- t task {self.name!r} -> lean4, generated by "
                   f"lower_lean.py; every verdict is the kernel's.\n")
         if _uses_sets(self.task) or _uses_sets(self.body):
-            # SPEC.md "Finite sets" in Lean (2026-10-07, PREDICT T29): core Std's extensional tree sets, and the one
+            # SPEC.md "Finite sets" in Lean (2026-10-07): core Std's extensional tree sets, and the one
             # fact their lemmas leave grind to chain (a member makes the size positive, so `size_erase`'s Nat
             # subtraction is exact), proved here once from isEmpty_eq_size_beq_zero, isEmpty_iff and not_mem_empty
             header += "import Std.Data.ExtTreeSet\n" + LEAN_SET_PRELUDE
@@ -7618,13 +7617,13 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         strlib_thms = []
         if self.strlib:
             strlib_thms = [(n, "string library lemma") for n in STRLIB_LEMMAS]
-        # SPEC.md "The library (v1)" in Lean (PREDICT T9)
+        # SPEC.md "The library (v1)" in Lean 
         lib_src, lib_names = _lib_prelude(self.lib_used)
-        hof_src, hof_names = self.emit_hof_helpers()       # SPEC.md "Higher-order calls (v1)" (PREDICT T9)
+        hof_src, hof_names = self.emit_hof_helpers()       # SPEC.md "Higher-order calls (v1)" 
         if hof_src:
             lib_src = (lib_src + "\n" + hof_src) if lib_src else hof_src
             lib_names = lib_names + hof_names
-        comp_src, comp_names = self.emit_comp_helpers()    # SPEC.md "Comprehensions (v1)" (PREDICT T12)
+        comp_src, comp_names = self.emit_comp_helpers()    # SPEC.md "Comprehensions (v1)" 
         if comp_src:
             lib_src = (lib_src + "\n" + comp_src) if lib_src else comp_src
             lib_names = lib_names + comp_names
@@ -8093,7 +8092,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
             + f"  | grind [{self.name}_t"
             + (", " + ", ".join(f"{f}_s" for f in self.sfuns)
                if self.sfuns else "") + "]\n"
-            # PREDICT T69 (PX4's Ringbuffer::pop_front, `min(_end - _start, buf_max_len)` inside a returned pair):
+            # the landing (PX4's Ringbuffer::pop_front, `min(_end - _start, buf_max_len)` inside a returned pair):
             # grind does not open `t_min`/`t_max`/`t_abs` on its own here, and `unfold` of both the task and the
             # helper then grind closes it (measured). Offered only when the task uses one, after every alternative
             # above, so no other task's text changes.
@@ -8151,7 +8150,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         return "\n".join(out), thms
 
     def _is_structural_quiet(self) -> bool:
-        """PREDICT T66: the task recurses structurally on a datatype parameter, so its definition takes no
+        """the task recurses structurally on a datatype parameter, so its definition takes no
         precondition argument (lower_rec_structural); False for anything else, never raising."""
         try:
             return self._structural(self.task["decreases"], dict(self.types))
@@ -8175,7 +8174,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         parameter. Its def is structurally recursive (no termination clause), and its contract is proved by
         structural induction on that parameter (TPIL ch. 7: the recursor; measured on a tree probe,
         `induction tr <;> grind [size_s]` closes), with every other parameter generalized."""
-        # PREDICT T66: a structural definition carries no precondition argument, so its self-calls pass none
+        # a structural definition carries no precondition argument, so its self-calls pass none
         self._struct_nopre = True
         try:
             expr, obs = self.to_expr(self.body, {}, dict(self.types))
@@ -8200,7 +8199,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         others = [n for n, _ in params_nt if n != d]
         gen = f" generalizing {' '.join(others)}" if others else ""
         names = ", ".join([f"{self.name}_t"] + [f"{f}_s" for f in self.sfuns] + list(self.lib_fns))
-        # PREDICT T66: a total body needs no precondition in its definition; the contract assumes the requires, and
+        # a total body needs no precondition in its definition; the contract assumes the requires, and
         # the induction (every other parameter generalized) carries it to each recursive call's own arguments
         pre = f"{self.pre_conj()} → " if has_pre else ""
         out.append(
@@ -8331,7 +8330,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # above) already found nothing else to do about it.
         return {"int": "(0 : Int)", "bool": "false",
                 "seq": "([] : List Int)",
-                "set": "(∅ : (Std.ExtTreeSet Int compare))"}.get(t)   # SPEC.md "Finite sets" in Lean (PREDICT T29)
+                "set": "(∅ : (Std.ExtTreeSet Int compare))"}.get(t)   # SPEC.md "Finite sets" in Lean 
 
     @staticmethod
     def _hok_components(n: int) -> list[str]:
@@ -8471,7 +8470,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # probe: `example (a b : Int) (ha : 0 <= a) (hb : 0 <= b) : 0 <= a * b
     # := Int.mul_nonneg ha hb` compiles clean, no Mathlib import) and
     # closes it by hand once the right product is named.
-    #
     # GENERIC, not cube-specific: built over every INT-typed loop state
     # variable, both its OLD value and its symbolically-updated NEW one
     # (`env_b`'s own substitution -- the exact term text each invariant's
@@ -8485,7 +8483,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # nonneg from context (most of them, for most tasks -- `c` itself
     # here, signed in general) just fails that one `have` and moves on,
     # costing nothing else in the block.
-    #
     # Appended as one more `first`-alternative on every loop invariant-
     # preservation proof, UNCONDITIONALLY -- not gated behind a new
     # capability flag, matching the "LOOP TERMINATION MEASURE +1"
@@ -8528,7 +8525,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # names, but between TWO DISTINCT terms, one of them a bare PARAM
     # `_nonneg_bridge_lines` never sees (it only ever walks `state`, a
     # loop's own local variables, never `self.task["params"]`).
-    #
     # ONLY BARE ATOMS, never a substituted (env_b) new-state term (2026-
     # 09-15, found chasing factorial's own residual after the first pass
     # here paired NEW-state terms too, e.g. `res`'s own update `i * res`):
@@ -8546,7 +8542,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # so that `have` silently fails under `try` and contributes nothing),
     # so bare atoms are both necessary and sufficient here; dropping the
     # substituted forms only removes dead alternatives, never a live one.
-    #
     # BOTH multiplication orders (2026-09-15, same pass): `Int.mul_nonneg
     # ha hb`'s conclusion is `0 <= t1 * t2` in the SOURCE order of its two
     # proof arguments, a syntactically different term from `t2 * t1` --
@@ -8554,7 +8549,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # the (res, i) pair alone read `res * i`, and `grind` left the goal
     # unsolved rather than normalizing the commutation on its own). Each
     # unordered pair is therefore emitted as two independent `try have`s.
-    #
     # Wired into `then_tac`'s own recursive-apply closer (below) as one
     # more `first`-alternative AFTER the pre-existing `self._gr()`, so
     # every already-closing goal keeps closing on that same first
@@ -8712,7 +8706,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # further down), so both prove the identical goal the identical
         # way, not two independently-written tactics that could drift.
         init_hinv_pfs = []
-        # PREDICT T72: an entry state reached through a division (`bound := 360 / inc`) needs `0 <= a / b`, which grind
+        # an entry state reached through a division (`bound := 360 / inc`) needs `0 <= a / b`, which grind
         # does not derive (Int.ediv_nonneg's hypotheses are not E-matched; receipt b4598ab5fa2e). Each division the body
         # makes is offered as a fact, its hypotheses by omega, in a last alternative; `try` drops one that does not apply.
         # Tasks without a division keep their text byte for byte.
@@ -8741,7 +8735,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # THE HAVE-BINDING WORKAROUND (2026-09-10). Two DISTINCT Lean
         # surprises, both measured directly on scratch probes before
         # trusting either fix generically:
-        #
         # (1) the natural rendering of the preservation proof -- one
         # `(by tac)` term per invariant, tacked directly onto `_t_loop`'s
         # own recursive self-call as extra arguments -- TYPECHECKS (a
@@ -8765,7 +8758,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # trailing arguments (mirrors `_t_loop_spec`'s own working `apply
         # ... <;> gr` shape, generalized to term mode); and
         # parenthesizing `{split_tac}` at every one-line `by` site.
-        #
         # (2) an EXISTENTIAL invariant's own preservation (minimum's own
         # `∃ i, ... ∧ m = a[i]`, a running-extremum witness) still fails
         # after (1)'s fix, split or not: `grind` cannot find the new
@@ -8946,7 +8938,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
                 # exactly as valid Lean4 tactic syntax as the multi-line
                 # form, with no offside-rule risk from splicing a
                 # differently-indented block into a new context.
-                #
                 # `({split_tac}); (all_goals {gr})` -- TWO separately
                 # parenthesized groups, not one `({split_tac}; all_goals
                 # {gr})` -- is THE HAVE-BINDING WORKAROUND's own bug
@@ -9034,7 +9025,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # guard-true step of `_t_loop_spec` gains a second case. A body
         # with no `return` reaches `ret_cond == "False"` and this is
         # byte-identical to the pre-return lowering.
-        #
         # 2026-09-14 (lean-cert, ROADMAP 16.2's value-witness-through-loop
         # item): `ret_cond == "True"` is not merely a return that HAPPENS
         # to always fire at this witness -- it is the literal Lean
@@ -9139,7 +9129,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # merely under-searched: `grind` correctly read UNPROVED on it,
         # one theorem, no amount of automation closes a goal missing a
         # premise. Every one of the nine named blockers sharing the
-        # `real=unproved, twin=refuted` shape in t/COVERAGE-lifted-785.md's
+        # `real=unproved, twin=refuted` shape in the coverage census's
         # 2026-09-10 sweep, plus a majority of the 15 newly-lifted tasks,
         # hit this exact gap (measured: a `t_wf{k}` clause at the
         # guard/body/decreases/after program points, referencing a frame
@@ -9248,7 +9238,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # so this also covers any already-resolved merge-if goal exactly
         # as the no-return lowering did. A body with no `return` keeps
         # the original single-tactic line, byte-identical.
-        #
         # THE PRESERVATION-HAVE COLLISION's own dite (above, `can_dite`)
         # needs the identical fallback shape for the SAME reason
         # `has_return` already does: `split_tac` now also splits the new
@@ -9302,7 +9291,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         # same alternative, byte-for-byte; `None` for any task outside
         # the append-one-element shape leaves this whole expression at
         # its exact prior text.
-        #
         # ORDERED AHEAD OF THE PARAM/STATE BRIDGE, and that ordering is
         # LOAD-BEARING, not cosmetic (2026-09-19, measured -- the new
         # script closed toggle_string's three preservation goals when it
@@ -9490,7 +9478,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
 
     # ---------- NESTED AND MULTIPLE LOOPS (2026-09-18, ROADMAP WS-20
     # move 1) ----------
-    #
     # WHY A SECOND LOOP PATH AND NOT A GENERALIZED `lower_loop`. The shape
     # above returns the TASK'S RETURN TYPE from `{name}_t_loop` and folds
     # the statements after the loop into its own guard-false branch; that
@@ -9507,7 +9494,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # committed tasks keep their exact prior output, byte for byte (checked
     # by `python3 -m t.lower_lean`-shaped regeneration of every tasks/*.t
     # before and after this wave: zero diff outside has_duplicate).
-    #
     # THE THREE PIECES PER LOOP, all of them kernel obligations, none
     # assumed:
     #   def   {name}_t_loop{k} (params) (scope...) : T1 × ... × Tn
@@ -9523,11 +9509,9 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     #   wf    one theorem per definedness obligation SPEC.md's D() calculus
     #         owes at this loop's program points (invariants, guard,
     #         decreases, body), under exactly the context SPEC.md grants.
-    #
     # TWO TRAPS, BOTH NAMED BY THE OTHER COLUMNS' OWN FIXES OF 2026-09-18
     # (lower_verus.py::_ro_defining_facts, lower_spark.py::_certify_calls)
     # and both avoided here BY CONSTRUCTION rather than by a later patch:
-    #
     # (1) THE READ-ONLY DEFINING FACT. `var j := i + 1;` before an inner
     # loop gives `j = i + 1` -- true at the inner loop's ENTRY and false at
     # every later inner-loop-head state, because the inner loop assigns
@@ -9543,7 +9527,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # Conjunctions are split first (`_nl_split_and`), so `i < len(s) and
     # not r` contributes its `i < len(s)` half and drops its `not r` half
     # rather than being lost whole.
-    #
     # (2) CERTIFYING ONLY THE OUTER LOOP'S CALLS. The enclosing loop's own
     # preservation step must know what the inner loop achieved, and the
     # only honest source is the inner loop's spec INSTANTIATED AT THE CALL
@@ -9553,7 +9536,6 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
     # loop in a body gets one, in source order; none is skipped, so no
     # inner loop's effect is ever assumed without its entry obligations
     # being discharged first.
-    #
     # WHAT THIS PATH STILL ABSTAINS ON, by name (each raises
     # NotImplementedError, which run_par.py routes to ABSTAIN -- a recorded
     # absence, never a faked proof):
@@ -10841,7 +10823,7 @@ theorem t_str_join_split_roundtrip (s : List Int) (c : Int) :
         `{name}_t_loop` -- `_cert_value`'s own default (`applied =
         {name}_t args (proof)`) is unsound for exactly this shape, MEASURED
         two different ways on the two rows Wave N (2026-09-14) left open by
-        name in t/COVERAGE-lifted-785.md's sweep r24:
+        name in the coverage census's sweep r24:
 
         Clover_cal_sum.Sum (off-by-one, witness n=1): the twin starts the
         loop with `n_v := 1` instead of `0`, so the invariant `s =
@@ -11142,7 +11124,7 @@ def _strip_task(task: dict) -> dict:
 
 
 
-# SPEC.md "The library (v1)" in Lean (PREDICT T9): the term each library call lowers to, the lemmas grind is handed
+# SPEC.md "The library (v1)" in Lean : the term each library call lowers to, the lemmas grind is handed
 # when the call is used, and the definitions a certificate unfolds; the prelude text itself below, each piece measured
 # on the hand probe (scratch probe3.lean, 2026-10-06: every theorem free of sorryAx, every ground value by `decide`).
 LEAN_LIB_TERM = {"min": "t_min", "max": "t_max", "abs": "t_abs", "sum": "t_sum", "gcd": "t_gcd", "pow": "t_pow",
@@ -11388,7 +11370,7 @@ _LEAN_LIB_ORDER = ["min", "max", "abs", "gcd", "pow", "isqrt", "sum", "rev", "so
 
 
 def _flat_slice_at(e):
-    """`e` with each `s[a..b][j]` (s a variable) read as `s[a + j]`; `e` itself when it holds none (PREDICT T39)."""
+    """`e` with each `s[a..b][j]` (s a variable) read as `s[a + j]`; `e` itself when it holds none ."""
     if isinstance(e, list):
         out = [_flat_slice_at(x) for x in e]
         return e if all(a is b for a, b in zip(out, e)) else out
@@ -11408,7 +11390,7 @@ def _flat_slice_at(e):
 
 def _comp_key(e: dict) -> str:
     """A comprehension's shape: its filter and body with the bound variable renamed, and whether the source is a seq
-    or a range (SPEC.md "Comprehensions (v1)", PREDICT T12)."""
+    or a range (SPEC.md "Comprehensions (v1)")."""
     import json
     import lower_verus as _lv
     c = e["comp"]
@@ -11527,12 +11509,12 @@ def _uses_sets(obj) -> bool:
 def lower(task: dict, body: list, witness: dict | None = None) -> str:
     import tshape
     task, body = tshape.desugar_seq_quants(task, body)   # SPEC.md "Quantifiers over a collection": seq ranges as indices
-    task, body = tshape.desugar_par(task, body)          # PREDICT T47: a parallel loop as its sequential `for`
-    task, body = tshape.desugar_exits(task, body)        # PREDICT T44: break/continue rewritten; `while true` stays
-    task, body, witness = tshape.desugar_heap(task, body, witness)   # PREDICT T53: copy-in/copy-out
-    tshape.abstain_on_floats(task, body, "lean")           # SPEC.md "Floats (v1)" (PREDICT T48)
+    task, body = tshape.desugar_par(task, body)          # a parallel loop as its sequential `for`
+    task, body = tshape.desugar_exits(task, body)        # break/continue rewritten; `while true` stays
+    task, body, witness = tshape.desugar_heap(task, body, witness)   # copy-in/copy-out
+    tshape.abstain_on_floats(task, body, "lean")           # SPEC.md "Floats (v1)" 
     tshape.abstain_unless_carried(task, body, "lean", carried={"comp-reduction", "comp", "collection-quant", "exit"},
-                                  lib=LEAN_LIB)   # PREDICT T9: the library; any/all over a comprehension
+                                  lib=LEAN_LIB)   # the library; any/all over a comprehension
     if _set_of_compound(task) or _set_of_compound(body):
         raise NotImplementedError(
             "lean lowering: a set of a compound element type (SPEC.md 'Compositional types (v1)'): "

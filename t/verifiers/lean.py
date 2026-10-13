@@ -149,7 +149,7 @@ BANNED = re.compile(
     r"builtin_initialize|import|variable|implemented_by|extern)\b"
     r"|#eval\b|#exit\b")
 AXIOM_ALLOW = {"propext", "Classical.choice", "Quot.sound"}
-# The one import a lowering may write (SPEC.md "Finite sets" in Lean, 2026-10-07, PREDICT T29): a module of the
+# The one import a lowering may write (SPEC.md "Finite sets" in Lean, 2026-10-07): a module of the
 # toolchain's own Std, compiled with Lean itself and trusted exactly as the implicit prelude is. The ban below still
 # refuses every other `import`, and the axiom audit still covers every theorem whatever it was proved with.
 IMPORT_ALLOW = frozenset({"Std.Data.ExtTreeSet"})

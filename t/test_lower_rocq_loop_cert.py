@@ -271,7 +271,7 @@ _TESTDOUBLE_JSON = Path(
 @unittest.skipUnless(_TESTDOUBLE_JSON.is_file(), "lifted corpus row not present")
 class TestDoubleReflexivityTest(unittest.TestCase):
     """dafny_learn_tmp_tmpn94ir40q_r01_functions__testDouble (2026-09-15,
-    this item's rocq-sole task): one of t/COVERAGE-lifted-785.md's eight
+    this item's rocq-sole task): one of the coverage census's eight
     rocq-sole-blocked rows. `sf_double` is a degenerate, non-recursive
     spec_fun (coqc's own "Not a truly recursive fixpoint" warning), so the
     REAL theorem's goal (`2 * val = sf_double val`) is already true BY
@@ -425,7 +425,7 @@ _EXTRA_SUM_JSON = Path(
 @unittest.skipUnless(_EXTRA_SUM_JSON.is_file(), "lifted corpus row not present")
 class ExtraSumRecEqTest(unittest.TestCase):
     """prog_fun_solutions_tmp_tmp7_gmnz5f_extra_sum__sum (ROCQ-SOLE,
-    2026-09-15): one of t/COVERAGE-lifted-785.md's eight rocq-sole-blocked
+    2026-09-15): one of the coverage census's eight rocq-sole-blocked
     rows, the "recursive-recurrence family" exemplar. `_loop_spec`'s
     induction step needs `sf_sum_v n = x + y * k + y * sf_sum_v (k - 1)`
     from the carried invariant `sf_sum_v n = x + y * sf_sum_v k`; a bare

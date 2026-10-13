@@ -164,7 +164,7 @@ def test_abs_still_reads_verified_refuted():
 # `at`/`update`/`fill`/`slice`, the exact shape rungs 1-8 have nothing to
 # mutate in (dafny_synthesis 234 cubeVolume is this shape verbatim, less the
 # name). Before WRONG-CONSTANT this was `no-twin / no-twin` in every column
-# (t/COVERAGE-lifted-785.md); this test runs it through the real pipeline
+# (the coverage census); this test runs it through the real pipeline
 # and checks the row that closes.
 CUBE_SHAPED_PROBE = {
     "t": 1,

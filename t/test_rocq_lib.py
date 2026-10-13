@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""test_rocq_lib.py: the library (v1) and the reductions any/all/max/min of one argument in the Rocq lowering (PREDICT
-T10, 2026-10-06; internal/RESEARCH-2026-10-06-landscape.md decision D1). Text-level checks only, no kernel runs: the
+"""test_rocq_lib.py: the library (v1) and the reductions any/all/max/min of one argument in the Rocq lowering (2026-10-06,
+decision D1). Text-level checks only, no kernel runs: the
 prelude carries only what a task uses, membership in a seq is the existential over indices with its bridge stated as a
 fact, the facts the proof engine needs are posed before it runs, the certificate reads a witness seq as the
 interpreter's tuple, and the refusals are by name."""
@@ -83,7 +83,7 @@ def test_refusals_by_name():
 
 
 def test_seq_equality_has_one_orientation():
-    # PREDICT T33: the code's `u == b` and the contract's `b == rev(a)` state one term, so the closer's congruence
+    # the code's `u == b` and the contract's `b == rev(a)` state one term, so the closer's congruence
     # between the contract's forall and the code's negated fact can close
     src = rocq("rev_equal")
     ok("&& t_seq_eqb a_len (t_rev a a_len) b)" in src, "the code's test, rev first")

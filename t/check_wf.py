@@ -1225,7 +1225,7 @@ def check_wf(task: dict, positions: dict | None = None,
     if ver == 0 and (funs or "decreases" in task or "gate" in task
                      or "methods" in task or "lemmas" in task):
         _e(errs, task, "v1 field in a v0 task", "v0-frozen")
-    # SPEC.md "Heap (v1)" (PREDICT T46): an array parameter reads as a seq, its contents; writes are `aset`
+    # SPEC.md "Heap (v1)" : an array parameter reads as a seq, its contents; writes are `aset`
     penv = {p["name"]: ("seq" if p["type"] == "array" else p["type"]) for p in task["params"]}
     _check_heap(task, errs)
     # v0 is int only (SPEC.md v0; `bool` and `seq` are v1 types), for the return as for the parameters: a `t 0`
@@ -1623,7 +1623,7 @@ def _par_reads(x, written: set, i: str, ok_at: bool = False) -> bool:
 
 
 def _check_par(s, env, funs, dtypes, ver, errs, lemmas, in_lemma) -> None:
-    """SPEC.md "Concurrency (v1)" (PREDICT T47): the bounds, the invariants and the body typed as a `for`'s, and the
+    """SPEC.md "Concurrency (v1)" : the bounds, the invariants and the body typed as a `for`'s, and the
     race-freedom rules that make every interleaving the sequential one."""
     w = s["par"]
     i = w["var"]
@@ -1684,7 +1684,7 @@ def _check_par(s, env, funs, dtypes, ver, errs, lemmas, in_lemma) -> None:
 
 
 def _check_heap(task, errs) -> None:
-    """SPEC.md "Heap (v1)" (PREDICT T46): where an array and `old` may appear, and what `modifies` names."""
+    """SPEC.md "Heap (v1)" : where an array and `old` may appear, and what `modifies` names."""
     for p in task["params"]:
         if p["type"] != "array" and _has_array(p["type"]):
             _e(errs, p, f"param {p['name']}: an array is a parameter's whole type", "array-param-only")
@@ -1752,7 +1752,7 @@ def _check_stmts(body, env, funs, dtypes, ver, errs, assignable, lemmas=None,
     lemmas = {} if lemmas is None else lemmas
     for s in body:
         if "aset" in s:
-            # SPEC.md "Heap (v1)" (PREDICT T46)
+            # SPEC.md "Heap (v1)" 
             n, i, e = s["aset"]
             arrays, mods = env.get(HEAP_KEY, (set(), set()))
             if n not in arrays or n not in mods:

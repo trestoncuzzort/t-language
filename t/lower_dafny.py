@@ -1740,7 +1740,7 @@ def _comp_key(e: dict) -> str:
     import json
     import lower_verus as _lv
     c = e["comp"]
-    # PREDICT T52: up to the bound variable's name (lower_lean's key already was), so `[x for x in s if p(x)]` in an
+    # up to the bound variable's name (lower_lean's key already was), so `[x for x in s if p(x)]` in an
     # ensures and `[y for y in s[0..i] if p(y)]` in an invariant are one function (measured: readings_in_band)
     ren = {c["var"]: {"var": "$0"}}
     return json.dumps({"cond": _lv.subst(c["cond"], ren), "body": _lv.subst(c["body"], ren), "range": "lo" in c},
@@ -4243,8 +4243,8 @@ def _lemma_decl(l: dict, self_name: str) -> list[str]:
 def lower(task: dict, body: list, witness: dict | None = None) -> str:
     import tshape
     task, body = tshape.desugar_seq_quants(task, body)   # SPEC.md "Quantifiers over a collection": seq ranges as indices
-    task, body = tshape.desugar_par(task, body)          # PREDICT T47: a parallel loop as its sequential `for`
-    tshape.abstain_on_floats(task, body, "dafny")        # SPEC.md "Floats (v1)" (PREDICT T48): Dafny has no IEEE type
+    task, body = tshape.desugar_par(task, body)          # a parallel loop as its sequential `for`
+    tshape.abstain_on_floats(task, body, "dafny")        # SPEC.md "Floats (v1)" : Dafny has no IEEE type
     # NAMES (2026-09-11, ROADMAP 13.2): sanitize away any identifier that
     # collides with a Dafny reserved word, before anything below ever sees
     # the task -- see names.py's module docstring. `task` is returned
@@ -4354,7 +4354,7 @@ def lower(task: dict, body: list, witness: dict | None = None) -> str:
     ret = task["returns"][0]
     lines.append(f"method {method}({ps}) "
                  f"returns ({ret['name']}: {dafny_type(ret['type'])})")
-    # SPEC.md "Heap (v1)" (PREDICT T46): the arrays the method writes, and the caller's no-alias obligation stated
+    # SPEC.md "Heap (v1)" : the arrays the method writes, and the caller's no-alias obligation stated
     hz = (lambda x: _heapify(x, set(arrays))) if arrays else (lambda x: x)
     if task.get("modifies"):
         lines.append(f"  modifies {', '.join(task['modifies'])}")

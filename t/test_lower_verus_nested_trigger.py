@@ -1,7 +1,7 @@
 """t/test_lower_verus_nested_trigger.py: unit test for the nested-quantifier
 trigger fix in lower_verus.py (ROADMAP 16.2, verus-2, 2026-09-12).
 
-Sweep r20 (t/COVERAGE-lifted-785.md) read verus malformed/malformed on two
+Sweep r20 (the coverage census) read verus malformed/malformed on two
 lifted tasks, 414 anyValueExists and 603 lucidNumbers. Both share one
 shape: an outer forall/exists whose bound variable is read from a seq only
 INSIDE a nested forall/exists's own body (a "preservation witness",

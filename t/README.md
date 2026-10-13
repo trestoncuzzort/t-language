@@ -24,14 +24,16 @@ provers) and Viper (one intermediate verification language, many frontends).
 If t ever grows its own checker, that checker gets verified inside Rocq or Lean
 (the CakeML path) before anything trusts it: a homemade language certifying a
 homemade system is two unaudited instruments signing each other's receipts, and
-that is refused here in advance ([dawnr's `ROADMAP.md`](https://github.com/trestoncuzzort/dawnr/blob/main/ROADMAP.md), "The far
-field").
+that is refused here in advance.
 
 ## What t covers
 
 Integers, booleans, sequences, pairs, and strings as character sequences.
 Loops with invariants, `decreases` clauses, quantifiers (`forall`, `exists`),
-and recursive specification functions. **No heap, no floats, no concurrency.**
+and recursive specification functions. Since 2026-10-07 also arrays written in
+place ("Heap (v1)"), parallel loops ("Concurrency (v1)") and IEEE binary64 floats
+("Floats (v1)"), each lowered where a kernel can carry it and refused by name
+where it cannot.
 
 A task is written as a `.t` file in the surface notation
 ([`SYNTAX.md`](SYNTAX.md)), parsed and printed by `surface.py`. The JSON that
@@ -48,8 +50,7 @@ a vacuous specification and the task is refused.
 REFUTED means the kernel accepted a certificate lemma restating a measured
 witness, not a bare failing exit code. That distinction was learned: until
 2026-09-02, Dafny's exit 4 (could-not-prove) was read as refuted. It is not a
-countermodel and is no longer read as one
-([`WITNESS-2026-09-02-dafny-door.md`](https://github.com/trestoncuzzort/dawnr/blob/main/t/WITNESS-2026-09-02-dafny-door.md)).
+countermodel and is no longer read as one.
 
 [`twins/`](twins/) ships 426 pairs as a standalone artifact: 213 verified
 programs answering 90 problems, each paired with a near-miss one deliberate
@@ -59,9 +60,9 @@ written only when both halves are on the record.
 
 ## Where the verdicts come from
 
-- **One matrix.** 35 committed tasks, 31 verified with the twin refuted in all
-  seven ([`AGREEMENT.md`](AGREEMENT.md)), regenerated on a second machine from
-  a clean clone with no cell moved.
+- **One matrix.** 130 tasks in [`AGREEMENT.md`](AGREEMENT.md), 66 verified with the
+  twin refuted in all seven kernels (Dafny 111, Verus 104, Lean 89, Rocq 84,
+  F\* 84, SPARK 79, Frama-C 71), regenerated from a clean clone with no cell moved.
 - **Nested loops, closed 2026-09-18.** A `while` inside a `while` was an
   abstain in Lean, Rocq and F\* and a timeout in Frama-C; all seven now verify
   it with its twin refuted. Two of those fixes were honesty defects rather than
@@ -73,16 +74,6 @@ written only when both halves are on the record.
   the lexer's keyword set. [`grammar_check.py`](grammar_check.py) proves it
   accepts all 4,208 programs the parser accepts and refuses 590 of 590 replies
   the parser refuses.
-- **Specifications are checked against the problems.** [dawnr's `spec_check.py`](https://github.com/trestoncuzzort/dawnr/blob/main/t/spec_check.py)
-  evaluates an accepted specification at the problem's own solution and at the
-  problem's own assertions. Across 36 graded answer sets and 650 clean answers,
-  13 disagree: tests passed, seven proofs held, twin refuted, and the
-  specification still does not say what the problem asked
-  ([`SPEC-CHECK-2026-09-18.md`](https://github.com/trestoncuzzort/dawnr/blob/main/t/SPEC-CHECK-2026-09-18.md)).
-- **Preflight.** [dawnr's `preflight.py`](https://github.com/trestoncuzzort/dawnr/blob/main/t/preflight.py) refuses to let a round start on
-  a checker whose version cannot be read, a held-out problem in a training set,
-  a clean answer resting on a flake or a timeout, or a specification that
-  disagrees with its problem.
 
 ## Using it
 
@@ -93,8 +84,8 @@ Documented with a real example per subcommand in [`COMMAND.md`](COMMAND.md).
 `cli.py verify t/tasks` writes a byte-identical `AGREEMENT.md` modulo the
 timestamp.
 
-Running a whole grading pass is [`run_par.py`](run_par.py); setup is
-[`RUN-ON-LINUX.md`](RUN-ON-LINUX.md).
+Verifying a whole directory of tasks in parallel is [`run_par.py`](run_par.py);
+kernel setup is [`RUN-ON-LINUX.md`](RUN-ON-LINUX.md) and [`RUN-ON-MACOS.md`](RUN-ON-MACOS.md).
 
 An editor integration lives in `editors/vscode/`: a plain JavaScript extension
 with a TextMate grammar covering every `surface.KEYWORDS` and
@@ -111,13 +102,9 @@ here; `editors/WALKTHROUGH.md` measures everything reachable without one.
 | `surface.py`, `check_wf.py` | parser, printer, well-formedness |
 | `lower_*.py` | one lowering per kernel, plus twin generation |
 | `verifiers/` | one driver per kernel, each collecting its own verdict and version |
-| `tasks/` | the 35 committed tasks, as `.t` |
+| `tasks/` | the 114 committed tasks, as `.t` |
 | `twins/` | 426 verified/near-miss pairs over 90 problems, with separating inputs |
-| `run_par.py`, `cli.py` | the grading driver and the single-task entry point |
-| `spec_check.py`, `preflight.py` | the checks that decide what counts |
-| `answer.py`, `prove.py`, `to_python.py` | the gate behind `dawnr ask`, `dawnr prove` and `dawnr spec`, and the proved answer handed back as checked Python |
-| `heldout_audit.py`, `spec_panel.py` | the gates a training-row build ends at: no row may name or behave as a held-out problem or question, or descend from GPL-licensed programs |
+| `run_par.py`, `cli.py` | the directory driver and the single-task entry point |
+| `to_python.py` | a proved task handed back as checked Python |
 | `out/` | lowered sources and verdicts, regenerated; witnesses are committed |
 
-Results and caveats for the whole project are in
-[dawnr's `SCOREBOARD.md`](https://github.com/trestoncuzzort/dawnr/blob/main/SCOREBOARD.md) and [`LIMITS.md`](https://github.com/trestoncuzzort/dawnr/blob/main/LIMITS.md).

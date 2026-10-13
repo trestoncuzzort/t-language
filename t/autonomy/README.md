@@ -1,14 +1,13 @@
 # The autonomy suite
 
-NORTH-STAR.md's target 2: routines of the kind a navigation, guidance and control stack is made of, each written
-once in t with a contract a reviewer would accept, and checked the way every t task is. A kernel's cell counts only
-when it proves the routine and refutes the routine's twin, a one-edit mutant, with a certificate at a measured
-input. The table is `t/AUTONOMY.md`, regenerated from a clean clone like `t/AGREEMENT.md`.
+Routines of the kind a navigation, guidance and control stack is made of, each written once in t with a contract a
+reviewer would accept, and checked the way every t task is: a kernel's cell counts only when it proves the routine
+and refutes the routine's twin, a one-edit mutant, with a certificate at a measured input.
 
 The routines use what the language carries since 2026-10-07: IEEE doubles (SPEC.md "Floats (v1)"), arrays written in
 place (SPEC.md "Heap (v1)") and parallel loops whose race freedom is checked by rule (SPEC.md "Concurrency (v1)").
 A float routine can be proved where floats are lowered (SPARK, Frama-C); an array routine in Dafny and Frama-C natively
-and in the other five by copy-in/copy-out (PREDICT T53); an integer routine in all seven kernels.
+and in the other five by copy-in/copy-out; an integer routine in all seven kernels.
 
 | routine | what it stands for | constructs |
 |---|---|---|

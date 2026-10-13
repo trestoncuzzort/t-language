@@ -1222,13 +1222,9 @@ of ambiguity, not remove one. `diff` had no such need -- it was simply
 spelled the same as an English word already in use -- so only its surface
 spelling changed, to `setminus`; the AST op tag stays `"diff"` (every
 lowering, `check_wf` and `interp` read the tag, never the surface word, so
-none of them changed). `t/loop_locallm.py`'s corpus builder gained the
-guard that was missing: it now refuses, by name and with the parse error,
-any document about to be written that does not parse with the current
-surface, rather than writing it and letting a downstream reader (`t_tool`,
-`locallm/chat_data.py`) drop it silently.
+none of them changed).
 
-**Lean states finite sets of ints (2026-10-07, PREDICT T29).** The note above calls core Lean's lack of a finite set a
+**Lean states finite sets of ints (2026-10-07).** The note above calls core Lean's lack of a finite set a
 named refusal. Lean 4.33's own Std now ships `Std.ExtTreeSet`, whose `=` is extensional (`ExtTreeSet.ext_mem`) and
 decidable, so a set is `Std.ExtTreeSet Int compare` and t's `==` is Lean's own equality.
 - **Operations:** a display is an insert chain from `∅`. union, inter and setminus are `∪`, `∩` and `\`; with a
@@ -1518,19 +1514,19 @@ same measured-cost posture its finite-set wave already logged; F*'s own
 exhaustiveness predicate, since C's `enum` is an unchecked int with no WP
 support of its own for a case split), unbuilt and unmeasured against their
 own kernels this landing, named honestly rather than guessed at. Rocq
-since 2026-10-07 (PREDICT T34): the `Inductive` itself, `dt_<D>` the type and
+since 2026-10-07: the `Inductive` itself, `dt_<D>` the type and
 `dt_<D>_<C>` a constructor; `==` is Leibniz equality in a Prop and a
 decider built by `decide equality` in a bool; `case` is Rocq's own `match`;
 a proof first destructs each matched variable and each decided equality
 (`t_dt_cases`), then closes every case by the usual search. F* since
-2026-10-07 (PREDICT T35): F*'s own inductive type, `dt_<D>` the type (an F*
+2026-10-07: F*'s own inductive type, `dt_<D>` the type (an F*
 type name begins in lower case) and `Dt_<D>_<C>` a constructor; an eqtype,
 so `==` is `=` in a bool and `==` in a Prop; `case` is F*'s `match`, whose
-exhaustiveness F* checks. SPARK since 2026-10-07 (PREDICT T36): an Ada
+exhaustiveness F* checks. SPARK since 2026-10-07: an Ada
 discriminated record whose discriminant (with a default, so the type is
 definite) is an enumeration of the constructors, `Dt_<D>_Tag`; `case` is an
 Ada case expression on the tag and `==` the record's predefined equality.
-Frama-C since 2026-10-07 (PREDICT T37): a C struct passed by value, the
+Frama-C since 2026-10-07: a C struct passed by value, the
 encoding its pairs already use, with `int tag` (an enum constant per
 constructor) and every variant's fields; a match is a conditional on the
 tag; ACSL needs no struct literal, since `x == C(a, b)` is `x.tag == C` and
@@ -1552,7 +1548,7 @@ before this landing (588 = 42 files x 7 kernels x 2 sides, byte for byte).
 
 ### Datatypes (v2): fields
 
-Stated 2026-10-07 (`internal/RESEARCH-2026-10-07-zoom-out.md` decision 4, G9; PREDICT T23). v1's
+Stated 2026-10-07. v1's
 constructors carried no fields. v2 lets them carry fields, which gives **records** (one constructor) and
 **non-recursive sums** (several constructors, any of them with fields). The designs are:
 - Dafny's named constructor parameters and destructors (Dafny Reference Manual 5.14.1);
@@ -1626,25 +1622,25 @@ mutation site, so every existing rung reaches it. `swap-ctor` is unchanged.
 
 In all three, the certificate reads a datatype witness back through the parser, and a value witness may be a
 datatype. A field or a match binder named like a kernel's keyword is renamed with its uses (`names.py`), as every
-other identifier is. Frama-C since 2026-10-07 (PREDICT T37): a field is the struct field `f_<C>_<f>`; a match arm's
+other identifier is. Frama-C since 2026-10-07: a field is the struct field `f_<C>_<f>`; a match arm's
 binder is bound by ACSL's `\let` and, in C, replaced by its field; a field read owes its constructor, which `defs()`
 states in a specification and an assert states before the statement in code. That landing takes datatype
 PARAMETERS: a datatype return or local, `==` on datatypes in executable position and a recursive datatype refuse by
 name. The certificate declares a datatype witness as its compound literal and decides each match at the ground tag,
-asserted, as it decides a branch. Since PREDICT T43, a datatype with one constructor whose fields are int, bool and seq is a
+asserted, as it decides a branch. A datatype with one constructor whose fields are int, bool and seq is a
 FLATTENED parameter, as a pair with a seq component is: each field is its own C parameter (`int *b_items, int
 b_items_n, int b_active` for `b: Bag`), so `b.items` is the bare name `b_items`, and the seq field owes what a seq
 parameter owes (`_n >= 0`, `\valid_read`, pairwise `\separated`). A C struct field cannot hold a seq buffer, so any
 other use of such a datatype (a return, local, constructor, match, equality, call argument, spec-function parameter,
 or a datatype with several constructors and a seq field) refuses by name. The certificate declares the witness
-field by field. SPARK since 2026-10-07 (PREDICT T36): a
+field by field. SPARK since 2026-10-07: a
 field is the component `F_<C>_<f>` of its constructor's variant (Ada forbids a component name twice in one record),
 and `e.f` is the component selection, whose discriminant check gnatprove proves: that check is the read's
 definedness; a field several constructors declare is a function over the tag whose `Pre` names them. A certificate
-binds a datatype parameter by name in a declare expression. F* since 2026-10-07 (PREDICT T35):
+binds a datatype parameter by name in a declare expression. F* since 2026-10-07:
 a field is the constructor's argument `f_<f>`, of type int, bool or a datatype, and `e.f` is a function whose argument
 is refined to the constructors that declare `f`, so F* proves the read's definedness itself wherever the field is
-read. Rocq since 2026-10-07 (PREDICT T34): a field is the constructor's argument, of type int, bool or a datatype (a seq, set or pair field refuses by
+read. Rocq since 2026-10-07: a field is the constructor's argument, of type int, bool or a datatype (a seq, set or pair field refuses by
 name), and `e.f` is the projection `dt_<D>_f_<f>`, whose value at a constructor without `f` is a placeholder; the
 definedness obligation that `e` was built by a constructor declaring `f` is a lemma, proved by cases.
 
@@ -1662,7 +1658,7 @@ byte-identical.
 
 ### Datatypes (v3): recursion
 
-Stated 2026-10-07 (G10, PREDICT T25). A constructor field may have the type of its own datatype, or of a datatype
+Stated 2026-10-07 (G10). A constructor field may have the type of its own datatype, or of a datatype
 declared before it, which gives trees. Spec functions, lemmas and self-recursive tasks may then recurse on such a
 value, with the value itself as the measure. The designs:
 - Dafny's inductive datatypes, ordered by structure (Reference Manual 5.14.1);
@@ -1708,13 +1704,13 @@ The kernels check this, each by its own order. The interpreter's opt-in measure 
 - **New wrong-var move:** a match arm's binder is read as another binder of the same field type (a tree's `l` for
   its `r`). It comes after every existing move, so no earlier task's twin changes. It is binders only: a
   parameter in a recursive call's place would not terminate.
-- **Labelled shapes (G12, PREDICT T27):** after the near corner, the ladder holds every shape of up to five recursive
+- **Labelled shapes (G12):** after the near corner, the ladder holds every shape of up to five recursive
   constructors (`DT_SHAPE_NODES`, at most `DT_SHAPE_CAP = 80`). Each shape's int fields are labelled 0, 1, 2, ... in
   order: the first subtree, then the node's ints, then the rest. A binary tree so labelled is a search tree with
   distinct keys. A BST contract's `requires` asks for exactly that, and the near corner, mostly zeros, almost never
   has it: measured, AlgoVeri's zig_zag had no input satisfying its requires until these were added. They are
   appended, so no earlier task's witness changed.
-- **Bool variants of the labelled shapes (PREDICT T38):** a labelled shape holds every bool field at its ladder's
+- **Bool variants of the labelled shapes:** a labelled shape holds every bool field at its ladder's
   first value, so a red-black node is always black and no shape meets a red-child precondition (measured:
   AlgoVeri's llrbt_rotateleft had no input satisfying its requires). For a recursive constructor with a bool field,
   each shape also enters with one node's bools flipped, every node in turn, then with all of them flipped; appended
@@ -1741,15 +1737,15 @@ The kernels check this, each by its own order. The interpreter's opt-in measure 
   - A measure that is not a parameter, and a structurally recursive task with a `requires`, are refused by name.
 
 SPARK and Frama-C refuse a recursive datatype by name: an Ada record cannot hold itself without access types, and a
-C struct cannot hold itself by value; neither lowering builds the pointer encoding. F* since 2026-10-07 (PREDICT T35): recursion on a
+C struct cannot hold itself by value; neither lowering builds the pointer encoding. F* since 2026-10-07: recursion on a
 datatype parameter is `(decreases q)`, F*'s subterm ordering, and the contract is the SMT proof F* already runs; a loop
-over a datatype state is proved too (some_negative). Rocq since 2026-10-07 (PREDICT T34): a spec fun or a
+over a datatype state is proved too (some_negative). Rocq since 2026-10-07: a spec fun or a
 task whose measure is a datatype parameter is Rocq's own structural `Fixpoint`, whose guard checker is the
 termination proof, and the contract is proved by induction on that parameter, each case unfolded one step. An `if`
 the unfolding cannot pass is destructed and the step repeated; the inductive hypotheses' conjuncts are split and their
 `= true` facts rewritten in. A loop over a datatype state lowers and is not yet proved (some_negative).
 
-**Certificates and obligations over trees (G12, PREDICT T27).** Measured on AlgoVeri's BST contracts, which
+**Certificates and obligations over trees (G12).** Measured on AlgoVeri's BST contracts, which
 recurse on trees and range over sets:
 - **Dafny's certificate** prints a ground set it states, the value of a set-valued spec fun at a witness, as a set
   display.
@@ -1775,7 +1771,7 @@ after this landing: real and twin, all seven kernels, with the witness. All are 
 
 ### Quantifiers over a collection
 
-Stated 2026-10-07 (G11, PREDICT T26). `forall x in S . P` and `exists x in S . P` let `x` range over the elements of
+Stated 2026-10-07 (G11). `forall x in S . P` and `exists x in S . P` let `x` range over the elements of
 a set or a seq `S`, the form AlgoVeri's contracts state as `forall x :: x in view(left) ==> x < val`.
 - **Range:** a name, a call or a parenthesized expression, read with no postfix, since the `.` after it is the
   quantifier's own separator and would otherwise read as a field (`view(l) . x < v`).
@@ -1795,7 +1791,7 @@ all seven. The fresh index names, `qi<n>`, are checked against every name in the
 - **Verus:** `forall|x: int| #![trigger S.contains(x)] S.contains(x) ==> P`. A trigger must be a function call
   naming the bound variable, per the Verus guide.
 
-Rocq, F*, SPARK and Frama-C refuse a set range by name, at their entry. Since PREDICT T30 (2026-10-07), Lean states
+Rocq, F*, SPARK and Frama-C refuse a set range by name, at their entry. Since 2026-10-07, Lean states
 one on its tree sets:
 - in a Prop as `∀ x, x ∈ S → P`;
 - computed as a Bool, as `S.toList.all`, with a connective over one computed as a Bool too;
@@ -1917,9 +1913,8 @@ chains, `list T`, its set encoding; F* `tuple3`..`tuple14` with `._1`..,
 shape and an array type declared per seq shape inside the task's package;
 Frama-C a struct per tuple shape and the offsets encoding of
 `DESIGN-framac-nested-seq.md` per seq shape. A kernel whose encoding is not
-yet written for a shape abstains WITH THE SHAPE NAMED (AGENTS rule 2), and
-`AGREEMENT.md` says which; the landing's registration
-(`t/PREDICT-2026-10-06-t-expansion.md`, T1 and T8) counts tasks only where
+yet written for a shape abstains WITH THE SHAPE NAMED (the abstain rule), and
+`AGREEMENT.md` says which; the agreement table counts tasks only where
 every present kernel verifies the real and refutes the twin.
 
 **The committed tasks** (each verified and its twin refuted in the kernels
@@ -2150,9 +2145,7 @@ unproved there), SPARK (`Min`,
 zero guard; `T_Pow`, `T_Isqrt`, `T_Sum`, `T_Rev`, `T_Contains` as
 recursive expression functions with `Subprogram_Variant`), F*
 (`FStar.Math.Lib`'s `abs`, `max`, `min`, `powx`; `t_gcd`, `t_isqrt`,
-`t_sum`, `t_rev` as `let rec`; `Seq.mem`). Lean since 2026-10-06 (PREDICT
-T9, the first landing of the depth programme in
-`internal/RESEARCH-2026-10-06-landscape.md`): core Lean only, every
+`t_sum`, `t_rev` as `let rec`; `Seq.mem`). Lean since 2026-10-06: core Lean only, every
 function by structural recursion so the kernel's own `decide` evaluates a
 ground value (a well-founded definition, core's `List.mergeSort` among
 them, does not reduce under `decide`, and `native_decide` is banned):
@@ -2162,7 +2155,7 @@ as `List.reverse`, membership as `List` membership, and `sort` as a stable
 insertion sort (the list Python's `sorted` gives) with its permutation,
 order and length lemmas; `isqrt`'s bounds reach `grind` through a
 `grind_pattern` (measured: handed the lemma alone, grind did not
-instantiate it). Rocq since 2026-10-06 (PREDICT T10), over its own
+instantiate it). Rocq since 2026-10-06, over its own
 sequence encoding, a function `Z -> Z` with a length (`t/rocq_lib.py`):
 `Z.min`, `Z.max`, `Z.abs`, `Z.gcd`, `Z.pow`, `Z.sqrt` from the stdlib,
 with gcd's sign and isqrt's bounds (`Z.sqrt_spec`) posed as facts before
@@ -2171,8 +2164,7 @@ the proof engine runs; `sum`, membership and the extrema as fuel
 membership in a seq stated as the existential over indices, its decided
 bool bridged by `t_memb_spec`; `rev` as `fun k => f (n - 1 - k)`; `sort`
 as a stable insertion sort over the listed elements, read back as a
-function, with its order lemma. Frama-C since 2026-10-06 (PREDICT T11,
-`t/framac_lib.py`): ACSL's own `\min`, `\max`, `\abs` in a specification
+function, with its order lemma. Frama-C since 2026-10-06 (`t/framac_lib.py`): ACSL's own `\min`, `\max`, `\abs` in a specification
 and a C conditional in code; `gcd`, `pow`, `isqrt`, `sum`, max/min of one
 argument as ACSL `logic` definitions, each recursive one with its
 termination lemma (proved by WP; the adapter reads a missing one as
@@ -2180,7 +2172,7 @@ vacuous), and in code as small C helper functions whose loops mirror the
 logic recursion one step per iteration, each proved once against its own
 contract; membership in a seq as the existential over indices, with
 `t_memb_c` in code; `sum` of a display as its definitional unfolding. No
-ACSL axiom is emitted. Frama-C since 2026-10-07 (PREDICT T31): `rev` in a
+ACSL axiom is emitted. Frama-C since 2026-10-07: `rev` in a
 specification as the element rewrite `rev(s)[k] == s[len(s) - 1 - k]`, and
 in code as a write loop into a buffer: the return's, or a seq local's own.
 A seq local whose initializer the lowering can write (a copy, `seq(n, v)`,
@@ -2372,7 +2364,7 @@ result satisfies `p` and the length does not grow; for `[e for x in s]`
 for `[e for i in [a, b)]` the length is `b - a` when `a <= b` and the
 element at `k` is `e` at `a + k`; for a filter-and-map, the length bound
 only. Dafny and Verus carry it (Verus with the ensures as a broadcast
-lemma, as for `rev`). Lean since 2026-10-06 (PREDICT T12): each shape one
+lemma, as for `rev`). Lean since 2026-10-06: each shape one
 function in the same prefix form, by structural recursion over `Nat`
 (appending the element's image when the filter holds), with the lemmas
 its shape admits generated beside it and proved by induction: a map's
@@ -2380,36 +2372,36 @@ length and its element at an int index (and, for a range from 0, the
 element with `0 + i` already simplified, which grind did not do under
 `toNat`), a filter's length bound and that every element satisfies it; a
 partial body owes its definedness at every index of the source. Since
-2026-10-07 (PREDICT T32) a map also has its element at a `Nat` index,
+2026-10-07 a map also has its element at a `Nat` index,
 proved from the int one by the cast alone: grind normalizes a literal
 `(0 : Int).toNat` to `0`, which the int lemma's pattern never matches, so
 `u[0]` of a map local went unproved. Rocq since
-2026-10-06 (PREDICT T14): its sequences are a function from `Z` with a length,
+2026-10-06: its sequences are a function from `Z` with a length,
 so a map is its own pair and needs no recursive function: over a seq,
 `(fun k => body[x := s k], len s)`; over a range, `(fun k => body[i := lo + k],
 Z.max 0 (hi - lo))`, the index alone when `lo` is the literal 0; the body owes
 its definedness at every element. A filter, and a comprehension inside a
 spec_fun, method or lemma, refuse by name in Rocq until a filter's
-construction is built and measured. F* since 2026-10-06 (PREDICT T16): each
+construction is built and measured. F* since 2026-10-06: each
 map shape is one function `t_compK` in the prefix form above, built by
 `Seq.init` with one call of `Seq.init_index`, so its postcondition carries the
 length and every element; the definedness is its precondition, the conjuncts
 that do not mention the element stated once (`t_n > 0 ==> ...`) and the rest
 as a quantifier triggered on the element (`t_ix` over a range, as in Dafny); a
-filter refuses by name. SPARK since 2026-10-07 (PREDICT T18): each map shape is
+filter refuses by name. SPARK since 2026-10-07: each map shape is
 one recursive expression function `T_CompK` in T_Slice's shape (a Pre with the
 definedness, a Post with the length and every element over T_Range, a
 Subprogram_Variant on a nonnegative count clamped at the call site), its
 recursion guarded by `R_Has (T_Range'(0, T_N), T_N - 1)`, the Has_Element term
 through which a T_Range quantifier is instantiated, and its index over a range
-written through the identity `T_Ix`. Frama-C since the same day (PREDICT T19):
+written through the identity `T_Ix`. Frama-C since the same day:
 a map that is the whole right-hand side of an assignment to a seq is one write
 loop over the buffer, the slice copy loop with the body's value, each step
 asserting the body's definedness, the count asserted as an ACSL term, and
 `s[a..b][i]` in the body read as `s[a + i]` with the slice's definedness; a
 map anywhere else refuses by name. So every kernel now carries a map; a filter
 is carried by Dafny, Verus and Lean, and refused by name elsewhere. Since
-2026-10-07 (PREDICT T45) F* and SPARK carry a filter too, in Dafny's own
+2026-10-07 F* and SPARK carry a filter too, in Dafny's own
 shape:
 - **The function:** a prefix-form recursion that keeps the last element when
   the condition holds of it. In F* it is a `let rec ... Pure` function,
@@ -2570,7 +2562,7 @@ Lean, Rocq and Frama-C abstain by name on a body with an early exit until
 built and measured (`tshape.has_exit`). The hand-back writes Python's
 `break` and `continue`.
 
-Since 2026-10-07 (PREDICT T44), Verus, Lean, Rocq, F*, SPARK and Frama-C carry
+Since 2026-10-07, Verus, Lean, Rocq, F*, SPARK and Frama-C carry
 all three through one rewrite (`tshape.desugar_exits`). Five of them write a
 loop as a recursive function, and all six already carry a `return` inside a
 loop (SPEC "Early exit (v1)"), which owes the task's `ensures`, not the
@@ -2708,12 +2700,12 @@ comprehension `set x | x in s`. Verus: `t_any`/`t_all` as spec fns with
 a quantifier, `max(s)`/`min(s)` as vstd's own `s.max()`/`s.min()` with
 `max_ensures()`/`min_ensures()` stated inside the proof fn for every use
 over the parameters (vstd's lemmas are not broadcast), `toset(s)` as
-`s.to_set()`. Lean (since 2026-10-06, PREDICT T9): `max(s)`/`min(s)` as
+`s.to_set()`. Lean (since 2026-10-06): `max(s)`/`min(s)` as
 structurally recursive `t_maxs`/`t_mins` with membership and bound lemmas,
 `any`/`all` as core's `List.any`/`List.all` over a predicate (a
 comprehension of a seq under them is the predicate), carried to the index
 quantifier by two bridge lemmas; `toset` stays refused (core Lean has no
-finite set). Rocq (since 2026-10-06, PREDICT T10): `t_maxs`/`t_mins` and
+finite set). Rocq (since 2026-10-06): `t_maxs`/`t_mins` and
 `t_all`/`t_any` as fuel `Fixpoint`s with their facts, an `any`'s bool
 predicate carried to the spec's Prop under the binder by a pointwise bridge
 (`setoid_rewrite`); `toset` refused. F*, SPARK and Frama-C abstain by name.
@@ -2730,7 +2722,7 @@ prefix is in it).
 
 ### Higher-order calls (v1)
 
-Stated 2026-10-06 (PREDICT T8, registered before any run; receipt
+Stated 2026-10-06 (registered before any run; receipt
 b27338128981 for the semantics read first: Python's `functools.reduce`,
 left to right with the initial value first; `sorted`, stable; `max` and
 `min` with a key, the first maximal or minimal item; receipt f70120c23d30
@@ -2797,7 +2789,7 @@ and vstd's `to_multiset_ensures`, with each count term named (the
 `contains <==> count > 0` fact triggers on a count term only: measured,
 the membership asserts failed without them). Measured on a hand probe
 before the generator was written: 14 verified, 0 errors. Lean (since
-2026-10-06, PREDICT T9): `fold`, `max_by` and `min_by` in the same prefix
+2026-10-06): `fold`, `max_by` and `min_by` in the same prefix
 form, by structural recursion over `Nat` (so ground values evaluate under
 `decide`), with fold's zero and step equations stated at an int index (the
 form a loop's invariant reaches) and the extrema's chosen-index bounds,
@@ -2832,8 +2824,7 @@ prefix and whose postcondition is the fold over the whole).
 
 ### Heap (v1): arrays by reference
 
-Stated 2026-10-07 (PREDICT T46), the first form of NORTH-STAR.md's target 1, with the pages on receipt 76b38f46f235
-read first: Ada 2022 RM 6.2 (an array parameter is passed by copy or by reference, unspecified, and reading an object
+Stated 2026-10-07, with the pages read first: Ada 2022 RM 6.2 (an array parameter is passed by copy or by reference, unspecified, and reading an object
 through a second access path after an update is a bounded error, so the two mechanisms agree exactly when nothing is
 aliased) and Dafny's `array<T>` with `modifies` and `old` (reference manual, "Array types"). In-place routines are
 what embedded code is made of (a ring buffer's push, a filter over a sensor window, an in-place sort), and SPARK and
@@ -2875,12 +2866,12 @@ so a certificate can ground `a` and `old(a)`.
   stated) and `a[i] := e;`. An element and the length are read on the array itself, `a[i]` and `a.Length`, the terms
   Dafny's array axioms trigger on (measured: reverse_in_place timed out reading `a[..][k]`). A whole read is `a[..]`,
   and the entry state is `old(a[..])`.
-- **Frama-C (PREDICT T50):** natively, as C pointers. The array is `int *a, int a_n`, `\valid` when written and
+- **Frama-C:** natively, as C pointers. The array is `int *a, int a_n`, `\valid` when written and
   `\valid_read` otherwise, with `assigns a[0 .. a_n - 1]` and the arrays in a loop's frame. A write is `a[i] = e;`
   after an assert of the index's range. `old(a)[i]` is `\let t = i; \at(a[t], Pre)`, the index bound in the current
   state, and `len(old(a))` is `a_n`. A certificate replays the writes on its ground arrays and reads old(...) at its
   own entry label. A whole array in old(...) (`a == rev(old(a))`) refuses by name.
-- **Verus, Lean, Rocq, F\* and SPARK (PREDICT T53):** by copy-in/copy-out (`tshape.desugar_heap`), which is the
+- **Verus, Lean, Rocq, F\* and SPARK:** by copy-in/copy-out (`tshape.desugar_heap`), which is the
   same program because nothing is aliased and nothing escapes.
   - The task becomes a value task: the array parameter is a seq, the body works on a local copy, and
     `m[i] := e` becomes `copy := update(copy, i, e)`.
@@ -2894,7 +2885,7 @@ so a certificate can ground `a` and `old(a)`.
 
 ### Concurrency (v1): parallel loops
 
-Stated 2026-10-07 (PREDICT T47), NORTH-STAR.md's target 1, built on "Heap (v1)". A sensor pass (scale, clamp,
+Stated 2026-10-07, built on "Heap (v1)". A sensor pass (scale, clamp,
 offset, compare every element) is the concurrency embedded code uses most, and its correctness has one question: do
 two iterations touch the same memory? OpenMP's `parallel for` and Rust's `par_iter_mut` answer it by construction,
 by giving each iteration only its own element, and so does t.
@@ -2920,11 +2911,11 @@ invariants (`tshape.desugar_par`), which owes `lo <= hi` as the `for` sugar does
 reverse order, a second schedule, so a gap in the rule would show as a disagreement with the kernels.
 
 **The lowerings:** every kernel through the sequential rewrite. A loop writes an array, so this needs "Heap (v1)"
-(natively in Dafny and Frama-C, by copy-in/copy-out in the other five since PREDICT T53); the hand-back submits the iterations to a thread pool, which the rule makes safe.
+(natively in Dafny and Frama-C, by copy-in/copy-out in the other five since 2026-10-07); the hand-back submits the iterations to a thread pool, which the rule makes safe.
 
 ### Floats (v1): IEEE-754 binary64
 
-Stated 2026-10-07 (PREDICT T48), NORTH-STAR.md's target 1, with the page on receipt 18db794aff2e read first: the
+Stated 2026-10-07, with the page read first: the
 SPARK User's Guide's "Semantics of Floating Point Operations" (binary64, round to nearest with ties to even, and
 infinities and NaN invalid values that proof obligations rule out). A navigation or control routine computes in
 doubles, and the question a reviewer asks of it is how far its answer can be from the exact one. t states floats
@@ -2951,11 +2942,11 @@ correctly rounded square root, and check finiteness after each operation. The in
 a value that rounds, the largest finite doubles (an overflow twin's witness) and a subnormal-scale one.
 
 **The lowerings.**
-- **SPARK (PREDICT T49):** `Long_Float`, which carries exactly these semantics, its division and overflow checks
+- **SPARK:** `Long_Float`, which carries exactly these semantics, its division and overflow checks
   being the definedness obligation. A literal is written as the exact decimal value of its double, so no rounding
   is left to the compiler. `Long_Float'Min`/`'Max` are used. `sqrt`, `real(f)` and a run-time `float(n)` refuse by
   name until built.
-- **Frama-C (PREDICT T51):** C's `double`. ACSL computes on reals (its manual's "Floating-point" section), so
+- **Frama-C:** C's `double`. ACSL computes on reals (its manual's "Floating-point" section), so
   every t float operation in a specification is written with its rounding made explicit, `((double)(a op b))`.
   In code the operation is C's own, preceded by `\is_finite` of that rounded value (and a nonzero divisor). Each
   float parameter is `requires \is_finite(p)`. A literal is the exact decimal value of its double (WP did not read a
@@ -3287,6 +3278,4 @@ like the existing literal sugar. The required round trip compares expanded
 ASTs: `parse(print(parse(source))) == parse(source)`. A context-free constrained
 decoding grammar covers declaration structure; scope, type, acyclicity and
 expansion-size rules are checked during elaboration. See
-[test_inline_helpers.py](test_inline_helpers.py),
-[the preregistration](https://github.com/trestoncuzzort/dawnr/blob/main/t/PREREG-inline-helpers-2026-09-19.md), and
-[the seven-kernel measurement](https://github.com/trestoncuzzort/dawnr/blob/main/t/INLINE-HELPERS-2026-09-19.md).
+[test_inline_helpers.py](test_inline_helpers.py).

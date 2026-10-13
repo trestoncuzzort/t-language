@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """test_framac_datatypes.py: datatypes in Frama-C (SPEC.md "Datatypes (v1)", "(v2): fields", the Frama-C note of
-2026-10-07, PREDICT T37). Text-level checks only, no kernel runs:
+2026-10-07). Text-level checks only, no kernel runs:
 - a datatype is a struct passed by value, a tag and a field per constructor's field, its predicates `ok` and `eq`;
 - a match is a conditional on the tag (`\\let` in ACSL, the field substituted in C), a field read owes its tag;
 - `==` with a constructor expands field by field;
 - the certificate declares the witness as a compound literal and decides each match at the ground tag;
-- a single-constructor datatype with a seq field is a flattened parameter, one C parameter per field (PREDICT T43);
+- a single-constructor datatype with a seq field is a flattened parameter, one C parameter per field ;
 - a recursive datatype, a seq field in a datatype of several constructors, any other use of a flattened one refuse by
   name."""
 from __future__ import annotations
@@ -83,7 +83,7 @@ def test_refused_by_name():
 
 
 def test_flattened_parameter():
-    # PREDICT T43: Bag(items: seq, active: bool) as a parameter is its fields, the seq one a buffer and a length
+    # Bag(items: seq, active: bool) as a parameter is its fields, the seq one a buffer and a length
     src = framac("bag_size")
     ok("int bag_size_t(int *b_items, int b_items_n, int b_active)" in src, "one C parameter per field")
     ok("requires b_items_n >= 0;" in src and "requires \\valid_read(b_items + (0 .. b_items_n - 1));" in src,
@@ -115,7 +115,7 @@ def test_flattened_parameter_other_uses_refused():
 
 
 def test_datatype_return_and_local():
-    # PREDICT T40: a datatype return is the struct by value, the loop frame havocs it by name
+    # a datatype return is the struct by value, the loop frame havocs it by name
     src = framac("some_negative")
     ok("struct dt_Opt some_negative_t(int *s, int s_n)" in src and "  struct dt_Opt r;" in src, "the struct return")
     ok("r = ((struct dt_Opt){.tag = dt_Opt_Some, .f_Some_v = s[i]});" in src, "a constructor assigned")

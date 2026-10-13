@@ -3,7 +3,7 @@
 SPEC.md "Compositional types (v1)" (2026-10-06) made t's types an algebra: a pair of any two types, tuples, seq<T>
 and set<T> over any element type. The seven lowerings carried a fixed list before that day (int, bool, seq, seq<seq>,
 a pair of two base types, set, a declared datatype). A lowering that has not yet been written for a shape must
-ABSTAIN WITH THE SHAPE NAMED (AGENTS rule 2: an honest refusal beats a false verdict), never emit a kernel source
+ABSTAIN WITH THE SHAPE NAMED (an honest refusal beats a false verdict), never emit a kernel source
 that happens to typecheck as something else. `abstain_unless_carried(task, body, kernel)` is that refusal: it raises
 NotImplementedError naming the first shape beyond the list, which run_par.py routes to the ABSTAIN cell. A lowering
 that carries a shape removes it from its `carried` set here, so the matrix in AGREEMENT.md says, kernel by kernel,
@@ -392,7 +392,7 @@ def _rename_var(x, old: str, new: str):
 
 
 def desugar_par(task: dict, body: list) -> tuple:
-    """SPEC.md "Concurrency (v1)" (PREDICT T47): each `parallel for i in [lo, hi)` as the sequential `for` it equals
+    """SPEC.md "Concurrency (v1)" : each `parallel for i in [lo, hi)` as the sequential `for` it equals
     under `par-race`: `var i := lo; while i < hi invariant lo <= i and i <= hi, ... decreases hi - i { body;
     i := i + 1; }`. The index is renamed when another declaration in the body already has its name, so two parallel
     loops in one block declare two variables. The real body stays the same object as task["body"]."""
@@ -459,7 +459,7 @@ def desugar_par(task: dict, body: list) -> tuple:
 
 
 def has_float(task: dict, body: list) -> bool:
-    """Whether the task or this body names the float type or a float operation (SPEC.md "Floats (v1)", PREDICT T48)."""
+    """Whether the task or this body names the float type or a float operation (SPEC.md "Floats (v1)")."""
     def ftype(t) -> bool:
         if t == "float":
             return True
@@ -482,7 +482,7 @@ def abstain_on_floats(task: dict, body: list, kernel: str) -> None:
         raise NotImplementedError(f"{kernel}: floats are not lowered yet (SPEC.md 'Floats (v1)')")
 
 
-# PREDICT T53: Heap (v1) by copy-in/copy-out, for a kernel that writes a task as a function of values. With no aliasing
+# Heap (v1) by copy-in/copy-out, for a kernel that writes a task as a function of values. With no aliasing
 # and nothing escaping (SPEC.md "Heap (v1)", Ada RM 6.2), a task writing array m in place is the same program as a value
 # task returning the pair (its result, m's final contents): the body works on a local copy, `m[i] := e` is
 # `copy := update(copy, i, e)`, the ensures reads `r` as `t_out.0` and m as `t_out.1`, and `old(e)` is e over the
@@ -493,7 +493,7 @@ _HEAP_DEFAULT = {"int": {"int": 0}, "bool": {"bool": False}, "seq": {"op": "seq"
 
 
 def desugar_heap(task: dict, body: list, witness: dict | None = None) -> tuple:
-    """(task, body, witness) with every array parameter a seq (PREDICT T53, the comment above); unchanged when the task
+    """(task, body, witness) with every array parameter a seq (the comment above); unchanged when the task
     has no array. The real body stays the same object as task["body"]."""
     arrays = [p["name"] for p in task.get("params", []) if p.get("type") == "array"]
     if not arrays:
@@ -501,7 +501,7 @@ def desugar_heap(task: dict, body: list, witness: dict | None = None) -> tuple:
     mods = list(task.get("modifies", []))
     if len(mods) > 1:
         raise NotImplementedError("a task writing two arrays is not lowered yet by copy-in/copy-out "
-                                  "(SPEC.md 'Heap (v1)', PREDICT T53)")
+                                  "(SPEC.md 'Heap (v1)')")
     params = [{**p, "type": "seq"} if p["type"] == "array" else p for p in task["params"]]
 
     def unold(x):
@@ -525,7 +525,7 @@ def desugar_heap(task: dict, body: list, witness: dict | None = None) -> tuple:
     r, rt = ret["name"], ret["type"]
     if not isinstance(rt, str) or rt not in _HEAP_DEFAULT:
         raise NotImplementedError(f"a heap task whose result is a {rt!r} has no default value for copy-in/copy-out "
-                                  f"(SPEC.md 'Heap (v1)', PREDICT T53)")
+                                  f"(SPEC.md 'Heap (v1)')")
     names = set(json_names(task))
     cur, out = _fresh("t_cur_" + m, names), _fresh("t_out", names)
 
@@ -621,7 +621,7 @@ def _fresh(base: str, taken: set) -> str:
 
 
 def has_heap(task: dict) -> bool:
-    """Whether the task has an array parameter (SPEC.md "Heap (v1)", PREDICT T46)."""
+    """Whether the task has an array parameter (SPEC.md "Heap (v1)")."""
     return any(p.get("type") == "array" for p in task.get("params", []))
 
 
@@ -636,7 +636,7 @@ def abstain_on_exits(task: dict, body: list, kernel: str) -> None:
                                   f"(SPEC.md 'Early exits (v1)')")
 
 
-# PREDICT T44: `break` and `continue` rewritten away, once for every kernel that writes a loop as a recursive function
+# `break` and `continue` rewritten away, once for every kernel that writes a loop as a recursive function
 # and already carries `return` inside a loop (SPEC.md "Early exit (v1)"). Receipt 28d3ddecb054.
 # - `continue` ends the iteration: what follows it on its path never runs, so the rest of the body moves into the
 #   other branch of each `if` on that path (`_skip_rest`). The iteration ends in the same state, where the invariants
@@ -686,7 +686,7 @@ def _walk(stmts: list, cont, brk, ret: str) -> list:
         if _is_exit(s, "break"):
             if brk is None:
                 raise NotImplementedError(
-                    "a `break` of a loop nested in another loop's body (SPEC.md 'Early exits (v1)', PREDICT T44): its "
+                    "a `break` of a loop nested in another loop's body (SPEC.md 'Early exits (v1)'): its "
                     "continuation is the rest of the outer iteration, which this lowering does not write as statements")
             return out + brk
         if "if" in s:
@@ -747,7 +747,7 @@ def _continues(stmts: list) -> list:
 
 
 def desugar_exits(task: dict, body: list) -> tuple:
-    """(task, body) with no `break` and no `continue` in `body` or in `task["body"]` (PREDICT T44, the comment above), or
+    """(task, body) with no `break` and no `continue` in `body` or in `task["body"]` (the comment above), or
     both as they are when `body` has neither. The real body stays the same object as `task["body"]`, as
     `desugar_seq_quants` keeps it: a lowering tells real from twin by identity. A method body with either, or a `break`
     in a task of several returns, is refused by name."""
@@ -759,10 +759,10 @@ def desugar_exits(task: dict, body: list) -> tuple:
         return task, body
     if any_exit(task.get("methods", [])):
         raise NotImplementedError("a `break` or `continue` in a method body is not lowered yet "
-                                  "(SPEC.md 'Early exits (v1)', PREDICT T44)")
+                                  "(SPEC.md 'Early exits (v1)')")
     if len(task["returns"]) != 1:
         raise NotImplementedError("a `break` in a task with several returns: `return` names one "
-                                  "(SPEC.md 'Early exits (v1)', PREDICT T44)")
+                                  "(SPEC.md 'Early exits (v1)')")
     import check_wf
 
     def one(b: list) -> list:
@@ -772,7 +772,7 @@ def desugar_exits(task: dict, body: list) -> tuple:
         errs = check_wf.check_wf({**task, "body": out})
         if errs and not check_wf.check_wf({**task, "body": b}):
             raise NotImplementedError(
-                f"the rewrite of `break`/`continue` (PREDICT T44) gives an ill-formed body: {errs[0]}")
+                f"the rewrite of `break`/`continue` gives an ill-formed body: {errs[0]}")
         return out
     new_body = one(body)
     new = dict(task)

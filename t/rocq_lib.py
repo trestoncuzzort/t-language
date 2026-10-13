@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """rocq_lib.py: SPEC.md "The library (v1)", "Reductions (v1)" and "Higher-order calls (v1)" in the Rocq lowering
-(PREDICT T10, 2026-10-06; internal/RESEARCH-2026-10-06-landscape.md decision D1).
+(2026-10-06, decision D1).
 
 The Rocq column encodes a sequence as a function `Z -> Z` with a length (lower_rocq.py's own encoding), so the
 library is written over that pair: `min`, `max`, `abs`, `gcd`, `pow`, `isqrt` are the stdlib's own `Z` functions

@@ -97,33 +97,3 @@ assets, what `run_all.py` printed for present and absent kernels, and the
 final agreement line. Drop it in `t/` as
 `WITNESS-windows-<date>.md`. Claims here become true the moment someone
 writes down that they happened.
-
-## The model side on Windows (2026-09-30)
-
-`locallm/` runs natively too. On a Windows 11 laptop with an 8 GB RTX 5050, a per-user Python
-3.12, MinGit with git-lfs (the corpus fixtures under `nl/data/` are LFS files: without `git lfs
-pull` they are 130-byte stubs and every pool test fails), and PyTorch 2.11 with CUDA 12.8 in a
-venv, `locallm/continue_from_checkpoint.py` ran the r12 fine-tune recipe on the card (20 steps,
-kept copies written, `--deterministic` honoured) and `locallm/chat_eval.py` judged dev problems
-through the engine and the t tool with the grammar on. Three places had assumed Unix and were
-fixed the same day: the alarm around every reference call in `t/spec_check.py` and
-`t/rl_reward.py` (a watchdog thread on Windows, the alarm kept on Unix), the pretraining
-study's `fcntl` lock (`msvcrt` on Windows, as `t/spec_experiment.py` already did), and the
-distributed trainer's backend (gloo on Windows, where NCCL does not exist). The only bash on such
-a machine may be System32's WSL launcher, which the launcher-parse test now recognises. The proof
-kernels are the five native ones above; the model side needs none of them to train or to sample.
-
-The whole `t/` suite was then run there three times, fixing what each pass showed. The third
-pass left 48 failures out of 1,478 run: 22 were the tests CI itself deselects (they need the
-dafny binary or the `t-corpora/` sibling checkout; use the workflow's `--deselect` list on any
-machine without them) and the rest were five more Unix assumptions, fixed the same day: the
-alarm in `t/relabel.py`, `t/score_synthesis.py` and `t/audit_reference_types.py` (all on
-`spec_check.deadline` now, which keeps its own exception class where a caller needs one);
-`multiprocessing`'s fork start method in `t/behavioural_decontam.py` (spawn where fork is not
-offered), whose watchdog thread now also exits a worker whose reference swallows every interrupt,
-as the Unix backstop does; and `time.monotonic` in `t/pilot_sampling.py`, which on Windows is
-GetTickCount64 and read 0.0 across a short sample (now `perf_counter`). Two tests assumed a
-`/`-joined path or `bash -c "ulimit -v"` and were made platform-agnostic. The fourth pass, at
-commit 5a2b488a with the workflow's ignore and deselect lists: 1,455 passed, 0 failed, 159
-skipped, 25 deselected, in 2 minutes 33 seconds. The `t/` suite is green on Windows.
-

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""test_spark_comp.py: comprehensions in the SPARK lowering (PREDICT T18, 2026-10-07; SPEC.md "Comprehensions (v1)").
+"""test_spark_comp.py: comprehensions in the SPARK lowering (2026-10-07, SPEC.md "Comprehensions (v1)").
 Text-level checks only, no kernel runs. Each map shape is one recursive expression function `T_CompK` in T_Slice's
 own shape: a Pre (the source's bound, the count nonnegative, the body's definedness), a Post stating the length and
 every element over T_Range, a Subprogram_Variant, and `Seqs.Add` of the last element. Over a range the index is
 written through the identity `T_Ix` and the count is clamped at the call site; the recursion is guarded by
 `R_Has (T_Range'(0, T_N), T_N - 1)`, the Has_Element term through which a T_Range quantifier is instantiated
 (measured on diffs: without it, the Pre's instance at T_N - 1 was out of reach at five times the step budget). A
-comprehension inside a spec_fun, method or lemma refuses by name; a filter is carried since PREDICT T45."""
+comprehension inside a spec_fun, method or lemma refuses by name; a filter is carried since 2026-10-07."""
 from __future__ import annotations
 
 import sys
@@ -60,7 +60,7 @@ def test_the_recursion_is_guarded_by_the_has_element_term():
 
 
 def test_filter():
-    # PREDICT T45: the map's recursion, the last element added only when the condition holds of it
+    # the map's recursion, the last element added only when the condition holds of it
     src = spark("evens")
     assert "Post => Len (T_Comp1'Result) <= T_N" in src
     assert "(for all T_K in T_Range'(Big_Integer'(0), Len (T_Comp1'Result)) =>" in src

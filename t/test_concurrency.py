@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_concurrency.py: SPEC.md "Concurrency (v1)" (PREDICT T47), parallel loops: the notation, the race-freedom
+"""test_concurrency.py: SPEC.md "Concurrency (v1)" , parallel loops: the notation, the race-freedom
 rules, schedule independence in the interpreter (the reverse schedule against the sequential rewrite), the thread-pool
 hand-back and the kernels' sequential lowering. Standard library only, no kernel runs."""
 from __future__ import annotations
@@ -111,10 +111,10 @@ def test_kernels():
     ok("while (i < a.Length)" in d and "a[i] := (a[i] - b[i]);" in d and "requires a != b" in d,
        "Dafny verifies the sequential loop")
     ok("int scale_all_t(int *a, int a_n, int k)" in tlib.lower(load("scale_all"), "framac"),
-       "Frama-C carries it with the heap (PREDICT T50)")
+       "Frama-C carries it with the heap")
     for k in ("verus", "lean", "rocq", "fstar", "spark"):
         src = tlib.lower(load("scale_all"), k)
-        ok("t_out" in src or "F'Result.P_B" in src, f"{k} lowers it through the heap rewrite (PREDICT T53)")
+        ok("t_out" in src or "F'Result.P_B" in src, f"{k} lowers it through the heap rewrite")
 
 
 if __name__ == "__main__":

@@ -213,7 +213,7 @@ def pool(version: str = "v1") -> dict[int, dict]:
     `pool_report`."""
     strings, allowed = _pool_settings(version)
     if version == "v7":
-        # Pool v7 (2026-10-05, t/PREDICT-2026-10-05-wider-reader.md): v5 plus the MBPP problems only the wider
+        # Pool v7 (2026-10-05): v5 plus the MBPP problems only the wider
         # reader reads (a tuple as the list of its elements, a list of int lists as seq<seq>). v5's entries are
         # unchanged and keep their ids; the additions are in no split, so nothing ever trained on or measured moves.
         return {**pool("v5"), **wider_pool()}
@@ -513,7 +513,7 @@ PROMPT_VERSIONS = ("v1", "v2", "v3", "v4", "v5", "s1", "s2")
 # sequences"). A prompted model reads the right spelling in the grammar text; a fine-tuned
 # student under s1 has only this sentence, and copies it: on the 18 dev problems whose prompt
 # says `seq-of-seq` the first three students pass no test, and the 4B writes `seq of seq` in 9
-# signatures (t/PREDICT-2026-10-01-base-model-selection.md). s1 stays byte for byte what the
+# signatures . s1 stays byte for byte what the
 # registered students were asked under.
 SURFACE_KIND = {"seq-of-seq": "seq<seq>"}
 STUDENT_SYSTEM = ("You write tasks in t, a small verified language. Reply with one fenced t task and "
@@ -1401,7 +1401,7 @@ def run_point(task: dict, point: dict) -> dict:
     except (interp.Budget, RecursionError) as b:
         return {"verdict": "budget", "why": str(b)[:120]}
     except (TypeError, ValueError, KeyError, IndexError, AttributeError) as c:
-        # 2026-09-16: a locallm answer that check_wf admitted multiplied a seq by
+        # 2026-09-16: a model answer that check_wf admitted multiplied a seq by
         # a pair and crashed the whole stage; a crash on one candidate is that
         # candidate failing, recorded with the interpreter's message
         return {"verdict": "crash", "why": f"{type(c).__name__}: {c}"[:120]}

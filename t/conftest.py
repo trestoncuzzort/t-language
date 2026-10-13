@@ -1,6 +1,6 @@
 """pytest is not this project's test runner (most files here are driven by
-their own `if __name__ == "__main__":`, run as `python3 test_x.py`, per
-AGENTS.md); CI uses it anyway to collect plain `test_*` functions and
+their own `if __name__ == "__main__":`, run as `python3 test_x.py`);
+CI uses it anyway to collect plain `test_*` functions and
 unittest.TestCase files uniformly in one pass. This bridges one of the
 project's own conventions into pytest without changing any test file:
 

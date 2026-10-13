@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""t/ship.py: prove the C at the width that ships (programme R4b, internal/RESEARCH-2026-10-07-zoom-out.md section 8).
+"""t/ship.py: prove the C at the width that ships.
 
 The matrix proves the Frama-C lowering with WP's Typed+nat model: C's `int` read as a mathematical integer, pinned
 because t's integers are unbounded. T62 compiled that C and found every disagreement with the interpreter to be

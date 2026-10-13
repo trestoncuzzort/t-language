@@ -1,7 +1,7 @@
 name: container
 
-# NORTH-STAR.md target 5: the Dockerfile builds on a fresh machine with all seven kernels, and four tasks verify with
-# their twins refuted in every kernel. The image is built and checked here, not published.
+# The Dockerfile builds on a fresh machine with all seven kernels, and four tasks verify with their twins refuted in
+# every kernel. The image is built and checked here, not published.
 on:
   workflow_dispatch:
   push:

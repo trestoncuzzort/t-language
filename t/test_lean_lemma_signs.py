@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """test_lean_lemma_signs.py: the nonlinear sign bridge for products inside a definition a lemma's ensures calls
-(PREDICT T28, 2026-10-07). Text-level checks only, no kernel runs. AlgoVeri's integer_exponential was blocked in
+(2026-10-07). Text-level checks only, no kernel runs. AlgoVeri's integer_exponential was blocked in
 Lean only by `0 <= b * spec_pow(b, e - 1)`, which grind's linear arithmetic does not derive from the two factors'
 signs; the lemma closer now states it, instantiated at the call's arguments, after the inductive hypothesis."""
 from __future__ import annotations

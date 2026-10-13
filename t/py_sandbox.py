@@ -4,7 +4,7 @@
 
     python3 t/py_sandbox.py solution.py "assert f(2) == 4" "assert f(3) == 9"
 
-The specification-first pipeline (t/PREDICT-2026-10-01-spec-first.md) has the student write a
+The specification-first pipeline  has the student write a
 Python solution before it writes a specification, and keeps that solution only if it passes the
 problem's visible tests. That means executing code a model wrote.
 

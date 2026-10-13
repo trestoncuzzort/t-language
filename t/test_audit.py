@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_audit.py: t/audit.py (NORTH-STAR.md target 3, D8), the specification audit. Every mutant lands in one class;
+"""test_audit.py: t/audit.py (D8), the specification audit. Every mutant lands in one class;
 a weak spec admits a survivor with a witness, the same routine under a strong spec admits none, a mutant that loops
 forever is classed apart from the spec, and the table and the CLI agree. Standard library only, no kernel runs."""
 from __future__ import annotations

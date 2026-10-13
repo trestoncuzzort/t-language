@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_framac_comp.py: comprehensions in the Frama-C lowering (PREDICT T19, 2026-10-07; SPEC.md "Comprehensions
+"""test_framac_comp.py: comprehensions in the Frama-C lowering (2026-10-07, SPEC.md "Comprehensions
 (v1)"). Text-level checks only, no kernel runs. A map that is the whole right-hand side of an assignment to a seq is
 one write loop over the buffer: the count asserted equal to the buffer's length as an ACSL term (never cexpr's
 branch-free C, which Frama-C rejects inside an annotation), each step asserting the body's definedness, the
@@ -58,7 +58,7 @@ def test_a_slice_index_in_the_body_reads_the_base_buffer():
 
 
 def test_refusals_by_name():
-  # PREDICT T55: evens' spec now states the comprehension too, so the refusal can name it in a spec position
+  # evens' spec now states the comprehension too, so the refusal can name it in a spec position
     e = refusal(load("evens"))
     assert "comprehension" in e and "not lowered yet" in e, e
     task = surface.parse("""t 1

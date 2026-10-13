@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_collection_quant.py: quantifiers over a collection (SPEC.md "Quantifiers over a collection", PREDICT T26,
+"""test_collection_quant.py: quantifiers over a collection (SPEC.md "Quantifiers over a collection",
 2026-10-07). Text-level checks only, no kernel runs:
 - the notation (the range forms, and the field-access reading the separator must not take);
 - the rule `quant-range`, and the interpreter over a set and a seq;
@@ -97,7 +97,7 @@ def test_set_range_in_dafny_and_verus():
     ok("forall|x: int| #![trigger s.contains(x)] s.contains(x) ==> (x > (0int))" in text(lower_verus, "all_pos_set"),
        "Verus's contains, as range and trigger")
     task = load("all_pos_set")
-    # Lean states set ranges since PREDICT T30 (test_lean_sets.py); the other four still refuse by name
+    # Lean states set ranges since 2026-10-07 (test_lean_sets.py); the other four still refuse by name
     for mod in (lower_rocq, lower_fstar, lower_spark, lower_framac):
         try:
             mod.lower(task, task["body"])

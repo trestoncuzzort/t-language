@@ -2,7 +2,7 @@
 2026-09-11.
 
 Two fixes landed here, each closing a whole cluster of the 2026-09-10
-lifted corpus's rocq FINDINGs (t/COVERAGE-lifted-785.md, re-measured
+lifted corpus's rocq FINDINGs (the coverage census, re-measured
 before this wave in t/ROADMAP.md's own 16.2 entry):
 
   1. gen_loop's own invariant set now carries one synthetic equality per

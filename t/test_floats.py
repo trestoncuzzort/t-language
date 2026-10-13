@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_floats.py: SPEC.md "Floats (v1)" (PREDICT T48), IEEE-754 binary64: the notation, the typing, the
+"""test_floats.py: SPEC.md "Floats (v1)" , IEEE-754 binary64: the notation, the typing, the
 interpreter's rounding and definedness, the twins, the hand-back, and every kernel's refusal by name until SPARK's
 lowering lands. Standard library only, no kernel runs."""
 from __future__ import annotations
@@ -90,7 +90,7 @@ def test_twins_and_hand_back():
 
 
 def test_spark():
-    # PREDICT T49: Long_Float, the literals as their exact decimal values, the rest refused by name
+    # Long_Float, the literals as their exact decimal values, the rest refused by name
     src = tlib.lower(tasks_io.load_task(str(HERE / "tasks" / "sat_scale.t")), "spark")
     ok("function F (X : Long_Float; K : Long_Float; Lim : Long_Float) return Long_Float" in src, "Long_Float")
     ok("Long_Float'(1.000E3)" in src and "Long_Float'(0.0E0)" in src, "exact literals")
@@ -106,7 +106,7 @@ def test_spark():
 
 
 def test_framac():
-    # PREDICT T51: C doubles; ACSL's arithmetic is exact, so a t float operation is the rounded cast
+    # C doubles; ACSL's arithmetic is exact, so a t float operation is the rounded cast
     src = tlib.lower(tasks_io.load_task(str(HERE / "tasks" / "sat_scale.t")), "framac")
     ok("double sat_scale_t(double x, double k, double lim)" in src and "requires \\is_finite(x);" in src,
        "double parameters, each finite")

@@ -146,7 +146,7 @@ def _digests(paths) -> dict[str, str]:
 # (the reproduction command in t/nested/README.md) had no --table, so this
 # driver wrote its default, the committed t/AGREEMENT.md, and the 35-row
 # matrix became a one-row table. The corpus builder reads that table
-# (loop_locallm.clean_rows needs all seven cells `verified / refuted`), so
+# (a row builder may need all seven cells `verified / refuted`), so
 # the next corpus silently lost every committed task (r12 blocker A3).
 #
 # Jest solves the same class of accident -- a filtered run must not prune
@@ -876,7 +876,7 @@ def format_table(cols, rows, tasks, out_dir: Path, wits: dict | None = None) -> 
     # ROADMAP WS-19 move 4: the sole-blocker count, over the cell text just
     # built above, no second parse of the table this function is writing.
     lines += ["", blockers.render_section(col_names, cell_rows).rstrip("\n")]
-    # internal/RESEARCH-2026-10-06-landscape.md, decision D3: the twin-refuted share and the all-columns count
+    # the design notes, decision D3: the twin-refuted share and the all-columns count
     lines += ["", blockers.render_kernels(col_names, cell_rows).rstrip("\n")]
     return "\n".join(lines) + "\n"
 

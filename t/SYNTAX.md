@@ -851,8 +851,7 @@ that expanded program, not the declarations: `parse(print(parse(source))) ==
 parse(source)`. As with string literal sugar, source spelling is not retained.
 The constrained grammar admits the structure; binding, typing and acyclicity
 are checked during elaboration. Unsupported expanded shapes remain unsupported
-by the same backends. See [the normative rules](SPEC.md#typed-inline-helpers-surface-v1)
-and [the preregistered probes](https://github.com/trestoncuzzort/dawnr/blob/main/t/PREREG-inline-helpers-2026-09-19.md).
+by the same backends. See [the normative rules](SPEC.md#typed-inline-helpers-surface-v1).
 
 ### Core scope
 

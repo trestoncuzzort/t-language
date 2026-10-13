@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """test_spark_seq_carry.py: a seq local that a loop does not assign is carried into the loop function's precondition
-by the qualified `Seqs."="`, never the infix "=" (2026-10-06, PREDICT T13's read). The infix equality of the
+by the qualified `Seqs."="`, never the infix "=" (2026-10-06). The infix equality of the
 instantiated private Sequence type is not directly visible without a use clause, and gnatprove refused the whole file
 ("operator for private type Sequence ... is not directly visible") on AlgoVeri's string_search_naive and
 solve_longest_common_subsequence. Text-level check, no kernel run."""

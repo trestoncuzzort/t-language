@@ -85,7 +85,7 @@ def test_double_all_states_the_list_route() -> None:
     assert ("logic \\list<integer> dbl{L}(int *s, integer s_n, integer n) ="
             in real), real
     assert "\\Nil" in real and "\\Cons(" in real and "\\concat(" in real
-    # PREDICT T65: `s` is a read-only input, so the function is read at the entry state
+    # `s` is a read-only input, so the function is read at the entry state
     assert ("\\length(dbl{Pre}(s, s_n, i))" in real
             and "\\nth(dbl{Pre}(s, s_n, i), __k)" in real), real
     assert "lemma t_list_append_length{L}:" in real
@@ -266,7 +266,7 @@ def test_check_wf_and_committed_tasks_unaffected() -> None:
             task = surface.parse_file(path)
             seq_sf = [f["name"] for f in task.get("spec_funs", [])
                       if f["result"] == "seq"]
-            if os.path.basename(path) not in ("double_all.t", "filter_pos.t"):  # filter_pos: PREDICT T55
+            if os.path.basename(path) not in ("double_all.t", "filter_pos.t"):  # filter_pos
                 assert not seq_sf, (path, seq_sf)
             for twin in (False, True):
                 try:

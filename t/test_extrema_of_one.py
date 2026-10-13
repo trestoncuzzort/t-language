@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_extrema_of_one.py: max(s)/min(s) of one argument in SPARK and F* (PREDICT T21, 2026-10-07; SPEC.md
+"""test_extrema_of_one.py: max(s)/min(s) of one argument in SPARK and F* (2026-10-07, SPEC.md
 "Reductions (v1)"). Text-level checks only, no kernel runs. Both kernels take the prefix form the comprehensions use:
 the extremum of the first n elements, recursive on n, with the two facts the SPEC states (the result is a member of
 the seq, and it bounds every element). SPARK states them as the Post of T_Maxs/T_Mins, the existential written the

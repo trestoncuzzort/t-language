@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """test_spark_datatypes.py: datatypes in SPARK (SPEC.md "Datatypes (v1)", "(v2): fields", the SPARK note of
-2026-10-07, PREDICT T36). Text-level checks only, no kernel runs:
+2026-10-07). Text-level checks only, no kernel runs:
 - a datatype is a discriminated record, the discriminant its constructor, a component per constructor's field;
 - a field read is a component selection (its discriminant check the definedness), `case` a case expression;
 - a certificate binds a datatype parameter by name, never as a static aggregate under another variant;
@@ -74,7 +74,7 @@ def test_refused_by_name():
 
 
 def test_seq_field():
-    # PREDICT T42: a seq field is a `Seq` component, and the seq preamble is emitted for it
+    # a seq field is a `Seq` component, and the seq preamble is emitted for it
     src = spark("bag_size")
     ok("F_Bag_items : Seq;" in src and "subtype Seq is Seqs.Sequence;" in src, "a Seq component, its preamble")
     ok("Len (B.F_Bag_items)" in src, "its length")

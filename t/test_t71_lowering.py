@@ -1,5 +1,4 @@
-"""t/test_t71_lowering.py: the lowering fixes PREDICT T71 registers, and px4_stmt's statement cutter. No kernel is
-invoked here; t/FLIGHT-FINDINGS-REAL.md and the clean-clone tables have the kernels' verdicts.
+"""t/test_t71_lowering.py: lowering fixes read from the emitted text. No kernel is invoked here.
 
 Run: python3 t/test_t71_lowering.py
 """
@@ -78,25 +77,6 @@ class LeanDivisionFacts(unittest.TestCase):
         import lower_lean
         t = _task("flight/fixes/px4_serial_control_fixed.t")
         self.assertNotIn("ediv_nonneg", lower_lean.lower(t, t["body"]))
-
-
-class StatementCut(unittest.TestCase):
-    TEXT = "a\n\tif (x) {\n\t\tf(x,\n\t\t  y);\n\t}\n\treturn;\n"
-
-    def test_cut_to_the_closing_brace_at_the_start_indent(self):
-        import px4_stmt
-        self.assertEqual(px4_stmt.cut(self.TEXT, "if (x)", "}"), "\tif (x) {\n\t\tf(x,\n\t\t  y);\n\t}")
-
-    def test_cut_to_the_second_closing_brace(self):
-        import px4_stmt
-        text = "\tint a = 1;\n\tif (a) {\n\t\ta = 2;\n\t}\n\tfor (;;) {\n\t}\n\treturn;\n"
-        self.assertEqual(px4_stmt.cut(text, "int a = 1;", "}#2"), "\tint a = 1;\n\tif (a) {\n\t\ta = 2;\n\t}\n\tfor (;;) {\n\t}")
-
-    def test_cut_one_line_and_a_missing_marker(self):
-        import px4_stmt
-        self.assertEqual(px4_stmt.cut(self.TEXT, "return;", None), "\treturn;")
-        with self.assertRaises(ValueError):
-            px4_stmt.cut(self.TEXT, "absent", None)
 
 
 if __name__ == "__main__":

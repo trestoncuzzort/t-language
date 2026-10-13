@@ -6,7 +6,7 @@ worker T_SPARK_JOBS=1 when cells run in parallel (A8). 2026-09-25.
 A3. Commit a3c6f955 replaced the 35-task t/AGREEMENT.md with a one-row table:
 `python3 t/run_par.py --tasks t/nested --jobs 7` (the reproduction command in
 t/nested/README.md) had no --table, so run_par wrote its default, the
-committed path. The corpus builder reads that table (loop_locallm.clean_rows
+committed path. The corpus builder reads that table (a row builder
 needs all seven cells `verified / refuted`), so the accident silently removed
 every committed task from the next corpus. Jest keeps a filtered run from
 pruning its snapshot file by marking the unexecuted tests' snapshots as

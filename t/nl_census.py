@@ -2,7 +2,7 @@
 """nl_census.py: which constructs the nl/ corpus needs that t does not have,
 problem by problem, and which gate opens the most problems, dated 2026-09-09.
 
-    python3 nl_census.py --out COVERAGE-nl.md --json ~/tup/t-corpora/nl-census/nl-census.json
+    python3 nl_census.py --out the coverage census --json ~/tup/t-corpora/nl-census/nl-census.json
 
 t/coverage_census.py answers this question for 785 DafnyBench ground-truth
 programs, a corpus of proofs already written in a verifier's own syntax. This
@@ -1425,7 +1425,7 @@ def greedy(programs: list[dict]) -> list[tuple[str, int, int]]:
     # Only a problem some gate blocks can be unlocked by opening gates. One out of the fragment with NO gap
     # named (a structural assertion shape the io reader refuses, no reference solution) was credited to
     # whichever gate opened first until 2026-10-06, which is how `real` read +362 on MBPP before this landing
-    # and +41 after it (t/PREDICT-2026-10-06-t-expansion.md, T2). `stuck_out_of_fragment` counts them apart.
+    # and +41 after it (the registration, T2). `stuck_out_of_fragment` counts them apart.
     remaining = [p for p in func if not p["in_fragment"] and p["gaps"]]
     while remaining:
         best, best_n = None, 0

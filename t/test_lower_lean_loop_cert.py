@@ -58,7 +58,7 @@ MEASURED 2026-09-14 by `python3 t/test_lower_lean_loop_cert.py`: see the
 printed unittest summary this run produces.
 
 2026-09-15 (lean-sole, "the nine sole-blocked rows", ROADMAP 16.2/
-COVERAGE-lifted-785.md's "Sole blockers"): added `ParamStateProductBridgeTest`
+the coverage census's "Sole blockers"): added `ParamStateProductBridgeTest`
 and `ParamStateProductBridgeKernelTest`, pinning `lower_lean.Lower.
 _param_state_bridge_lines` (THE PARAM-STATE PRODUCT GAP, see that
 method's own docstring) -- pow's and factorial's own committed shapes
