@@ -1740,7 +1740,7 @@ def _comp_key(e: dict) -> str:
     import json
     import lower_verus as _lv
     c = e["comp"]
-    # up to the bound variable's name (lower_lean's key already was), so `[x for x in s if p(x)]` in an
+    # PREDICT T52: up to the bound variable's name (lower_lean's key already was), so `[x for x in s if p(x)]` in an
     # ensures and `[y for y in s[0..i] if p(y)]` in an invariant are one function (measured: readings_in_band)
     ren = {c["var"]: {"var": "$0"}}
     return json.dumps({"cond": _lv.subst(c["cond"], ren), "body": _lv.subst(c["body"], ren), "range": "lo" in c},
@@ -3645,8 +3645,18 @@ def _ev_undef(e: dict, env: dict, funs: dict, st):
         if f is None or len(c["args"]) != len(f["params"]):
             raise ValueError(f"undefined-kind certificate: call {c['fun']!r} unknown or mis-arity")
         vals = [_ev_undef(a, env, funs, st) for a in c["args"]]
-        ground = {"call": {"fun": c["fun"],
-                           "args": [_tlit(v, prm.get("type")) for v, prm in zip(vals, f["params"])]}}
+        lits = [_tlit(v, prm.get("type")) for v, prm in zip(vals, f["params"])]
+        ground = {"call": {"fun": c["fun"], "args": lits}}
+        # a method's or the task's own `requires` at the ground arguments is the call's obligation (Dafny's call
+        # rule: the callee's precondition must hold where it is called); the first one that fails is the guard
+        for rq in f.get("_requires", ()):
+            at_args = subst(rq, {prm["name"]: lit for prm, lit in zip(f["params"], lits)})
+            try:
+                holds = interp.ev(at_args, {}, funs, st)
+            except interp.Undef as u:
+                raise ValueError(f"undefined-kind certificate: requires of {c['fun']!r} undefined on replay: {u}")
+            if not holds:
+                raise _DefViol(at_args)
         try:
             return interp.ev(ground, {}, funs, st)
         except interp.Undef as u:
@@ -3860,6 +3870,10 @@ def _witness_env(names: dict, types: dict | None = None) -> dict:
         if isinstance(v, str) and _RAT_TEXT.match(v):
             n, d = v.split("/")
             return interp.Fraction(int(n), int(d))
+        if isinstance(v, str) and isinstance(ty, dict) and "datatype" in ty:
+            # SPEC.md "Datatypes": shown as `Dtype.Ctor(field, ...)` in t's own notation, read back as the value
+            import surface                                      # noqa: PLC0415 (surface imports the lowerings' names)
+            return interp.ev(surface.parse_expr(v), {}, {}, interp.St())
         if isinstance(ty, dict) and "map" in ty and isinstance(v, list):
             kt, vt = ty["map"]
             return interp.MapV.of([(conv(kv[0], kt), conv(kv[1], vt)) for kv in v])
@@ -4243,8 +4257,8 @@ def _lemma_decl(l: dict, self_name: str) -> list[str]:
 def lower(task: dict, body: list, witness: dict | None = None) -> str:
     import tshape
     task, body = tshape.desugar_seq_quants(task, body)   # SPEC.md "Quantifiers over a collection": seq ranges as indices
-    task, body = tshape.desugar_par(task, body)          # a parallel loop as its sequential `for`
-    tshape.abstain_on_floats(task, body, "dafny")        # SPEC.md "Floats (v1)" : Dafny has no IEEE type
+    task, body = tshape.desugar_par(task, body)          # PREDICT T47: a parallel loop as its sequential `for`
+    tshape.abstain_on_floats(task, body, "dafny")        # SPEC.md "Floats (v1)" (PREDICT T48): Dafny has no IEEE type
     # NAMES (2026-09-11, ROADMAP 13.2): sanitize away any identifier that
     # collides with a Dafny reserved word, before anything below ever sees
     # the task -- see names.py's module docstring. `task` is returned
@@ -4318,7 +4332,8 @@ def lower(task: dict, body: list, witness: dict | None = None) -> str:
         # a result that is not a flat type (SPEC.md "Datatypes (v3): recursion": a Tree) is spelled as a parameter is
         lines.append(f"function {f['name']}({ps}): "
                      f"{TYPES[res] if isinstance(res, str) and res in TYPES else dafny_type(res)}")
-        lines.append(f"  decreases {expr(f['decreases'], self_name)}")
+        if "decreases" in f:            # a definition that never calls itself carries none (2026-10-13)
+            lines.append(f"  decreases {expr(f['decreases'], self_name)}")
         lines.append("{")
         lines.append(f"  {expr(f['body'], self_name)}")
         lines.append("}")
@@ -4354,7 +4369,7 @@ def lower(task: dict, body: list, witness: dict | None = None) -> str:
     ret = task["returns"][0]
     lines.append(f"method {method}({ps}) "
                  f"returns ({ret['name']}: {dafny_type(ret['type'])})")
-    # SPEC.md "Heap (v1)" : the arrays the method writes, and the caller's no-alias obligation stated
+    # SPEC.md "Heap (v1)" (PREDICT T46): the arrays the method writes, and the caller's no-alias obligation stated
     hz = (lambda x: _heapify(x, set(arrays))) if arrays else (lambda x: x)
     if task.get("modifies"):
         lines.append(f"  modifies {', '.join(task['modifies'])}")

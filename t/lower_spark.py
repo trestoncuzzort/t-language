@@ -1410,7 +1410,7 @@ harness.twin_cached picked either side of this patch):
 # None. MEASURED: allow42 lowers to valid Ada (no "None" substring) and
 # reads verified/refuted in both dafny and spark at flake 3, matching;
 # this closes spark's own one sole-blocked row in
-# the coverage census's "Sole blockers" section (r26: spark 1,
+# t/COVERAGE-lifted-785.md's "Sole blockers" section (r26: spark 1,
 # formal_verication_dafny_tmp_tmpwgl2qz28_challenges_ex2__allow42). The
 # SAME fix also turns dafny_synthesis_task_id_760__hasOnlyOneDistinctElement
 # from spark ABSTAIN (the identical join shape, `if len(a) == 0 { return
@@ -1426,6 +1426,7 @@ harness.twin_cached picked either side of this patch):
 # its own audit reads VC_POSTCONDITION severity medium/status limit,
 # "cannot prove (for some I_v in T_Range'(0, Len (A)) => (Elem (A, I_v) /=
 # N))" -- the SAME existential-witness gap, named open, not attempted.
+#
 # The sweep r26 spark tail's OTHER two rows (both reproduced ALONE, no
 # --jobs contention, this session):
 #   - dafny_synthesis_task_id_594__firstEvenOddDifference: real=verified,
@@ -1502,7 +1503,7 @@ TYPE = {"int": "Big_Integer", "bool": "Boolean", "seq": "Seq",
         # Numerator/Denominator in lowest terms; gnatprove maps it to the reals (measured on this desktop:
         # literals as quotients, "/" with its Pre, To_Big_Real, the comparisons)
         "real": "Big_Real",
-        # SPEC.md "Floats (v1)" : GNAT's Long_Float, IEEE binary64 with ties-to-even rounding, its
+        # SPEC.md "Floats (v1)" (PREDICT T49): GNAT's Long_Float, IEEE binary64 with ties-to-even rounding, its
         # infinities and NaN invalid values that gnatprove's overflow checks rule out (the SPARK UG's "Semantics
         # of Floating Point Operations"), which is t's definedness for a float operation exactly
         "float": "Long_Float"}
@@ -1773,6 +1774,7 @@ SEQ_PREAMBLE = """\
 # warning already (unnoticed until a second instantiation's own diagnostic
 # put it beside a real error and made it worth reading), so no committed
 # task's own audit outcome moves.
+#
 # Every other seq primitive at this level is the SAME Ada name as its flat
 # counterpart, OVERLOADED rather than renamed: Len/Elem/T_Update/T_Fill/
 # T_Slice/T_Concat/T_Concat_Aux/T_Eq each gain a second declaration whose
@@ -1789,6 +1791,7 @@ SEQ_PREAMBLE = """\
 # has to choose the package by the static type of its own first element
 # (Lower._ty), the one place this construct needed new dispatch logic
 # rather than new Ada text (see Lower._ty and Lower.expr, below).
+#
 # A row-typed postcondition (T_Fill/T_Slice/T_Concat at this level) cannot
 # lean on Ada's own "=" any more than the flat EQ_PREAMBLE's own elementwise
 # fact could (Seq is the same private generic-instantiation type either
@@ -1822,6 +1825,7 @@ NESTED_SEQ_PREAMBLE = """\
 # as an infix operator without a `use Seqs;` this file will not add
 # unconditionally (the same regression `use` would cause T_Update was
 # measured to cause, above).
+#
 # TWO CANDIDATES were measured, not one. The first try leaned on the
 # generic's OWN "=", called by QUALIFIED function-call name rather than
 # infix (`Seqs."=" (S, T)`, "not directly visible" being specifically
@@ -1849,6 +1853,7 @@ NESTED_SEQ_PREAMBLE = """\
 # representation. Proving T_Eq(F'Result, S) from the loop helper's Post
 # therefore asks the prover to bridge two quantifier encodings on top of
 # unfolding a recursive call, and that combination missed the budget.
+#
 # T_Eq is therefore the SECOND candidate, SPEC.md's definition restated
 # directly over Len/Elem/T_Range with no library help, the same shape
 # T_Fill/T_Slice/T_Concat already use, and gated to also turn needs_range
@@ -2017,10 +2022,10 @@ LIB_PREAMBLE = {
    function T_Contains (S : Seq; X : Big_Integer) return Boolean is
      (for some I in T_Range'(Big_Integer'(0), Len (S)) => Elem (S, I) = X);
 """,
-    # SPEC.md "Reductions (v1)" (2026-10-07): the extremum of the first N elements, in prefix form as
+    # SPEC.md "Reductions (v1)" (PREDICT T21, 2026-10-07): the extremum of the first N elements, in prefix form as
     # the comprehensions are, its Post the two facts the SPEC states (a member, and bounding every element), the
     # existential written as T_Contains writes membership; the recursion guarded by R_Has, the Has_Element term a
-    # T_Range quantifier is instantiated through 
+    # T_Range quantifier is instantiated through (PREDICT T18)
     "T_Maxs": """\
    function T_Maxs (S : Seq; N : Big_Integer) return Big_Integer
    with
@@ -2079,6 +2084,7 @@ DIVMOD_PREAMBLE = """\
 # nothing beyond termination (trivial here, no recursion) for gnatprove to
 # fail to prove, the same "zero-risk" reasoning R_First/R_Has/R_Next
 # already rely on for T_Range.
+#
 # MEASURED (probes p1/p2/p3, gnatprove FSF 16.1.0, z3, scratch dir, this
 # session): T_Slice (S, 0, Len (S)) = S -- NATIVE Seqs."=" equality, not
 # just elementwise T_Eq -- verifies directly with 0 unproved (174 checks),
@@ -2097,6 +2103,7 @@ DIVMOD_PREAMBLE = """\
 # T_Replace_From/T_Replace_Empty_From) or by peeling ONE Seq element via
 # T_Slice (T_Lower/T_Upper/T_Digits) stays in exactly this proven-tractable
 # shape.
+#
 # THE ONE MEMBER THAT DID NOT: split/join's round-trip law. Building the
 # split RESULT needs SPARK.Containers.Functional's own Rows.Add (there is
 # no other Seq2 constructor), and Rows.Add's OWN preservation fact
@@ -2140,6 +2147,7 @@ STRCORE_PREAMBLE = """\
 # `_str_count` exactly, INCLUDING for Len (T) = 1 (non-overlapping is
 # moot at width 1: skipping by Len (T) = 1 after a match is the same
 # position T_Count_From would have reached anyway).
+#
 # T_Count1 is a SECOND, equal-by-construction definition of THAT SAME
 # Len (T) = 1 case, recursing by PEELING THE LAST ELEMENT VIA T_SLICE
 # (T_Lower/T_Upper's own shape) rather than by counting a position UP.
@@ -2520,7 +2528,7 @@ def _is_nested_seq(ty) -> bool:
     return isinstance(ty, dict) and "seq" in ty
 
 
-# DATATYPES in SPARK (2026-10-07, SPEC.md "Datatypes (v1)", "(v2): fields"). A t datatype is an Ada
+# DATATYPES in SPARK (PREDICT T36, 2026-10-07; SPEC.md "Datatypes (v1)", "(v2): fields"). A t datatype is an Ada
 # discriminated record whose discriminant is the constructor (learn.adacore.com, "More about records": variant
 # records): an enumeration `Dt_<D>_Tag` of literals `Dt_<D>_<C>`, and `Dt_<D>` with one variant per constructor, a
 # field the component `F_<C>_<f>` (Ada forbids a component name twice in one record, t allows a field in several
@@ -2575,7 +2583,7 @@ def _dt_check(task: dict) -> None:
                     raise NotImplementedError(
                         "spark: a recursive datatype (SPEC.md 'Datatypes (v3): recursion'): an Ada record cannot hold "
                         "itself without access types, which this lowering does not build")
-                if t not in ("int", "bool", "seq") and _dt_of(t) not in names:    # seq
+                if t not in ("int", "bool", "seq") and _dt_of(t) not in names:    # seq: PREDICT T42
                     raise NotImplementedError(
                         f"spark: a datatype field of type {t!r} (SPEC.md 'Datatypes (v2): fields'): only int, bool, seq "
                         "and datatype fields are lowered yet")
@@ -2612,7 +2620,7 @@ _DT_VARTYPES: dict = {}
 
 
 def _dt_type_of(e: dict):
-    """the datatype a field read's scrutinee denotes, read statically for `defined()` (which has no
+    """PREDICT T36: the datatype a field read's scrutinee denotes, read statically for `defined()` (which has no
     typing context of its own): a constructor, a field of one, or a name whose declared type `lower()` recorded."""
     if "ctor" in e:
         return {"datatype": e["ctor"]["dtype"]}
@@ -2632,7 +2640,7 @@ def _dt_aggregate(e: dict) -> str:
     if e.get("op") == "neg" and "int" in e["args"][0]:
         return f"Big_Integer'({-e['args'][0]['int']})"
     if e.get("op") == "seq":
-        # a ground seq field, the certificate's own seq literal
+        # PREDICT T42: a ground seq field, the certificate's own seq literal
         return _cert_lit([x["int"] if "int" in x else -x["args"][0]["int"] for x in e["args"]])
     c = e["ctor"]
     fields = _dt_fields(c["dtype"], c["name"])
@@ -2651,7 +2659,7 @@ def ada_type(ty) -> str:
     if _is_nested_seq(ty):
         return "Seq2"
     if _dt_of(ty) is not None:
-        return _adt(_dt_of(ty))                           # the landing
+        return _adt(_dt_of(ty))                           # PREDICT T36
     if isinstance(ty, dict):
         return _pair_ada_name(ty)
     return TYPE[ty]
@@ -2869,6 +2877,7 @@ def _has_seq_op(node) -> bool:
 # the PAIRS docstring, above) (fst/snd's own `.P_A`/`.P_B`, Lower.expr
 # below), one declaration per distinct pair type the task uses
 # (_pair_types), emitted in that deterministic order.
+#
 # `==`/`!=` on two pairs is componentwise (SPEC.md), and Ada's own
 # predefined "=" on a plain (untagged, non-private) record already IS that,
 # componentwise over each field's own "=": MEASURED (probe p_pair1.ads,
@@ -3095,6 +3104,7 @@ NESTED_CONCAT_PREAMBLE = """\
 # was MEASURED (2026-09-11, this task, --steps DEFAULT_STEPS=20000 in
 # t/verifiers/spark.py, then --steps ESCALATED_STEPS=100000) to exceed
 # the budget outright: VC_POSTCONDITION at the limit, real=timeout.
+#
 # FIRST TRY, ABANDONED (2026-09-11, wave G): a per-point induction lemma
 # with a `begin`/`pragma Assert` body -- MEASURED here to be plainly
 # ILLEGAL, not merely slow: a full subprogram body (anything with a
@@ -3112,6 +3122,7 @@ NESTED_CONCAT_PREAMBLE = """\
 # an expression-function's implicit unfolding the way it does through an
 # explicit `pragma Assert` -- and the "no begin in a spec" rule above
 # rules out the assert route.
+#
 # WHAT WORKS (probes split_test3/4/5.ads, this session, gnatprove FSF
 # 16.1.0/z3, 0 unproved at --steps 20000): induct on the RESULT LENGTH
 # instead of on a per-point predicate, over NATIVE Seq "=" the whole way
@@ -3174,6 +3185,7 @@ SPLIT_CONCAT_LEMMA_PREAMBLE = """\
 # slice(l,0,n))[i] == l[(i+n) mod len]`), restated here over this file's
 # own T_Concat/T_Slice/T_Mod encoding, named but not built in wave H
 # (ROADMAP 16.2, "586 splitAndAppend... a T_Mod bridging lemma").
+#
 # FIRST TRY, ABANDONED (2026-09-12, this session, probes probe1/probe11/
 # probe12.ads): a single Boolean lemma stating the FULL forall directly
 # (`for all I in T_Range'(0,Len(L)) => Elem(T_Concat(...),I) =
@@ -3188,6 +3200,7 @@ SPLIT_CONCAT_LEMMA_PREAMBLE = """\
 # exactly the "nested quantifier under a case split" wall
 # SPLIT_CONCAT_LEMMA's own docstring already measured for a different
 # task's shape.
+#
 # WHAT WORKS (probes probe13.ads through probe20.ads, this session,
 # gnatprove FSF 16.1.0/z3, 0 unproved at --steps 20000): never ask
 # gnatprove to instantiate a quantified Post at a SYMBOLIC, case-split
@@ -3744,6 +3757,7 @@ def has_return(body: list) -> bool:
 # task/AST dicts, zero spark-specific code, so fstar, verus, lean and spark
 # all recognize the identical shape from the identical detector; only the
 # LEMMA TEXT each kernel emits differs (`_divisor_bound_spark_defs` below).
+#
 # WAVE J'S OWN FINDING (2026-09-12, this session, this worktree): a wave-J
 # builder wrote and proved a lemma family for this shape STANDALONE (this
 # session's own probe1.ads through probe7.ads, gnatprove FSF 16.1.0/z3,
@@ -3761,6 +3775,7 @@ def has_return(body: list) -> bool:
 # own boolean-typed `result` field; the guard false at exit and the
 # divisor bound, both proved standalone above) are all in scope with no
 # dependency on this loop being the body's last statement.
+#
 # THE FOUR PROBES, MEASURED (this session, probe1.ads through probe7.ads):
 # probe1 (Divisor_Le_Half alone, `k >= 2 /\ k < n /\ n rem k = 0 ==>
 # k <= n/2`) proves with ZERO help beyond gnatprove's own native `rem`/`/`
@@ -4077,7 +4092,7 @@ class Lower:
     def __init__(self, task: dict, ce: bool = False):
         self.task = task
         self.helpers: list[str] = []   # emitted W_k record types + functions
-        self.comps: dict = {}          # SPEC.md "Comprehensions (v1)", shape key -> (k, Ada text)
+        self.comps: dict = {}          # SPEC.md "Comprehensions (v1)", PREDICT T18: shape key -> (k, Ada text)
         self.wcount = 0
         self.needs_range = False       # set by the first lowered quantifier
         self.needs_divmod = False      # set by the first lowered div/mod
@@ -4184,7 +4199,7 @@ class Lower:
     # --- expressions -------------------------------------------------------
 
     def _comp_call(self, e: dict, sub: dict, types: dict) -> str:
-        """SPEC.md "Comprehensions (v1)" in SPARK : the call of this shape's function (registered, with
+        """SPEC.md "Comprehensions (v1)" in SPARK (PREDICT T18): the call of this shape's function (registered, with
         its text, on first sight) in Dafny's prefix form: a source `s` is `(S, Len (S))`, a source `s[0..e]` is
         `(S, E)`, a range `[a, b)` is `(A, B - A)`, then the free variables of the body by name."""
         import lower_dafny
@@ -4232,7 +4247,7 @@ class Lower:
         return self._map_text(k, c, fvs, ftys, types2)
 
     def _filter_text(self, k: int, c: dict, fvs: list, ftys: dict, types2: dict) -> str:
-        """a filter as a recursive expression function, the map's own shape (`_map_text`) with the last
+        """PREDICT T45: a filter as a recursive expression function, the map's own shape (`_map_text`) with the last
         element added only when the condition holds of it (Dafny's filter `t_comp`). The Post is the length bound
         and, for a pure filter (the body is the bound variable), the condition at every element; the step a count
         over a growing prefix needs is the definition itself, which GNATprove unfolds for an expression function."""
@@ -4377,7 +4392,7 @@ class Lower:
         witness's own ground values instead, since there is no AST-level
         `types` dict at a witness."""
         if "ctor" in e:
-            return {"datatype": e["ctor"]["dtype"]}          # the landing
+            return {"datatype": e["ctor"]["dtype"]}          # PREDICT T36
         if "field" in e:
             return _dt_field_type(_dt_of(self._ty(e["field"]["of"], types)), e["field"]["name"])
         if "match" in e:
@@ -4400,7 +4415,7 @@ class Lower:
         if "ite" in e:
             return self._ty(e["ite"]["then"], types)
         if "comp" in e:
-            return "seq"   # SPEC.md "Comprehensions (v1)", a map whose elements are ints (_comp_call)
+            return "seq"   # SPEC.md "Comprehensions (v1)", PREDICT T18: a map whose elements are ints (_comp_call)
         if "call" in e:
             fun = e["call"]["fun"]
             if fun == self.task["name"]:
@@ -4468,7 +4483,7 @@ class Lower:
         if op in ("floor", "ceil"):
             return "int"
         if op in ("min", "max") and len(e["args"]) == 1:
-            # SPEC.md "Reductions (v1)" : max(s)/min(s) is an element, never the seq; read as the seq's
+            # SPEC.md "Reductions (v1)" (PREDICT T21): max(s)/min(s) is an element, never the seq; read as the seq's
             # type it made `max(s) + 1` (largest's twin) a concatenation, a file gnatprove refused
             t0 = self._ty(e["args"][0], types)
             return "real" if isinstance(t0, dict) and t0.get("seq") == "real" else "int"
@@ -4537,7 +4552,7 @@ class Lower:
             self.needs_reals = True
             return _real_lit(*e["rat"])
         if e.get("op") == "float":
-            # SPEC.md "Floats (v1)" : float(literal), rounded here as t rounds it, written as the exact
+            # SPEC.md "Floats (v1)" (PREDICT T49): float(literal), rounded here as t rounds it, written as the exact
             # double; a run-time conversion of a Big_Integer is not lowered yet
             a0 = e["args"][0]
             if "rat" in a0 or "int" in a0:
@@ -4574,14 +4589,14 @@ class Lower:
                     f"then {self.expr(c['then'], sub, types)} "
                     f"else {self.expr(c['else'], sub, types)})")
         if "ctor" in e:
-            # a constructor is the qualified aggregate of its variant
+            # PREDICT T36: a constructor is the qualified aggregate of its variant
             c = e["ctor"]
             assoc = [f"Tag => {_actor(c['dtype'], c['name'])}"] + [
                 f"{_acomp(c['name'], fd['name'])} => {self.expr(a, sub, types)}"
                 for a, fd in zip(c["args"], _dt_fields(c["dtype"], c["name"]), strict=True)]
             return f"{_adt(c['dtype'])}'({', '.join(assoc)})"
         if "field" in e:
-            # the component selection, whose discriminant check is the read's definedness; a field
+            # PREDICT T36: the component selection, whose discriminant check is the read's definedness; a field
             # several constructors declare is the function over the tag (_dt_decls)
             f = e["field"]
             d = _dt_of(self._ty(f["of"], types))
@@ -4591,7 +4606,7 @@ class Lower:
                 return f"{of}.{_acomp(ctors[0], f['name'])}"
             return f"{_adt(d)}_F_{f['name']} ({of})"
         if "match" in e:
-            # an Ada case expression on the tag, each binder its constructor's component
+            # PREDICT T36: an Ada case expression on the tag, each binder its constructor's component
             m = e["match"]
             d = _dt_of(self._ty(m["scrutinee"], types))
             scr = self.expr(m["scrutinee"], sub, types)
@@ -4839,7 +4854,7 @@ class Lower:
             eq = f"{_pair_ada_name(pty)}_Eq ({args[0]}, {args[1]})"
             return eq if op == "==" else f"(not {eq})"
         if op in ("min", "max") and len(e["args"]) == 1:
-            # SPEC.md "Reductions (v1)" in SPARK : max(s)/min(s) of one argument, the prefix-form
+            # SPEC.md "Reductions (v1)" in SPARK (PREDICT T21): max(s)/min(s) of one argument, the prefix-form
             # T_Maxs/T_Mins (LIB_PREAMBLE), whose Pre `Len (S) > 0` is the definedness obligation at this call
             self.needs_lib.add("T_Maxs")
             self.needs_range = True
@@ -5074,6 +5089,7 @@ class Lower:
     # lower_while() for a loop whose own body can return; every other body
     # keeps compile()/lower_while() exactly as they read before this note,
     # byte-for-byte, since neither is touched by anything below.
+    #
     # A `return` cannot become an actual Ada `return` statement: everything
     # this file emits is an expression function (SHAPE, header), and a full
     # subprogram body (statements, a loop, `return`) is not a
@@ -5173,6 +5189,7 @@ class Lower:
                 # is empty; the real "else path" is the code AFTER the
                 # if), and the OLD per-variable loop below raised on ANY
                 # None regardless of which side escaped.
+                #
                 # EXACTLY one side escaping unconditionally is the case
                 # this fixes: the continuation (whatever runs after this
                 # `if` in real control flow) is then simply whichever
@@ -5184,6 +5201,7 @@ class Lower:
                 # flattened body -- overwrites it before anything reads
                 # it; lower()'s own final "body never assigns ret_name"
                 # sanity check still catches a genuine miss).
+                #
                 # A first attempt instead special-cased "BOTH sides
                 # escape unconditionally" the same way (skip the merge
                 # entirely, on the theory that nothing continues past
@@ -5485,7 +5503,7 @@ class Lower:
             # a seq-typed local is compared by the qualified function, `Seqs."="` (or `Rows."="` one level up):
             # the infix "=" of the instantiated private type is not directly visible without a use clause, and
             # gnatprove refused the whole file (AlgoVeri's string_search_naive and solve_longest_common_subsequence,
-            # the read). The qualified spelling is the same function, already used for the Rows instance.
+            # PREDICT T13's read). The qualified spelling is the same function, already used for the Rows instance.
             vt = types.get(v)
             if vt == "seq":
                 carried_pre.append(f'Seqs."=" ({cap(v)}, ({env[v]}))')
@@ -5671,14 +5689,15 @@ class Lower:
     def lower_spec_fun(self, sf: dict) -> str:
         sub = {p["name"]: cap(p["name"]) for p in sf["params"]}
         types = {p["name"]: p["type"] for p in sf["params"]}
-        d = self.expr(sf["decreases"], sub, types)
         plist = "; ".join(f"{cap(p['name'])} : {ada_type(p['type'])}"
                           for p in sf["params"])
         sig = f"function {cap(sf['name'])} ({plist}) return " \
               f"{ada_type(sf['result'])}"
-        return (f"   {sig}\n"
-                f"   with Subprogram_Variant => "
-                f"(Decreases => (if {d} >= 0 then {d} else 0));\n"
+        head = f"   {sig}"
+        if "decreases" in sf:               # a definition that never calls itself has no variant to state
+            d = self.expr(sf["decreases"], sub, types)
+            head += f"\n   with Subprogram_Variant => (Decreases => (if {d} >= 0 then {d} else 0))"
+        return (f"{head};\n"
                 f"\n"
                 f"   {sig} is\n"
                 f"     ({self.expr(sf['body'], sub, types)});\n")
@@ -5783,7 +5802,7 @@ def _cert_lit_of_type(v, ty) -> str:
         return out
     if _dt_of(ty) is not None:
         import interp
-        import surface                                     # the witness's own t text, parsed
+        import surface                                     # PREDICT T36: the witness's own t text, parsed
         return _dt_aggregate(surface.parse_expr(v if isinstance(v, str) else interp._j(v)))
     if isinstance(ty, dict):
         t1, t2 = ty["pair"]
@@ -5851,9 +5870,9 @@ def defined(e: dict, is_real=None) -> dict:
     if "call" in e:
         return _t_conj([defined(a, is_real) for a in e["call"]["args"]])
     if "ctor" in e:
-        return _t_conj([defined(a, is_real) for a in e["ctor"]["args"]])   # the landing
+        return _t_conj([defined(a, is_real) for a in e["ctor"]["args"]])   # PREDICT T36
     if "field" in e or "match" in e:
-        # `e.f` owes a constructor declaring f, and a match each arm's body on its own constructor,
+        # PREDICT T36: `e.f` owes a constructor declaring f, and a match each arm's body on its own constructor,
         # both stated as a t match over the scrutinee
         if "field" in e:
             of = e["field"]["of"]
@@ -5876,7 +5895,7 @@ def defined(e: dict, is_real=None) -> dict:
                                "body": db}})
         return _t_conj([defined(q["lo"], is_real), defined(q["hi"], is_real), body_ob])
     if "comp" in e:
-        # the landing (a filter's count can reach an ensures): lower_verus.defined's own comprehension case, the
+        # PREDICT T45 (a filter's count can reach an ensures): lower_verus.defined's own comprehension case, the
         # source defined, then at every element the condition defined and the body defined where it holds
         import lower_verus
         c = e["comp"]
@@ -6072,6 +6091,7 @@ def _undef_obligation(task: dict, twin_body: list, sub: dict, vals: dict,
     # itself to replay an early exit inside this walk, the pre-existing
     # fail-closed posture the module docstring already states for that
     # shape.
+    #
     # `while` DESCENT (ROADMAP 16.2, 2026-09-12, dafny_synthesis_task_id_
     # 610 removeElement): mirrors the `if` case just above (a ground
     # `interp.ev` decides which way each iteration goes, so a
@@ -6359,7 +6379,7 @@ def certificate(task: dict, body: list, w: dict | None, L: Lower,
     sub = {k: (_cert_lit_of_type(v, param_types[k]) if k in param_types
               else _cert_lit(v))
           for k, v in vals.items()}
-    # a datatype parameter is bound by name in a declare expression around the goal; substituted as a
+    # PREDICT T36: a datatype parameter is bound by name in a declare expression around the goal; substituted as a
     # static aggregate, a case alternative for another variant selects a component the aggregate lacks, which GNAT
     # rejects at compile time (measured: shape_area's twin MALFORMED)
     dt_decls = []
@@ -6484,7 +6504,7 @@ def certificate(task: dict, body: list, w: dict | None, L: Lower,
                 return ""
             # The obligation usually names the return (`r[k]` with k past the twin's shorter result), unbound at an
             # ensures-level witness: bind it to F at the witness's inputs, exactly as the "value" kind does, when the
-            # witness values every parameter (squares' and diffs' twins built no certificate and read
+            # witness values every parameter (PREDICT T18: squares' and diffs' twins built no certificate and read
             # TIMEOUT; their F is an expression function whose value comes through the helper's own proved Post)
             sub_e = dict(sub)
             if set(vals) == {p["name"] for p in task["params"]}:
@@ -6506,7 +6526,7 @@ def certificate(task: dict, body: list, w: dict | None, L: Lower,
         parts.append(neg)
     conj = "\n      and then ".join(parts)
     if dt_decls:
-        conj = "declare " + " ".join(dt_decls) + " begin (" + conj + ")"   # the landing
+        conj = "declare " + " ".join(dt_decls) + " begin (" + conj + ")"   # PREDICT T36
     sig = f"function {CERT_NAME} return Boolean"
     return (pre_decls +
             f"   --  Refutation certificate: the measured witness, restated\n"
@@ -6529,6 +6549,7 @@ def certificate(task: dict, body: list, w: dict | None, L: Lower,
 # specified subprogram contracts are assumed to analyze a subprogram's
 # callers, and verified when the body of the subprogram is analyzed"), which
 # is Dafny's modular call rule.
+#
 # The one leak: this file can only write expression functions (SHAPE,
 # header), and GNATprove makes an expression function's body an implicit
 # postcondition everywhere the body is visible, which is everywhere in the
@@ -6543,6 +6564,7 @@ def certificate(task: dict, body: list, w: dict | None, L: Lower,
 # proof context -- it is not a justification, an assumption or a skip (none
 # of verifiers/spark.py's BANNED forms), so it can make a proof fail, never
 # make one pass. The method's own Post is still proved against its body.
+#
 # What abstains, by name: a method using a pair type (its record would have
 # to be declared from the method's signature, which _pair_types does not
 # read), a method whose loop is the divisor-bound shape (its lemma is wired
@@ -6746,7 +6768,7 @@ def _uses_sets(obj) -> bool:
 
 
 def _comp_refusal(task: dict, body: list) -> None:
-    """SPARK carries a comprehension that is a map (no filter) over a seq or an int range, in the task's
+    """PREDICT T18: SPARK carries a comprehension that is a map (no filter) over a seq or an int range, in the task's
     requires, ensures and body; a filter, or a comprehension inside a spec_fun, method or lemma, refuses by name."""
     def walk(x, inside_task: bool) -> None:
         if isinstance(x, dict):
@@ -6767,7 +6789,7 @@ def _comp_refusal(task: dict, body: list) -> None:
 
 
 def lower(task: dict, body: list, witness: dict | None = None) -> str:
-    # the task's datatype declarations, for the module-level helpers, for exactly this call
+    # PREDICT T36: the task's datatype declarations, for the module-level helpers, for exactly this call
     prev, prev_vt = dict(_DTS), dict(_DT_VARTYPES)
     _DTS.clear()
     _DTS.update({d["name"]: d for d in task.get("datatypes", [])})
@@ -6796,16 +6818,16 @@ def lower(task: dict, body: list, witness: dict | None = None) -> str:
 def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     import tshape
     task, body = tshape.desugar_seq_quants(task, body)   # SPEC.md "Quantifiers over a collection": seq ranges as indices
-    task, body = tshape.desugar_par(task, body)          # a parallel loop as its sequential `for`
-    task, body = tshape.desugar_exits(task, body)        # break/continue rewritten; `while true` stays
-    task, body, witness = tshape.desugar_heap(task, body, witness)   # copy-in/copy-out
+    task, body = tshape.desugar_par(task, body)          # PREDICT T47: a parallel loop as its sequential `for`
+    task, body = tshape.desugar_exits(task, body)        # PREDICT T44: break/continue rewritten; `while true` stays
+    task, body, witness = tshape.desugar_heap(task, body, witness)   # PREDICT T53: copy-in/copy-out
     tshape.abstain_unless_carried(task, body, "spark", carried=frozenset({"real", "comp", "exit", "float"}), lib=SPARK_LIB)
-    _comp_refusal(task, body)                              # maps carried, the rest refused by name
+    _comp_refusal(task, body)                              # PREDICT T18: maps carried, the rest refused by name
     if tshape.uses_ops(body, task, {"floor", "ceil"}):
         # SPEC.md "Exact rationals (v1)" (2026-10-06): Big_Reals (Ada 2022 A.5.7) has no floor or ceiling
         raise NotImplementedError(
             "spark: floor/ceil: Ada.Numerics.Big_Numbers.Big_Reals has no floor or ceiling (SPEC.md 'Exact rationals (v1)')")
-    _dt_check(task)                                        # datatypes lowered; the rest by name
+    _dt_check(task)                                        # PREDICT T36: datatypes lowered; the rest by name
     if (_uses_sets(task) or _uses_sets(body)) and not _only_seq_membership(task, body):
         # FINITE SETS (2026-09-27, SPEC.md "Finite sets (v1)"): the SPARK
         # library ships SPARK.Containers.Functional.Sets (`Contains`,
@@ -6981,7 +7003,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
         needs_nested_seq = needs_nested_seq or m_nested
         needs_seq = needs_seq or m_seq or m_nested
     if any(fd["type"] == "seq" for d in task.get("datatypes", []) for k in d["ctors"] for fd in k.get("fields", [])):
-        needs_seq = True                                   # a datatype's seq field names Seq
+        needs_seq = True                                   # PREDICT T42: a datatype's seq field names Seq
 
     # The seq and range preambles put fixed Ada names in scope; a t
     # identifier capitalizing onto one of them would be captured silently,
@@ -7339,7 +7361,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     if pair_types_used:
         parts += [_pair_preamble(pair_types_used, L.needs_pair_eq)]
     if task.get("datatypes"):
-        parts += [_dt_decls(task)]                         # the landing
+        parts += [_dt_decls(task)]                         # PREDICT T36
     for sf in spec_funs:
         parts += [sf]
     parts += lemma_parts
@@ -7347,9 +7369,9 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     if any("T_Ix (" in txt for _k, txt in L.comps.values()):
         parts += ["   function T_Ix (K : Big_Integer) return Big_Integer is (K);\n"]
     for _k, txt in sorted(L.comps.values()):
-        parts += [txt]   # SPEC.md "Comprehensions (v1)", after every preamble each one calls
+        parts += [txt]   # SPEC.md "Comprehensions (v1)", PREDICT T18: after every preamble each one calls
     for h in L.helpers:
-        parts += [h]     # after the comprehensions, which a loop's contract may call (count_evens_skip)
+        parts += [h]     # PREDICT T45: after the comprehensions, which a loop's contract may call (count_evens_skip)
     parts += [
         f"   {fsig}",
         "   with\n     " + ",\n     ".join(aspects) + ";",

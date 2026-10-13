@@ -156,6 +156,10 @@ RULES: dict[str, str] = {
     "no-self-in-ensures": "ensures never references the task's own name (Gate 3)",
     "one-return": "exactly one return value (SPEC.md v0 and v1)",
     "op-arity": "each operator has the fixed arity its Expr form declares",
+    "int-literal": "an int literal carries an integer (not a string, not a bool)",
+    "bool-literal": "a bool literal carries true or false",
+    "rat-lit-v1": "a real literal is a v1 construct (SPEC.md \"Exact rationals (v1)\")",
+    "task-decreases-int": "a task decreases is an int or a datatype value, typed over the parameters",
     "op-unknown": "an operator must be in the declared version's operator set",
     "proj-nonpair": "fst/snd want a pair or tuple operand, proj wants a tuple (Pairs; Compositional types)",
     "proj-index": "a projection index is an int literal within the tuple; .0 and .1 are fst and snd (Compositional types)",
@@ -195,6 +199,8 @@ RULES: dict[str, str] = {
     "spec-fun-result": "a spec_fun's result is any t type (Gate 3; Compositional types)",
     "quant-range": "a quantifier ranges over [lo, hi) or over a set or seq's elements (Gate 1; Quantifiers over "
                    "a collection)",
+    "spec-fun-decreases-selfcall": "a spec_fun that calls itself requires a decreases measure; one that does not "
+                                   "needs none (2026-10-13)",
     "spec-fun-decreases-int": "a spec_fun's decreases must be int, or a datatype value whose recursive calls "
                               "take its fields (Gate 3; Datatypes (v3): recursion)",
     "strlib-arity": "each string-library member has a fixed arity (The string library)",
@@ -294,7 +300,7 @@ def _e(errs: "_Errs", node, msg: str, rule: str) -> None:
     errs.append(WfError(msg, rule, errs.file, line, col))
 
 
-NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*$")
+NAME_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*\Z")
 V0_OPS = {"+", "-", "*", "neg", "==", "!=", "<", "<=", ">", ">=",
           "and", "or", "not", "implies"}
 # div and mod are v1 (SPEC.md "Division and modulo", 2026-09-08): Euclidean,
@@ -492,8 +498,13 @@ def _ty(e, env, funs, dtypes, ver, errs, bound, expect=None):
     `expect` down; everywhere else it stays None and behaviour is
     unchanged from before this construct."""
     if "int" in e:
+        if isinstance(e["int"], bool) or not isinstance(e["int"], int):
+            _e(errs, e, f"an int literal carries an integer, not {e['int']!r}", "int-literal")
+            return None
         return "int"
     if "rat" in e:
+        if ver == 0:
+            _e(errs, e, "real literal in a v0 task", "rat-lit-v1")
         # SPEC.md "Exact rationals (v1)" (2026-10-06): n / d in lowest terms, d >= 1, d of the form 2^a 5^b (a
         # finite decimal, the only literal the notation writes), else refused as non-canonical.
         r = e["rat"]
@@ -503,6 +514,9 @@ def _ty(e, env, funs, dtypes, ver, errs, bound, expect=None):
             _e(errs, e, f"a real literal is n/d in lowest terms with a finite decimal expansion, not {r!r}", "rat-literal")
         return "real"
     if "bool" in e:
+        if not isinstance(e["bool"], bool):
+            _e(errs, e, f"a bool literal carries true or false, not {e['bool']!r}", "bool-literal")
+            return None
         if ver == 0:
             _e(errs, e, "bool literal in a v0 task", "bool-lit-v1")
         return "bool"
@@ -611,7 +625,7 @@ def _ty(e, env, funs, dtypes, ver, errs, bound, expect=None):
                        "quant-shadow")
                 sub[bname] = fdecl.get("type")
                 subbound.add(bname)
-            at = _ty(a.get("body"), sub, funs, dtypes, ver, errs, subbound)
+            at = _ty(a.get("body"), sub, funs, dtypes, ver, errs, subbound, expect)
             if result is None:
                 result = at
             elif at != result:
@@ -699,6 +713,7 @@ def _ty(e, env, funs, dtypes, ver, errs, bound, expect=None):
     args = e.get("args", [])
     if op in HOF_OPS:
         return _ty_hof(e, op, args, env, funs, dtypes, ver, errs, bound)
+    n_errs_before = len(errs)
     if op in UNARY and len(args) != 1:
         _e(errs, e, f"{op} takes one argument", "op-arity")
     if op in TERNARY and len(args) != 3:
@@ -724,6 +739,8 @@ def _ty(e, env, funs, dtypes, ver, errs, bound, expect=None):
         _e(errs, e, f"{op} takes two arguments", "op-arity")
     if op in NARY and len(args) < 2:
         _e(errs, e, f"{op} needs at least two arguments", "op-arity")
+    if len(errs) != n_errs_before:
+        return None                                    # the arity is wrong: nothing below may index the operands
     # SPEC.md "Compositional types (v1)" (2026-10-06): a display's elements are typed against the element type
     # of the expected type, so `[[]]` under a declared `seq<seq<bool>>` reads its inner `[]` as a `seq<bool>`.
     expects = [None] * len(args)
@@ -1152,6 +1169,7 @@ def check_wf(task: dict, positions: dict | None = None,
         _e(errs, task, "bad task name", "name")
     if len(task["returns"]) != 1:
         _e(errs, task, "exactly one return value (SPEC.md v0 and v1)", "one-return")
+        return errs                                    # everything below reads the one return
     if not task["ensures"]:
         _e(errs, task, "ensures must be non-empty", "ensures-nonempty")
     # SPEC.md "Datatypes (v1)" (2026-09-27): `task["datatypes"]`, a list of
@@ -1180,6 +1198,7 @@ def check_wf(task: dict, positions: dict | None = None,
             dtypes[dname] = d
             continue
         cnames = set()
+        dfield_types: dict = {}
         for c in ctors:
             cname = c.get("name") if isinstance(c, dict) else None
             if not isinstance(cname, str) or not NAME_RE.match(cname):
@@ -1206,6 +1225,12 @@ def check_wf(task: dict, positions: dict | None = None,
                            "field-dup")
                     fnames.add(fname)
                     ft = f.get("type")
+                    # a field name shared by two constructors projects with one type (Dafny 5.14.1: shared
+                    # destructors agree in type), so a clash is refused at the declaration, not at first use
+                    if fname in dfield_types and dfield_types[fname] != ft:
+                        _e(errs, d, f"datatype {dname}: field {fname} is {dfield_types[fname]!r} in one constructor "
+                                    f"and {ft!r} in {cname}", "field-type-clash")
+                    dfield_types.setdefault(fname, ft)
                     if (isinstance(ft, dict) and set(ft) == {"datatype"}
                             and (ft["datatype"] == dname or ft["datatype"] in dtypes)):
                         pass   # SPEC.md "Datatypes (v3): recursion": this datatype, or one declared before it
@@ -1225,7 +1250,7 @@ def check_wf(task: dict, positions: dict | None = None,
     if ver == 0 and (funs or "decreases" in task or "gate" in task
                      or "methods" in task or "lemmas" in task):
         _e(errs, task, "v1 field in a v0 task", "v0-frozen")
-    # SPEC.md "Heap (v1)" : an array parameter reads as a seq, its contents; writes are `aset`
+    # SPEC.md "Heap (v1)" (PREDICT T46): an array parameter reads as a seq, its contents; writes are `aset`
     penv = {p["name"]: ("seq" if p["type"] == "array" else p["type"]) for p in task["params"]}
     _check_heap(task, errs)
     # v0 is int only (SPEC.md v0; `bool` and `seq` are v1 types), for the return as for the parameters: a `t 0`
@@ -1250,21 +1275,33 @@ def check_wf(task: dict, positions: dict | None = None,
             # SPEC.md "Compositional types (v1)" (2026-10-06): any t type; an invalid one is refused here by name,
             # where before an unlisted result only failed the body-type check below under a misleading message.
             _e(errs, f, f"spec_fun {f['name']} result is not a t type: {f['result']!r}", "spec-fun-result")
-        dty = _ty(f["decreases"], fenv, earlier, dtypes, ver, errs, set())
-        if dty != "int" and not (isinstance(dty, dict) and set(dty) == {"datatype"}):
-            # an int, or (SPEC.md "Datatypes (v3): recursion") a datatype value, ordered by structure
-            _e(errs, f, f"spec_fun {f['name']} decreases is not int or a datatype value", "spec-fun-decreases-int")
+        if "decreases" in f:
+            dty = _ty(f["decreases"], fenv, earlier, dtypes, ver, errs, set())
+            if dty != "int" and not (isinstance(dty, dict) and set(dty) == {"datatype"}):
+                # an int, or (SPEC.md "Datatypes (v3): recursion") a datatype value, ordered by structure
+                _e(errs, f, f"spec_fun {f['name']} decreases is not int or a datatype value", "spec-fun-decreases-int")
+        elif _self_calls(f["body"], f["name"]):
+            # the measure is what makes a self-recursive definition a function (Dafny asks one of every possibly
+            # recursive function); a definition that never calls itself needs none (2026-10-13)
+            _e(errs, f, f"spec_fun {f['name']} calls itself without a decreases", "spec-fun-decreases-selfcall")
         if _ty(f["body"], fenv, earlier, dtypes, ver, errs, set(), f["result"]) != f["result"]:
             _e(errs, f, f"spec_fun {f['name']} body type != result", "spec-fun-body-type")
     for e in task.get("requires", []):
         if _ty(e, penv, funs, dtypes, ver, errs, set()) != "bool":
             _e(errs, e, "requires clause is not bool", "requires-bool")
     ret = task["returns"][0]
+    if ret["name"] in penv:
+        _e(errs, task, f"a parameter and the return share the name {ret['name']}", "local-shadow")
     eenv = dict(penv)
     eenv[ret["name"]] = ret["type"]
     for e in task["ensures"]:
         if _ty(e, eenv, funs, dtypes, ver, errs, set()) != "bool":
             _e(errs, e, "ensures clause is not bool", "ensures-bool")
+    if "decreases" in task:
+        # the measure is an expression over the parameters, typed like a spec_fun's (an int or a datatype value)
+        dty = _ty(task["decreases"], penv, funs, dtypes, ver, errs, set())
+        if dty is not None and dty != "int" and not (isinstance(dty, dict) and set(dty) == {"datatype"}):
+            _e(errs, task, "task decreases is not int or a datatype value", "task-decreases-int")
     if _self_calls(task["ensures"], task["name"]):
         _e(errs, task, "ensures references the task name (SPEC.md gate 3)", "no-self-in-ensures")
     selfrec = _self_calls(task["body"], task["name"])
@@ -1302,7 +1339,8 @@ def check_wf(task: dict, positions: dict | None = None,
         _no_method_calls(task["decreases"], all_methods, errs)
     for f in task.get("spec_funs", []):
         _no_method_calls(f["body"], all_methods, errs)
-        _no_method_calls(f["decreases"], all_methods, errs)
+        if "decreases" in f:
+            _no_method_calls(f["decreases"], all_methods, errs)
     bfuns = dict(funs)
     bfuns.update(msigs)
     if selfrec:
@@ -1522,6 +1560,12 @@ def _check_call_positions(body, names, errs) -> None:
                 _no_method_calls(rhs, names, errs)
         elif "return" in s:
             _no_method_calls(s["return"][1], names, errs)
+        elif "aset" in s:
+            _no_method_calls(list(s["aset"])[1:], names, errs)      # the index and the value written
+        elif "par" in s and isinstance(s["par"], dict):
+            q = s["par"]
+            _no_method_calls([q.get("lo"), q.get("hi")] + list(q.get("invariants", [])), names, errs)
+            _check_call_positions(q.get("body", []), names, errs)
         elif "lemma" in s and isinstance(s["lemma"], dict):
             _no_method_calls(s["lemma"].get("args", []), names, errs)
         elif "if" in s:
@@ -1623,7 +1667,7 @@ def _par_reads(x, written: set, i: str, ok_at: bool = False) -> bool:
 
 
 def _check_par(s, env, funs, dtypes, ver, errs, lemmas, in_lemma) -> None:
-    """SPEC.md "Concurrency (v1)" : the bounds, the invariants and the body typed as a `for`'s, and the
+    """SPEC.md "Concurrency (v1)" (PREDICT T47): the bounds, the invariants and the body typed as a `for`'s, and the
     race-freedom rules that make every interleaving the sequential one."""
     w = s["par"]
     i = w["var"]
@@ -1684,7 +1728,7 @@ def _check_par(s, env, funs, dtypes, ver, errs, lemmas, in_lemma) -> None:
 
 
 def _check_heap(task, errs) -> None:
-    """SPEC.md "Heap (v1)" : where an array and `old` may appear, and what `modifies` names."""
+    """SPEC.md "Heap (v1)" (PREDICT T46): where an array and `old` may appear, and what `modifies` names."""
     for p in task["params"]:
         if p["type"] != "array" and _has_array(p["type"]):
             _e(errs, p, f"param {p['name']}: an array is a parameter's whole type", "array-param-only")
@@ -1696,8 +1740,8 @@ def _check_heap(task, errs) -> None:
             places += [(k[:-1] + " parameter", q["type"], q) for q in m.get("params", [])]
             places += [(k[:-1] + " return", q["type"], q) for q in m.get("returns", [])]
     for d in task.get("datatypes", []):
-        for c in d["ctors"]:
-            places += [("field", f["type"], d) for f in c.get("fields", [])]
+        for c in (d.get("ctors") or []) if isinstance(d, dict) else []:
+            places += [("field", f.get("type"), d) for f in (c.get("fields") or []) if isinstance(f, dict)] if isinstance(c, dict) else []
 
     def locals_(x):
         if isinstance(x, dict):
@@ -1752,7 +1796,7 @@ def _check_stmts(body, env, funs, dtypes, ver, errs, assignable, lemmas=None,
     lemmas = {} if lemmas is None else lemmas
     for s in body:
         if "aset" in s:
-            # SPEC.md "Heap (v1)" 
+            # SPEC.md "Heap (v1)" (PREDICT T46)
             n, i, e = s["aset"]
             arrays, mods = env.get(HEAP_KEY, (set(), set()))
             if n not in arrays or n not in mods:

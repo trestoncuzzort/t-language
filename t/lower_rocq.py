@@ -996,7 +996,7 @@ artifact. No Admitted, no Axiom: the adapter bans the tokens outright.
   and nested-return abstains, `_undef_cert`'s loop-free-only abstain) --
   none of which this date's fix was scoped to close.
 
-  THE NINE SOLE-BLOCKERS (2026-09-10, the coverage census's tenth
+  THE NINE SOLE-BLOCKERS (2026-09-10, COVERAGE-lifted-785.md's tenth
   sweep, "Sole blockers": rocq alone keeps 9 of the 72 six-of-seven
   lifted tasks out of all seven). MEASURED (coqc 9.2.0, this box,
   harness.run_task, flake 3, one task at a time, load average 17-52
@@ -1183,7 +1183,7 @@ artifact. No Admitted, no Axiom: the adapter bans the tokens outright.
   tasks now read COUNTS; these three do not, each for a distinct, named
   reason, none of them a lowering crash or a masked error.
 
-  THE EIGHT SOLE-BLOCKERS, SECOND PASS (2026-09-10, the coverage census's
+  THE EIGHT SOLE-BLOCKERS, SECOND PASS (2026-09-10, COVERAGE-lifted-785.md's
   TWELFTH sweep, sweep-785-r16, "Sole blockers": rocq alone now keeps 8 of
   the 72 six-of-seven lifted tasks out of all seven -- the set shifted from
   the tenth sweep's nine above: upWhileLess, m3, minArray x2, calcR,
@@ -1400,7 +1400,7 @@ artifact. No Admitted, no Axiom: the adapter bans the tokens outright.
   own directly-read stuck goal, none of them a lowering crash or a masked
   error.
 
-  THE SIX SOLE-BLOCKERS, THIRD PASS (2026-09-10, the coverage census's
+  THE SIX SOLE-BLOCKERS, THIRD PASS (2026-09-10, COVERAGE-lifted-785.md's
   THIRTEENTH sweep: rocq alone keeps 6 of the 72 six-of-seven lifted tasks
   out of all seven -- tetrahedralNumber, is_even, invertArray, max_nit,
   max, mystery1). ONE now reads COUNTS; the other five stay exactly as
@@ -1493,7 +1493,7 @@ artifact. No Admitted, no Axiom: the adapter bans the tokens outright.
   reaches.
 
   INVERTARRAY, RE-MEASURED ALONE AS INSTRUCTED: still TIMEOUT/REFUTED,
-  the SAME reading the coverage census already records, not a
+  the SAME reading COVERAGE-lifted-785.md already records, not a
   regression. This task has no spec_fun at all (gate "loops", a plain
   seq in/seq out reversal with three `forall` invariants and one `div`),
   so nothing either change above could possibly touch it; read directly
@@ -1526,7 +1526,7 @@ artifact. No Admitted, no Axiom: the adapter bans the tokens outright.
   the other three lifted tasks with a bool-result spec_fun besides
   max_nit/is_even (`nit_add`, `nit_increment`, the only other lifted
   tasks `bool_sf` is ever non-empty for): both read unproved/refuted,
-  identical to the coverage census's own row for each, unchanged. Spot-
+  identical to COVERAGE-lifted-785.md's own row for each, unchanged. Spot-
   checked two lifted tasks with an INT-only spec_fun (`bool_sf` empty,
   the ground arms a no-op string) for a lowering crash or shape change:
   neither errored, both lowered and dispatched normally (ComputeFact
@@ -1800,7 +1800,7 @@ artifact. No Admitted, no Axiom: the adapter bans the tokens outright.
   out-of-guard index" shape the certificate builder already grounds.
 
 ROADMAP 16.2, rocq's own rows, 2026-09-11. Re-measured before touching
-anything (the coverage census's own rocq cells, dated 2026-09-10,
+anything (t/COVERAGE-lifted-785.md's own rocq cells, dated 2026-09-10,
 were a day stale): the 59-task ds59-lifted set and the 15-task ds15-new
 set, both graded in rocq+dafny at flake 3. Three real causes, largest
 first, each fixed in the lowering/prelude, never by relabeling a verdict:
@@ -1976,7 +1976,7 @@ ROCQ-4, 2026-09-12 (ROADMAP 16.2's rocq item: "two sequential loops,
 rotate by mod, the primes, the pair twin" -- tasks 610 removeElement, 586
 splitAndAppend, 470 pairwiseAddition, 576 isSublist, 126
 sumOfCommonDivisors, 3 isNonPrime, 605 isPrime, from
-the coverage census's own sweep-r21 findings). One classification bug
+COVERAGE-lifted-785.md's own sweep-r21 findings). One classification bug
 fixed in `t/verifiers/rocq.py` (this session's other file), everything
 else measured and named rather than guessed at; no lowering feature in
 `lower_rocq.py` itself changed this session.
@@ -2169,7 +2169,7 @@ touching the generation pipeline).
   timeout/refuted) -- a true regression check, not inferred, since a
   docstring-only edit cannot move a `.v` byte either way but the run was
   still made to have a measured "after" rather than an assumed one. The
-  six the coverage census rows named in this session's own brief
+  six COVERAGE-lifted-785.md rows named in this session's own brief
   (task_id_3, 470, 576, 586, 605, 610), graded standalone at flake 3
   before and after: identical both times (removeElement abstain/
   abstain, splitAndAppend unproved/refuted, pairwiseAddition
@@ -2286,7 +2286,7 @@ touching the generation pipeline).
   (new, this date): 13 of 13, coqc/coqchk both on PATH. Restricted-to-rocq
   conformance (`conformance.py`'s own `probe_manifest()`/`run_items()`,
   one column): 66 of 66 PASS both before and after, no PASS lost. Of the
-  75 `dafny_synthesis` rows in the coverage census, graded standalone
+  75 `dafny_synthesis` rows in COVERAGE-lifted-785.md, graded standalone
   at flake 3: 58 read the identical cell, 17 moved (all twin-side,
   unproved/timeout -> refuted; no real moved except task_id_605__isPrime,
   timeout -> unproved, confirmed BYTE-IDENTICAL lowered source before and
@@ -2377,7 +2377,7 @@ touching the generation pipeline).
   reading the row directly from the read-only lifted corpus, skipped
   when that file is absent).
 
-  Swept every OTHER lifted row named in the coverage census's own
+  Swept every OTHER lifted row named in COVERAGE-lifted-785.md's own
   sweep r24 whose rocq TWIN read unproved or timeout (89 rows; graded
   standalone at flake 3, rocq+dafny, from the read-only lifted corpus):
   33 of 89 moved (twin unproved/timeout -> refuted, real unaffected by
@@ -2407,7 +2407,7 @@ touching the generation pipeline).
   3, rocq+dafny, from the read-only lifted corpus): testDouble,
   isArmstrong, containsK, is_even, invertArray, extra_sum's own `sum`,
   flex_ex2's own `max`, and CVS-projeto_aula2's own `mystery1` (t/
-  the coverage census's "Sole blockers" table). coqc's own message,
+  COVERAGE-lifted-785.md's "Sole blockers" table). coqc's own message,
   reproduced individually before any change here:
     - isArmstrong: no failure at all standalone (verified/refuted); the
       sweep's own "verified / timeout" cell is CONFIRMED contention, not
@@ -2487,7 +2487,7 @@ touching the generation pipeline).
       Un-investigated beyond reproduction; named here so it is not
       confused with the `t_go`-family gap above.
 
-  Wave O's own two named gaps (the coverage census /
+  Wave O's own two named gaps (t/COVERAGE-mbpp-dfy-lifter.md /
   HANDOFF-2026-09-12.md), re-measured today with BOTH fixes below
   applied: "Unable to unify" on a scalar param-witness fact no longer
   reproduces on search/max/computeFib as that literal message -- with
@@ -2545,14 +2545,14 @@ touching the generation pipeline).
   above and on 2026-09-10/11). Restricted-to-rocq conformance
   (`probe_manifest()`/`run_items()`, one column): 66 of 66 PASS both
   before and after, no PASS lost, no FAIL gained. Every dafny_synthesis
-  row of the coverage census whose rocq cell already read "verified
+  row of t/COVERAGE-lifted-785.md whose rocq cell already read "verified
   / refuted" (71 of the file's 95 dafny_synthesis rows) still does,
   standalone at flake 3, rocq+dafny, from the read-only lifted corpus:
   71 of 71 unchanged. `python3 -m unittest test_lower_rocq_loop_cert
   test_lower_rocq test_names`: 40 of 40 before, unchanged after (new
   cases added below run green).
 
-  ROCQ-SOLE, 2026-09-15 (the coverage census's rocq-sole-blocked
+  ROCQ-SOLE, 2026-09-15 (t/COVERAGE-lifted-785.md's rocq-sole-blocked
   eight, wave P's own note that this item "was still building when this
   commit was cut"). Built the per-spec_fun lemma generator the eight
   rows' own "recursive-recurrence family" needs (`_emit_t_eqs_rec`, its
@@ -2635,7 +2635,7 @@ touching the generation pipeline).
     (`probe_manifest()`/`run_items()`, one column, `present` also
     restricted so only rocq's own kernel is invoked): 66 of 66 PASS
     both before and after, no PASS lost, no FAIL gained. Of the
-    72 dafny_synthesis rows in the coverage census reading
+    72 dafny_synthesis rows in t/COVERAGE-lifted-785.md reading
     `verified / refuted` in rocq, exactly one
     (`577__factorialOfLastDigit`) has this gate's shape; graded alone
     (dafny,rocq, flake 3) it still reads verified/refuted in both,
@@ -4855,6 +4855,7 @@ Ltac t_sweep :=
 # docstring, "STILL OPEN... PRELUDE feature-gating split") and then
 # REVERTED: it moved 32 of 34 committed tasks' lowered bytes, divmod_pair
 # (no string-lib member anywhere in it) included.
+#
 # `_uses_strlib` below is `lower_fstar.py`'s own `_uses_strlib` gate,
 # ported verbatim (a generic dict/list walk for an `{"op": <member>, ...}`
 # node whose op is in `STRLIB_OPS`, run over the task dict AND the body
@@ -4876,6 +4877,7 @@ Ltac t_sweep :=
 # patterns top to bottom and a dropped arm's pattern (`t_list`,
 # `t_count_list`, `split_sep_list`, ...) can never match a goal that
 # mentions none of those names.
+#
 # MEASURED (relower_before_after.py, this worktree, 2026-09-12): all 34
 # committed `t/tasks/*.t` relowered before and after this change; the 26
 # with no string-library member anywhere lose exactly the string block
@@ -4901,7 +4903,7 @@ def _uses_strlib(obj) -> bool:
         return any(_uses_strlib(v) for v in obj)
     return False
 
-# `in` left this list on 2026-10-06 : membership in a SEQ is the library's; a set reaches a task only
+# `in` left this list on 2026-10-06 (PREDICT T10): membership in a SEQ is the library's; a set reaches a task only
 # through a set-typed name or one of these operations
 _SET_OPS_R = {"set", "card", "union", "inter", "diff"}
 
@@ -5115,7 +5117,7 @@ def header(task: dict | None = None, body: list | None = None) -> str:
         parts.append(_STRLIB_DEFS)
     if sets:
         parts.append(_SET_DEFS)
-    import rocq_lib      # SPEC.md "The library (v1)" in Rocq 
+    import rocq_lib      # SPEC.md "The library (v1)" in Rocq (PREDICT T10)
     lib = (rocq_lib.used(task) if task is not None else set()) | (rocq_lib.used(body) if body is not None else set())
     if lib:
         parts.append(rocq_lib.prelude(lib) + "\n")
@@ -5132,7 +5134,7 @@ def header(task: dict | None = None, body: list | None = None) -> str:
     parts.append(PRELUDE_CORE_4)
     parts.append("\n")
     if task is not None and task.get("datatypes"):
-        parts.append(_dt_decls(task))                     # the landing
+        parts.append(_dt_decls(task))                     # PREDICT T34
     return "".join(parts)
 
 # emitted after the spec_fun section, since t_eqs/t_eqs_h name their
@@ -5300,9 +5302,9 @@ def _post_sf_for(task: dict) -> str:
     if _nonrec_sfs(task):
         text = _add_nr_alt(text)
     if task.get("datatypes"):
-        text = _add_dt_alt(text)                          # the landing
+        text = _add_dt_alt(text)                          # PREDICT T41
     if any(p["type"] == "bool" for p in task.get("params", [])):
-        text = _add_bool_alt(text)                        # the landing
+        text = _add_bool_alt(text)                        # PREDICT T52
     spec = [task.get("ensures"), task.get("body"), task.get("lemmas")]
     ex, fa = _has_quant(spec, "exists"), _has_quant(spec, "forall")
     loop_fa = _has_quant(task.get("body"), "forall") and _any_while_deep(task.get("body") or [])
@@ -5365,7 +5367,7 @@ def _add_nr_alt(text: str) -> str:
 
 
 def _add_bool_alt(text: str) -> str:
-    """for a task with a bool parameter, `t_dis` gains a LAST alternative that splits every bool in
+    """PREDICT T52: for a task with a bool parameter, `t_dis` gains a LAST alternative that splits every bool in
     context, then searches as before. A condition built from bool parameters (`gps_fix && imu_ok`, the autonomy
     suite's arm_check) is decided only once each is a constructor (measured: arm_check and debounce were unproved and
     prove with the split). Last, so every goal an earlier alternative closes is closed exactly as before."""
@@ -5379,7 +5381,7 @@ def _add_bool_alt(text: str) -> str:
 
 
 def _add_dt_alt(text: str) -> str:
-    """for a task with datatypes, `t_dis` and `t_side` each gain a LAST alternative that splits every
+    """PREDICT T41: for a task with datatypes, `t_dis` and `t_side` each gain a LAST alternative that splits every
     matched variable and decided datatype equality first (`t_dt_cases`), then searches as before. A loop whose state
     is a datatype (some_negative's `Opt`) carries its invariant as a `match` on that state, which the generic search
     never splits. Last, so every goal an earlier alternative closes is closed exactly as before."""
@@ -5505,7 +5507,7 @@ RESERVED = {"at", "in", "fun", "if", "then", "else", "let", "forall", "exists",
 
 
 def _ck(name: str) -> str:
-    # a `_len` name the sanitizer has already renamed (prefix `tn_`, the rename site's own namespace)
+    # PREDICT T69: a `_len` name the sanitizer has already renamed (prefix `tn_`, the rename site's own namespace)
     # is passed; the rename site below refuses the one rename that could shadow a length binder.
     if (name in RESERVED or (name.endswith("_len") and not name.startswith("tn_")) or name.startswith("sf_")
             or name.startswith("t_")):
@@ -5580,7 +5582,7 @@ class Ctx:
 
     def ty(self, e: dict, local: dict[str, str]) -> str:
         if "ctor" in e:
-            return {"datatype": e["ctor"]["dtype"]}          # the landing
+            return {"datatype": e["ctor"]["dtype"]}          # PREDICT T34
         if "field" in e:
             return _dt_field_type(_dt_of(self.ty(e["field"]["of"], local)), e["field"]["name"])
         if "match" in e:
@@ -5602,7 +5604,7 @@ class Ctx:
         if "call" in e:
             return self.sfres[e["call"]["fun"]]
         if "comp" in e:
-            return "seq"   # SPEC.md "Comprehensions (v1)", a map whose elements are ints (comp_fn)
+            return "seq"   # SPEC.md "Comprehensions (v1)", PREDICT T14: a map whose elements are ints (comp_fn)
         op = e["op"]
         if op == "+":
             # SPEC.md "Sequences: literals, concatenation, slices (v1)":
@@ -5634,7 +5636,7 @@ class Ctx:
             # to the existing int group.
             return "int"
         if op in ("min", "max", "abs", "gcd", "pow", "isqrt", "sum"):
-            return "int"                      # SPEC.md "The library (v1)" 
+            return "int"                      # SPEC.md "The library (v1)" (PREDICT T10)
         if op in ("rev", "sort"):
             return self.ty(e["args"][0], local)
         if op == "split":
@@ -5724,12 +5726,12 @@ class Ctx:
         t_upd/t_fill (PRELUDE)."""
         local = local or {}
         if "field" in e:
-            x = self._field_txt(e, env, local)            # a seq field, one (function, length) value
+            x = self._field_txt(e, env, local)            # PREDICT T42: a seq field, one (function, length) value
             return f"(fst {x})", f"(snd {x})"
         if "comp" in e:
             return self.comp_fn(e["comp"], env, local)
         if e.get("op") in ("rev", "sort"):
-            # SPEC.md "The library (v1)"/"Sorting (v1)" in Rocq : the same length, read from the other
+            # SPEC.md "The library (v1)"/"Sorting (v1)" in Rocq (PREDICT T10): the same length, read from the other
             # end, or the stable insertion sort read back as a function
             fn, ln = self.seq_fn(e["args"][0], env, local)
             return (f"(t_rev {fn} {ln})" if e["op"] == "rev" else f"(t_sortf {fn} {ln})"), ln
@@ -5979,7 +5981,7 @@ class Ctx:
             f"t_nupd)")
 
     def comp_fn(self, c: dict, env: dict, local: dict) -> tuple[str, str]:
-        """SPEC.md "Comprehensions (v1)" in Rocq : a map is its own (function, length) pair in this
+        """SPEC.md "Comprehensions (v1)" in Rocq (PREDICT T14): a map is its own (function, length) pair in this
         file's encoding and needs no construction. Over a seq `s` it is `(fun k => body[x := s k], len s)`; over a
         range `[lo, hi)` it is `(fun k => body[i := lo + k], Z.max 0 (hi - lo))`, the index written `k` alone when
         `lo` is the literal 0. A filter, and a comprehension in a spec_fun, method or lemma, refuse by name before
@@ -6021,11 +6023,11 @@ class Ctx:
         return self.seq_fn(e, env, local)
 
     def _arm_types(self, d: str, arm: dict) -> dict:
-        """a match arm's binders, each at its field's type."""
+        """PREDICT T34: a match arm's binders, each at its field's type."""
         return {b: fd["type"] for b, fd in zip(arm["binders"], _dt_fields(d, arm["ctor"]), strict=True)}
 
     def _match_txt(self, e: dict, env: dict, local: dict, render) -> str:
-        """`case e { C(x, y) => body, ... }` as Rocq's own match, each binder shadowing an outer name
+        """PREDICT T34: `case e { C(x, y) => body, ... }` as Rocq's own match, each binder shadowing an outer name
         of its spelling, each body rendered by `render` (zx, bx, px or prop)."""
         m = e["match"]
         d = _dt_of(self.ty(m["scrutinee"], local))
@@ -6037,7 +6039,7 @@ class Ctx:
             types = self._arm_types(d, arm)
             for b in bs:
                 if types.get(b) == "seq":
-                    env2[b], env2[b + "_len"] = f"(fst {b})", f"(snd {b})"   # a seq field's two halves
+                    env2[b], env2[b + "_len"] = f"(fst {b})", f"(snd {b})"   # PREDICT T42: a seq field's two halves
             local2 = dict(local, **types)
             pat = " ".join([_rctor(d, arm["ctor"])] + bs)
             arms.append(f"{pat} => {render(arm['body'], env2, local2)}")
@@ -6050,7 +6052,7 @@ class Ctx:
 
     def _dt_arg(self, a: dict, t, env: dict, local: dict) -> str:
         if t == "seq":
-            fn, ln = self.seq_fn(a, env, local)           # one (function, length) value
+            fn, ln = self.seq_fn(a, env, local)           # PREDICT T42: one (function, length) value
             return f"({fn}, {ln})"
         if t == "bool":
             return self.bx(a, env, local)
@@ -6105,7 +6107,7 @@ class Ctx:
             return (f"(if {cb} then {self.px(c['then'], env, local)} "
                     f"else {self.px(c['else'], env, local)})")
         if "ctor" in e:
-            # a constructor applied to its fields, each at its own type
+            # PREDICT T34: a constructor applied to its fields, each at its own type
             c = e["ctor"]
             args = [self._dt_arg(a, fd["type"], env, local)
                     for a, fd in zip(c["args"], _dt_fields(c["dtype"], c["name"]), strict=True)]
@@ -6176,7 +6178,7 @@ class Ctx:
             elif formal["type"] == "bool":
                 parts.append(self.bx(a, env, local))
             elif _dt_of(formal["type"]) is not None:
-                parts.append(self.px(a, env, local))       # the landing
+                parts.append(self.px(a, env, local))       # PREDICT T34
             else:
                 parts.append(self.zx(a, env, local))
         return "(" + " ".join(parts) + ")"
@@ -6199,7 +6201,7 @@ class Ctx:
         if "call" in e:
             return self.call(e, env, local)
         if "field" in e:
-            return self._field_txt(e, env, local)          # the landing
+            return self._field_txt(e, env, local)          # PREDICT T34
         if "match" in e:
             return self._match_txt(e, env, local, self.zx)
         op = e.get("op")
@@ -6239,7 +6241,7 @@ class Ctx:
             fn_t, ln_t = self.seq_fn(t, env, local)
             cfn = "t_count_list" if op == "count" else "t_find_list"
             return f"({cfn} (t_list {fn_s} {ln_s}) (t_list {fn_t} {ln_t}))"
-        # SPEC.md "The library (v1)" in Rocq : the stdlib's own Z functions, and the prelude's
+        # SPEC.md "The library (v1)" in Rocq (PREDICT T10): the stdlib's own Z functions, and the prelude's
         # fuel Fixpoints over a seq's function and length
         if op in ("min", "max") and len(e["args"]) == 1:
             fn, ln = self.seq_fn(e["args"][0], env, local)
@@ -6255,7 +6257,7 @@ class Ctx:
         raise ValueError(f"t v1 -> rocq: not an int expression: {op!r}")
 
     def anyall_parts(self, e: dict, env: dict, local: dict) -> tuple[str, str]:
-        """(length, predicate) of any/all over a comprehension of a seq : the predicate at each index of
+        """(length, predicate) of any/all over a comprehension of a seq (PREDICT T10): the predicate at each index of
         the source, its filter an implication for all and a conjunction for any."""
         c = e["args"][0]["comp"]
         fn, ln = self.seq_fn(c["seq"], env, local)
@@ -6269,7 +6271,7 @@ class Ctx:
         return ln, f"(fun {k} : Z => {body})"
 
     def anyall_prop(self, e: dict, env: dict, local: dict) -> str:
-        """The Prop each index of any/all over a comprehension asserts : the body's prop at the
+        """The Prop each index of any/all over a comprehension asserts (PREDICT T10): the body's prop at the
         element, under the filter (an implication for all, a conjunction for any)."""
         c = e["args"][0]["comp"]
         fn, _ln = self.seq_fn(c["seq"], env, local)
@@ -6283,25 +6285,25 @@ class Ctx:
 
     def bx(self, e: dict, env: dict, local: dict) -> str:
         if "field" in e:
-            return self._field_txt(e, env, local)          # the landing
+            return self._field_txt(e, env, local)          # PREDICT T34
         if "match" in e:
             return self._match_txt(e, env, local, self.bx)
         if (e.get("op") in ("==", "!=") and len(e.get("args", [])) == 2
                 and _dt_of(self.ty(e["args"][0], local)) is not None):
-            # a datatype's equality decided by its `decide equality` decider
+            # PREDICT T34: a datatype's equality decided by its `decide equality` decider
             d = _dt_of(self.ty(e["args"][0], local))
             if _dt_has_seq(d):
-                raise NotImplementedError("rocq lowering: `==` on a datatype holding a seq: a seq is a "
+                raise NotImplementedError("rocq lowering: `==` on a datatype holding a seq (PREDICT T42): a seq is a "
                                           "function here, its equality extensional, not decidable")
             a, b = (self.px(x, env, local) for x in e["args"])
             core = f"(if {_rdt(d)}_eq_dec {a} {b} then true else false)"
             return core if e["op"] == "==" else f"(negb {core})"
         if e.get("op") == "in" and self.ty(e["args"][1], local) == "seq":
-            # SPEC.md "The library (v1)" in Rocq : membership in a seq
+            # SPEC.md "The library (v1)" in Rocq (PREDICT T10): membership in a seq
             fn, ln = self.seq_fn(e["args"][1], env, local)
             return f"(t_memb {fn} {ln} {self.zx(e['args'][0], env, local)})"
         if e.get("op") in ("any", "all"):
-            # SPEC.md "Reductions (v1)" in Rocq : over a comprehension of a seq, the predicate at
+            # SPEC.md "Reductions (v1)" in Rocq (PREDICT T10): over a comprehension of a seq, the predicate at
             # each index of the source (its filter an implication for all, a conjunction for any)
             a = e["args"][0]
             if not (isinstance(a, dict) and "comp" in a and "seq" in a["comp"]):
@@ -6438,18 +6440,18 @@ class Ctx:
     def prop(self, e: dict, env: dict, local: dict | None = None) -> str:
         local = local or {}
         if "field" in e:
-            return f"({self._field_txt(e, env, local)} = true)"   # a bool field
+            return f"({self._field_txt(e, env, local)} = true)"   # PREDICT T34: a bool field
         if "match" in e:
             return self._match_txt(e, env, local, lambda b, en, lo: self.prop(b, en, lo))
         if (e.get("op") in ("==", "!=") and len(e.get("args", [])) == 2
                 and _dt_of(self.ty(e["args"][0], local)) is not None):
             if _dt_has_seq(_dt_of(self.ty(e["args"][0], local))):
-                raise NotImplementedError("rocq lowering: `==` on a datatype holding a seq: Leibniz "
+                raise NotImplementedError("rocq lowering: `==` on a datatype holding a seq (PREDICT T42): Leibniz "
                                           "equality on its function half is not t's extensional seq equality")
             a, b = (self.px(x, env, local) for x in e["args"])
             return f"({a} = {b})" if e["op"] == "==" else f"({a} <> {b})"
         if e.get("op") == "in" and self.ty(e["args"][1], local or {}) == "seq":
-            # SPEC.md "The library (v1)" in Rocq : membership in a seq is some index holding it, the
+            # SPEC.md "The library (v1)" in Rocq (PREDICT T10): membership in a seq is some index holding it, the
             # meaning the other kernels state; t_memb_spec (rocq_lib) bridges the computed bool to it
             fn, ln = self.seq_fn(e["args"][1], env, local or {})
             x = self.zx(e["args"][0], env, local or {})
@@ -6619,7 +6621,7 @@ class Ctx:
             self.defs(c["else"], ctx + [f"(~ {cp})"], binders, acc, env, local)
             return
         if "comp" in e:
-            # SPEC.md "Comprehensions (v1)" (a map, so `cond` is the literal true): the source defined,
+            # SPEC.md "Comprehensions (v1)" (PREDICT T14, a map, so `cond` is the literal true): the source defined,
             # then the body at every element, the element bound the way comp_fn binds it
             c = e["comp"]
             v = c["var"]
@@ -6641,10 +6643,10 @@ class Ctx:
             return
         if "ctor" in e:
             for a in e["ctor"]["args"]:
-                self.defs(a, ctx, binders, acc, env, local)   # the landing
+                self.defs(a, ctx, binders, acc, env, local)   # PREDICT T34
             return
         if "field" in e:
-            # `e.f` is defined iff `e` was built by a constructor that declares `f`
+            # PREDICT T34: `e.f` is defined iff `e` was built by a constructor that declares `f`
             of = e["field"]["of"]
             self.defs(of, ctx, binders, acc, env, local)
             d = _dt_of(self.ty(of, local))
@@ -6655,7 +6657,7 @@ class Ctx:
                             f"(match {self.px(of, env, local)} with {' | '.join(arms + ['_ => False'])} end)"))
             return
         if "match" in e:
-            # each arm's body on its own path, the scrutinee equal to the arm's constructor
+            # PREDICT T34: each arm's body on its own path, the scrutinee equal to the arm's constructor
             m = e["match"]
             self.defs(m["scrutinee"], ctx, binders, acc, env, local)
             d = _dt_of(self.ty(m["scrutinee"], local))
@@ -6686,7 +6688,7 @@ class Ctx:
             return
         op = e["op"]
         if op in ("pow", "isqrt"):
-            # SPEC.md "The library (v1)": pow(a, n) and isqrt(n) DEFINED IFF n >= 0 
+            # SPEC.md "The library (v1)": pow(a, n) and isqrt(n) DEFINED IFF n >= 0 (PREDICT T10)
             for a in e["args"]:
                 self.defs(a, ctx, binders, acc, env, local)
             acc.append((list(binders), list(ctx), f"(0 <= {self.zx(e['args'][-1], env, local)})"))
@@ -6991,7 +6993,7 @@ def exec_straight(cx: Ctx, stmts: list, env: dict, local: dict,
         elif "var" in s:
             d = s["var"]
             v = _ck(d["name"])
-            # each arm of an `if` is its own block (the `if` case below passes each a copy of `local`),
+            # PREDICT T69: each arm of an `if` is its own block (the `if` case below passes each a copy of `local`),
             # so PX4's `const size_t available` in both arms of `push_back` declares two locals. A name an earlier
             # `var` declared at the same type may be declared again in a sibling block; a parameter or return never.
             var_names = cx.__dict__.setdefault("_var_names", {})
@@ -7130,7 +7132,7 @@ def param_binders(cx: Ctx) -> tuple[str, str]:
             bs.append(f"({v} : bool)")
             args.append(v)
         elif _dt_of(p["type"]) is not None:
-            bs.append(f"({v} : {rty(p['type'])})")        # the landing
+            bs.append(f"({v} : {rty(p['type'])})")        # PREDICT T34
             args.append(v)
         elif isinstance(p["type"], dict):
             bs.append(f"({v} : {pair_ty(p['type'])})")
@@ -7226,7 +7228,7 @@ def pair_ty(t: dict) -> str:
     return f"({pair_comp_ty(t1)} * {pair_comp_ty(t2)})"
 
 
-# DATATYPES in Rocq (2026-10-07, SPEC.md "Datatypes (v1)", "(v2): fields", "(v3): recursion"). A t
+# DATATYPES in Rocq (PREDICT T34, 2026-10-07; SPEC.md "Datatypes (v1)", "(v2): fields", "(v3): recursion"). A t
 # datatype is Rocq's own `Inductive`, one constructor per `|`, a field its argument (Rocq reference, "Inductive types
 # and recursive functions"): `dt_<D>` the type, `dt_<D>_<C>` a constructor, so nothing collides with a t name or the
 # prelude. `==` is Leibniz equality in a Prop and `dt_<D>_eq_dec`, built by `decide equality`, as a bool. `e.f` is the
@@ -7268,19 +7270,19 @@ def _dt_check(task: dict) -> None:
         for k in d["ctors"]:
             for fd in k.get("fields", []):
                 t = fd["type"]
-                if t not in ("int", "bool", "seq") and _dt_of(t) is None:     # seq
+                if t not in ("int", "bool", "seq") and _dt_of(t) is None:     # seq: PREDICT T42
                     raise NotImplementedError(
                         f"rocq lowering: a datatype field of type {t!r} (SPEC.md 'Datatypes (v2): fields'): only int, "
                         "bool, seq and datatype fields are lowered yet")
 
 
 def _dt_frty(t) -> str:
-    """a field's Rocq type, a seq field one value `((Z -> Z) * Z)` (function and length)."""
+    """PREDICT T42: a field's Rocq type, a seq field one value `((Z -> Z) * Z)` (function and length)."""
     return "((Z -> Z) * Z)" if t == "seq" else rty(t)
 
 
 def _dt_has_seq(d: str, seen: frozenset = frozenset()) -> bool:
-    """`d` holds a seq (directly or through a datatype field): its equality is not decidable here."""
+    """PREDICT T42: `d` holds a seq (directly or through a datatype field): its equality is not decidable here."""
     for k in _DTS[d]["ctors"]:
         for fd in k.get("fields", []):
             if fd["type"] == "seq":
@@ -7321,7 +7323,7 @@ def _dt_decls(task: dict) -> str:
             arms.append(f"  | {_rctor(name, k['name'])}{bs}")
         out.append(f"Inductive {_rdt(name)} : Type :=\n" + "\n".join(arms) + ".\n")
         if not _dt_has_seq(name):
-            # a datatype holding a seq (a function) has no decider; `==` on it refuses by name
+            # PREDICT T42: a datatype holding a seq (a function) has no decider; `==` on it refuses by name
             leaf = "Z.eq_dec | apply Bool.bool_dec" + "".join(f" | apply {x}" for x in decs)
             out.append(f"Definition {_rdt(name)}_eq_dec (t_a t_b : {_rdt(name)}) : {{t_a = t_b}} + {{t_a <> t_b}}.\n"
                        f"Proof. decide equality; first [ apply {leaf} ]. Defined.\n")
@@ -7345,7 +7347,7 @@ def _dt_decls(task: dict) -> str:
     eq_arms = "".join(
         f"  | |- context [{x} ?a ?b] => destruct ({x} a b)\n"
         f"  | H : context [{x} ?a ?b] |- _ => destruct ({x} a b)\n" for x in decs)
-    # a variable read through a field's projection is split too, and the projections then reduce
+    # PREDICT T42: a variable read through a field's projection is split too, and the projections then reduce
     # (bag_size: `dt_Bag_f_active b` is no `match` on `b`, so nothing split it)
     projs = [f"{_rdt(d['name'])}_f_{f}" for d in task.get("datatypes", [])
              for f in dict.fromkeys(fd["name"] for k in d["ctors"] for fd in k.get("fields", []))]
@@ -7353,7 +7355,7 @@ def _dt_decls(task: dict) -> str:
         f"  | |- context [{x} ?y] => is_var y; destruct y\n"
         f"  | H : context [{x} ?y] |- _ => is_var y; destruct y\n" for x in projs)
     reduce = f"cbn [{' '.join(projs)}] in *" if projs else "cbn beta iota in *"
-    out.append("(* split each decided datatype equality and each match on a variable, then reduce *)\n"
+    out.append("(* PREDICT T34: split each decided datatype equality and each match on a variable, then reduce *)\n"
                "Ltac t_dt_cases :=\n  repeat match goal with\n" + eq_arms +
                "  | |- context [match ?x with _ => _ end] => is_var x; destruct x\n"
                "  | H : context [match ?x with _ => _ end] |- _ => is_var x; destruct x\n" + proj_arms +
@@ -7362,7 +7364,7 @@ def _dt_decls(task: dict) -> str:
 
 
 def _dt_struct_param(decreases, params: list) -> str | None:
-    """the parameter a `decreases` names when it is a datatype, the recursion then structural."""
+    """PREDICT T34: the parameter a `decreases` names when it is a datatype, the recursion then structural."""
     if isinstance(decreases, dict) and "var" in decreases:
         for p in params:
             if p["name"] == decreases["var"] and _dt_of(p["type"]) is not None:
@@ -7383,7 +7385,7 @@ def _dt_gterm(e: dict) -> str:
         args = "".join(" " + _dt_gterm(a) for a in c["args"])
         return f"({_rctor(c['dtype'], c['name'])}{args})" if args else _rctor(c["dtype"], c["name"])
     if e.get("op") == "seq":
-        # a ground seq field, its function and its length
+        # PREDICT T42: a ground seq field, its function and its length
         vals = [x["int"] if "int" in x else -x["args"][0]["int"] for x in e["args"]]
         return f"(({_seq_lambda(vals)}), {_zlit(len(vals))})"
     raise NotImplementedError(f"rocq lowering: no ground datatype term for {e!r}")
@@ -7409,14 +7411,14 @@ def default_term(t) -> str:
             "rocq lowering: default_term has no single-slot default for "
             "a nested seq; the caller must build its own two-slot env0")
     if _dt_of(t) is not None:
-        return _dt_default(_dt_of(t))                     # the landing
+        return _dt_default(_dt_of(t))                     # PREDICT T34
     if isinstance(t, dict):
         t1, t2 = t["pair"]
         return f"({default_term(t1)}, {default_term(t2)})"
     if t == "set":
         return "S.empty"   # SPEC.md "Finite sets" (2026-09-27)
     if t == "seq":
-        # a seq INSIDE a pair is one ((Z -> Z) * Z) value (the heap rewrite's (result, array) return); a
+        # PREDICT T53: a seq INSIDE a pair is one ((Z -> Z) * Z) value (the heap rewrite's (result, array) return); a
         # top-level seq never reaches here (its callers build their own two slots)
         return "((fun _ : Z => 0), 0)"
     return "false" if t == "bool" else "0"
@@ -7439,7 +7441,7 @@ def rty(t) -> str:
         # literal Coq pair of a row's own (function, length).
         return "Z -> ((Z -> Z) * Z)"
     if _dt_of(t) is not None:
-        return _rdt(_dt_of(t))                            # the landing
+        return _rdt(_dt_of(t))                            # PREDICT T34
     if isinstance(t, dict):
         return pair_ty(t)
     if t == "bool":
@@ -7870,7 +7872,7 @@ def emit_def_lemmas(cx: Ctx, name: str, obls: list, extra_binders: str = "",
         # one param or bound variable is unaffected (`allb` non-empty,
         # byte-identical to before).
         fa = f"forall {allb},\n" if allb else ""
-        close = "t_dt_cases; t_dis" if cx.task.get("datatypes") else "t_dis"   # the landing
+        close = "t_dt_cases; t_dis" if cx.task.get("datatypes") else "t_dis"   # PREDICT T34
         out.append(
             f"Lemma {name}_def_{k} : {fa}{hyp_txt}"
             f"  {concl}.\n"
@@ -7884,7 +7886,7 @@ def emit_spec_funs(cx: Ctx) -> str:
     task = cx.task
     chunks = []
     eqs = []
-    # THE GROUND-FACT SUBSTITUTION GAP (2026-09-10, the coverage census's
+    # THE GROUND-FACT SUBSTITUTION GAP (2026-09-10, COVERAGE-lifted-785.md's
     # thirteenth sweep, max_nit): `nitness`'s own body, once unfolded by
     # `t_eqs`, exposes a bare `sf_valid_base b` -- the SAME argument, no
     # arithmetic offset, as the task's own `requires valid_base(b)`
@@ -7906,7 +7908,7 @@ def emit_spec_funs(cx: Ctx) -> str:
     # param is function+length, two), the same count `atxt` below builds
     # from.
     bool_sf: list[tuple[str, int]] = []
-    # ROCQ-SOLE, 2026-09-15 (the coverage census "Sole blockers",
+    # ROCQ-SOLE, 2026-09-15 (t/COVERAGE-lifted-785.md "Sole blockers",
     # the recursive-recurrence family: extra_sum's sum, flex_ex2's max,
     # invertArray, computeFib, problem5, sumOfCommonDivisors). Collected
     # here, used below (after `eqs`) to build `t_eqs_rec`: one match arm
@@ -7944,7 +7946,7 @@ def emit_spec_funs(cx: Ctx) -> str:
         if sf["result"] == "bool":
             bool_sf.append((f, len(args)))
         if (sf["result"] == "int" and has_self_call(sf["body"], f)
-                and _dt_struct_param(sf.get("decreases"), sf["params"]) is None):   # no _eq lemma
+                and _dt_struct_param(sf.get("decreases"), sf["params"]) is None):   # PREDICT T34: no _eq lemma
             pat_holes = " ".join(f"?a{i}" for i in range(len(args)))
             use_holes = " ".join(f"a{i}" for i in range(len(args)))
             rec_int_sf.append((f, pat_holes, use_holes))
@@ -7960,11 +7962,29 @@ def emit_spec_funs(cx: Ctx) -> str:
             if sf["result"] == "bool":
                 return cx.bx(sf["body"], {}, {})
             if _dt_of(sf["result"]) is not None:
-                return cx.px(sf["body"], {}, {})            # the landing
+                return cx.px(sf["body"], {}, {})            # PREDICT T34
             return cx.zx(sf["body"], {}, {})
+        if "decreases" not in sf:
+            if has_self_call(sf["body"], f):
+                raise NotImplementedError(f"rocq: self-recursive spec_fun {f} without a decreases")
+            # a definition that never calls itself (2026-10-13): a plain Definition, no fuel, no lemma; its
+            # definedness obligations are stated as the fuel path states them
+            cx.callpre[f] = f"sf_{f}"
+            body_plain = _sf_body()
+            sf_lens = [f"(0 <= {p['name']}_len)" for p in sf["params"] if p["type"] == "seq"]
+            obls_nr: list = []
+            cx.defs(sf["body"], [], [], obls_nr, {}, {})
+            cx._sf_obls = getattr(cx, "_sf_obls", [])
+            for binders, hyps, concl in obls_nr:
+                cx._sf_obls.append((f, btxt, sf_lens, binders, hyps, concl))
+            chunks.append(f"Definition sf_{f} {btxt} : {res} :=\n  {body_plain}.\n")
+            cx.tys = saved_tys
+            cx.callpre = saved_pre
+            cx.callpre[f] = f"sf_{f}"
+            continue
         q = _dt_struct_param(sf.get("decreases"), sf["params"])
         if q is not None:
-            # a measure that is a datatype parameter is structural recursion, Rocq's own Fixpoint
+            # PREDICT T34: a measure that is a datatype parameter is structural recursion, Rocq's own Fixpoint
             # (its guard checker is the termination proof); with no self-call, a Definition
             cx.callpre[f] = f"sf_{f}"
             body_plain = _sf_body()
@@ -8079,7 +8099,7 @@ Qed.
         # weight, never harm, on the other, since `first` restores the
         # goal between alternatives (measured on digit_sum, 2026-09-08).
         eq_tac_h = " ".join(f"try rewrite {e} in * |-;" for e in eqs) + seq_sf_norm_h
-        # 2026-09-10 (the coverage census's twelfth sweep, computeSum):
+        # 2026-09-10 (COVERAGE-lifted-785.md's twelfth sweep, computeSum):
         # a bare `rewrite sf_X_eq` leaves the recursive step's own
         # argument ARITHMETIC unnormalized (`sf_sum (i + 1)` rewrites to
         # `i + sf_sum (i + 1 - 1)`, not `i + sf_sum i`), syntactically
@@ -8369,6 +8389,7 @@ def lens_arrows(cx: Ctx) -> str:
 # and, at a call `x := m(args)`, lets the caller prove m's requires at the
 # arguments and then know ONLY m's ensures of x. Rocq has no call rule, so
 # the rule is built out of binders:
+#
 #   * every method m becomes its own unit, lowered by the same generators a
 #     task uses (gen_plain / gen_loop / gen_loops / gen_rec) as a
 #     pseudo-task, giving `m_t` and its theorem `m_t_spec`;
@@ -8388,6 +8409,7 @@ def lens_arrows(cx: Ctx) -> str:
 #   * `m_t_closed : t_mspec_m (m_t <closed callees>)` instantiates each
 #     unit with the concrete callees and their closed contracts, and the
 #     task's `<name>_t_closed` states the composed program's theorem.
+#
 # `Opaque m_t` was the rejected alternative: the reference manual
 # (proofs/writing-proofs/equality.html, "Opaque") says it only marks a
 # constant "changeably opaque" for tactics, while conversion (hence exact /
@@ -8748,6 +8770,7 @@ def _mconcrete_defs(task: dict) -> str:
 # the other six kernels proved it (FEATURES-TRACK's 2026-09-27 measurement:
 # rocq gained 0 of the 33 kernel cells lemmas bought; 9 of the 10
 # lemma-carrying documents clean in exactly five kernels missed rocq).
+#
 # The design is copied from two places this file already trusts. From the
 # Lean lowering's `emit_lemmas`: one theorem per lemma, its proof the lemma's
 # own skeleton (a case split per `if`, a proved cut per `assert`, a posed
@@ -8757,6 +8780,7 @@ def _mconcrete_defs(task: dict) -> str:
 # fuel bounding its `decreases` (the same encoding every self-recursive task
 # and spec_fun already gets), so the induction hypothesis is exactly the
 # lemma at smaller arguments and a self-call poses it:
+#
 #   lemma L(params) requires R ensures E [decreases d] { skeleton }
 #     non-recursive ->  Theorem tl_L : forall params, lens -> R -> E.
 #     recursive     ->  Lemma tl_L_fuel : forall (fuel : nat) params,
@@ -8770,6 +8794,7 @@ def _mconcrete_defs(task: dict) -> str:
 #   the goal (`rewrite (sf_f_eq args)`: Dafny's own default fuel of one
 #   unfolding per application in the goal, Amin, Leino and Rompf,
 #   "Computing with an SMT solver", TAP 2014) and t_dis closes it.
+#
 #   a call L(args); in the task body -> its instance `tl_L <args rendered in
 #   the symbolic state at the call>` posed in the proof whose goal covers
 #   that statement (gen_plain's theorem; gen_loop's theorem for a prefix or
@@ -8777,6 +8802,7 @@ def _mconcrete_defs(task: dict) -> str:
 #   proof's case split and fed after it, once the guard is in context), and
 #   `t_feed` specializes each premise (a length fact, a `requires`) it can
 #   prove with t_dis, leaving any it cannot in place as an implication.
+#
 # Soundness. Every tl_* theorem is proved by the kernel in this file and
 # audited by the adapter's Print Assumptions like every other obligation; a
 # posed instance is a proved theorem applied to terms, valid on every path
@@ -8785,6 +8811,7 @@ def _mconcrete_defs(task: dict) -> str:
 # circular induction fails its own Qed and the file reads unproved (the five
 # t/lemmas_probe/ fixtures). The refutation certificate is untouched: it is
 # still built from the stripped body (`lower`).
+#
 # What still strips (states none of the lemmas, this file's behaviour before
 # this date, `_lemmas_stated`): a body that self-recurses or takes the
 # general loop path (gen_rec/gen_loops close their goals inside their own
@@ -9024,7 +9051,7 @@ def emit_lemmas(cx: Ctx) -> str:
 
 
 def _lib_fact_lines(cx: Ctx, task: dict, body: list) -> str:
-    """SPEC.md "The library (v1)" in Rocq : one `pose proof` line per distinct library call over the
+    """SPEC.md "The library (v1)" in Rocq (PREDICT T10): one `pose proof` line per distinct library call over the
     parameters, naming the fact the engine needs about it (gcd's sign, isqrt's bounds, the extremum's membership and
     bound, membership's bridge to the existential, the sort's order, a sum over a concatenation, any/all's bridge to
     the quantifier). Stated before `t_dis`, as the lemma sites are; an argument that names anything but a parameter
@@ -9223,7 +9250,7 @@ def lower_v1(task: dict, body: list, witness: dict | None = None) -> str:
 
 
 def _dt_close(task: dict) -> str:
-    """The closing line of a straight-line spec proof: `t_dis`, or, for a task with datatypes , each
+    """The closing line of a straight-line spec proof: `t_dis`, or, for a task with datatypes (PREDICT T34), each
     matched variable and decided equality split first, every case closed by `t_dis`."""
     return "  t_dt_cases.\n  all: t_dis." if task.get("datatypes") else "  t_dis."
 
@@ -9254,7 +9281,7 @@ def gen_plain(cx: Ctx, body: list, counter: list) -> str:
     cx.lemma_sites = None
     # SPEC.md "Lemmas (v1)": each lemma call's instance, posed before the
     # closing t_dis (the LEMMAS section); empty text without a call.
-    site_txt = _lemma_site_lines(cx, sites, [0]) + _lib_fact_lines(cx, task, body)   # the landing
+    site_txt = _lemma_site_lines(cx, sites, [0]) + _lib_fact_lines(cx, task, body)   # PREDICT T10
     def_txt = emit_def_lemmas(cx, name, obls, counter=counter)
 
     if isinstance(ret_t, dict) and "seq" in ret_t:
@@ -9354,7 +9381,7 @@ Qed.
     fa = f"forall {pb},\n" if pb else ""
     close = _dt_close(task)
     if isinstance(ret_t, dict) and "pair" in ret_t and not task.get("datatypes"):
-        # a pair returned through branch-dependent ifs (PX4's Ringbuffer::push_back, `(ok, _end)`)
+        # PREDICT T69: a pair returned through branch-dependent ifs (PX4's Ringbuffer::push_back, `(ok, _end)`)
         # leaves `fst (if c then (a, b) else ...)` stuck until the comparison `c` is decided. When plain `t_dis`
         # fails, t_sweep splits every comparison with its reflect lemma, and the projections then reduce. Last,
         # so a task that proved before proves by the same branch.
@@ -9451,6 +9478,7 @@ def gen_loop(cx: Ctx, prefix: list, w: dict, suffix: list,
     # costing nothing new anywhere those already succeed. A task with no
     # such local (every committed task through 2026-09-10) computes an
     # empty list here and renders byte-identical to before this existed.
+    #
     # MEASURED WRONG once (2026-09-11), fixed by the `not has_return`
     # guard below: containsSequence/containsK/isSmaller (the PRESERVATION-
     # witness family, ROADMAP 16.2's own brief naming these three "another
@@ -9469,7 +9497,7 @@ def gen_loop(cx: Ctx, prefix: list, w: dict, suffix: list,
     # nothing; `has_return` is the exact predicate `gen_loop`'s own
     # early-exit branch (below) already uses to pick its Fixpoint shape.
     _body_assigned = loop_assigned(w["body"])
-    # a local the prefix reassigns after its declaration (`var m := 0; if c { m := n }`), or whose
+    # PREDICT T71: a local the prefix reassigns after its declaration (`var m := 0; if c { m := n }`), or whose
     # initialiser reads one the prefix reassigns, does not equal its initialiser at the loop; the invariant would be
     # false at entry and fail the proof (never pass it), so it is not emitted.
     _prefix_assigned = loop_assigned(prefix)
@@ -9830,6 +9858,7 @@ Qed.
     # the branch that doesn't, step_tup is exactly the old step_terms
     # tuple. So the SAME step_tup feeds both arms of the fixpoint's inner
     # `if`, and no separate "continued" state is ever computed.
+    #
     # The induction lemma's conclusion becomes a disjunction on that flag:
     # returned (rflag' = true) owes the task's ensures directly, at the
     # invariant, the guard, and whichever branch condition step_done
@@ -9914,6 +9943,7 @@ Qed.
 # --------------------------------------------------------------------------
 # NESTED AND MULTIPLE LOOPS (2026-09-18, ROADMAP WS-20 move 1)
 # --------------------------------------------------------------------------
+#
 # WHAT THIS SECTION IS. Until this date `find_while` refused two shapes
 # outright -- "more than one loop per body" and "nested loops" -- and
 # `has_duplicate` (the committed nested-loop task, a `while` inside a
@@ -9924,18 +9954,21 @@ Qed.
 # loop, nothing nested), `gen_loop` runs unchanged and every task built
 # before today lowers BYTE-IDENTICALLY, which is the only regression bar
 # this file has ever accepted for a change this size.
+#
 # THE MODEL, and why it is the one Rocq forces. Rocq has no `while`; a loop
 # is a fuel-indexed `Fixpoint` over the loop's own state tuple plus a
 # separate induction Lemma that carries the invariants across one
 # iteration (`gen_loop`, above, is the single-loop instance of exactly
 # this). The generalisation is therefore mechanical and, importantly,
 # COMPOSITIONAL:
+#
 #   * ONE Fixpoint AND ONE `_spec` Lemma PER LOOP, named `{task}_loop{k}`
 #     / `{task}_loop{k}_spec`, `k` a pre-order index. Nothing is inlined
 #     and nothing is unrolled -- the one hazard this file's own history
 #     names by size (a chained-replace lowering that expanded to 27.7 GB
 #     and filled a shared disk; `run_par.py`'s 64 MB `T_MAX_SOURCE_MB`
 #     cap is its scar). Source grows LINEARLY in the number of loops.
+#
 #   * A LOOP'S STATE IS EVERY LIVE VARIABLE AT ITS ENTRY, not only the
 #     ones it assigns: the return, every local declared in an enclosing
 #     block, and (for an inner loop) the enclosing loop's own state. That
@@ -9947,6 +9980,7 @@ Qed.
 #     state the outer iteration started in (MEASURED: has_duplicate's
 #     outer `decreases` obligation, `len(s) - (i+1) < fuel`, is
 #     unprovable without it).
+#
 #   * THE CALL SITE IS A `let`, NEVER A PROJECTION. The inner loop's
 #     result is bound once, `let '(a, b, c) := {task}_loop1 ... in ...`,
 #     and the outer step terms read the binders. The obvious alternative
@@ -9954,6 +9988,7 @@ Qed.
 #     term once per slot, so a depth-d nest multiplies the source by
 #     (slots)^d. With `let` the term appears exactly once at every depth.
 #     This is the size discipline the 27.7 GB note above demands.
+#
 # THE PROOF, and the one genuinely new step. A loop whose body contains no
 # loop proves exactly as it always has (`induction fuel`, `cbn`,
 # `t_sweep`, then `apply IH; t_side` or the base-case `inversion`). A loop
@@ -9962,6 +9997,7 @@ Qed.
 # no fact about it at all, so the induction step's invariant obligations
 # are unprovable. The fix is to hand the enclosing proof the inner loop's
 # OWN spec, at the point of the call, before `apply IH`:
+#
 #     try (match goal with
 #          | |- context [ {task}_loop1 (S (Z.to_nat ?d)) s s_len ?a0 ?a1 ?a2 ] =>
 #              destruct (...) as [[x y] z] eqn:t_le1;
@@ -9973,7 +10009,9 @@ Qed.
 #              pose proof ({task}_loop1_spec ... ) as t_ho1;
 #              clear ...
 #          end);
+#
 # Four decisions in there, each measured or argued:
+#
 #   (1) `match goal with ... context [...]` rather than writing the call
 #       term out literally. By the time the prologue runs, `t_sweep` and
 #       the bool-state `destruct` (`_bool_state_assigned`, above) have
@@ -9987,6 +10025,7 @@ Qed.
 #       params are spelled by name, since a param is never substituted
 #       (nothing destructs or rewrites one here) and spelling them keeps
 #       the pattern honest about arity.
+#
 #   (2) `try (...)`, because the same tactic text runs in EVERY branch
 #       `t_sweep` produced, and the call term is simply absent in the
 #       fuel-`O` branch and in the guard-false branch (the `if` reduced
@@ -9996,6 +10035,7 @@ Qed.
 #       fails, and the emitted `fail 1 "unsolved t verification
 #       condition"` makes coqc report exactly that -- an UNPROVED reading,
 #       never a wrong VERIFIED.
+#
 #   (3) The inner invariants are asserted `by t_dis` at the ENTRY state,
 #       from the enclosing invariants plus the enclosing guard. This is
 #       the same "assert the invariant holds where the loop starts" step
@@ -10004,6 +10044,7 @@ Qed.
 #       has_duplicate's inner `invariant i >= 0 and i < len(s)` needs the
 #       OUTER guard `i < len(s)`, which only exists as a hypothesis once
 #       `t_sweep` has case-split it.
+#
 #   (4) `cbn beta iota zeta` right after the `destruct`. `let '(a,b) := e
 #       in body` is a `match` on `e`, so once `destruct` has replaced `e`
 #       by a literal tuple the match is an iota-redex; the one-slot case
@@ -10011,6 +10052,7 @@ Qed.
 #       here would undo the `cbn [{task}_loop{k}]` discipline the whole
 #       induction rests on (`gen_loop`'s own dated note on `simpl` vs
 #       whitelisted delta, 2026-09-08, fz_v1loop_007).
+#
 # WHAT STAYS AN ABSTAIN HERE, BY NAME. (a) A `return` anywhere in a body
 # that also has nested or multiple loops: `gen_loop`'s early-exit
 # encoding turns a loop's result into a `(state, returned?)` pair and its
@@ -10119,6 +10161,7 @@ def _declared(stmts: list) -> list:
 # search this goal never came out of (MEASURED: that single subgoal alone
 # was still running past 45 s, with every other subgoal of the same branch
 # closing in under a second).
+#
 # `t_gwit` is the directed alternative, and its whole idea is that the
 # witness is not something to SEARCH for: the branch that made the
 # existential true also put the fact that makes it true in the context
@@ -10128,6 +10171,7 @@ def _declared(stmts: list) -> list:
 # instantiation by unifying against that hypothesis; every remaining
 # conjunct is then a ground arithmetic side condition `lia` closes from
 # the invariants already in scope. Four decisions, each measured:
+#
 #   * `lazymatch goal with |- exists _, _ => eexists end`, NOT a bare
 #     `eexists`. Coq's `exists`/`eexists` applies to ANY inductive type
 #     with a single constructor, and `eq` is one: a bare `eexists` on the
@@ -10147,6 +10191,7 @@ def _declared(stmts: list) -> list:
 #     instantiation propagate: Ltac's `;` finishes a pass on every goal
 #     before the next pass starts, so by the time `lia` runs the evars
 #     the equation pass bound are ground.
+#
 # THE ENCLOSING LOOP'S OWN STEP, `t_gstep` (same date, same task, also
 # MEASURED). The other half of the outer induction step is the invariant
 # that has to GROW by one index across the inner loop: has_duplicate's
@@ -10159,6 +10204,7 @@ def _declared(stmts: list) -> list:
 # subgoal was still running past 90 s, as were `t_dis` and `t_go` at
 # depths 2 and 3). The proof it is failing to find is four steps long, and
 # all four are deterministic or nearly so:
+#
 #   `t_gfwd`  resolve, in place, every implication hypothesis whose
 #             antecedent is immediately available (`assumption` for the
 #             guard facts the branch just introduced, `discriminate` for
@@ -10185,6 +10231,7 @@ def _declared(stmts: list) -> list:
 #             `multimatch` simply tries the variable pairs until one
 #             works, with every branch discharged or the pair abandoned.
 #             MEASURED: 2 s on the subgoal nothing else finished.
+#
 # Emitted ONLY by the general path (this section builds both into its own
 # chunk list, never into `header()`'s PRELUDE), so no task outside it
 # gains a byte. Both are tried strictly AFTER `assumption` and `lia` and
@@ -10205,6 +10252,7 @@ def _declared(stmts: list) -> list:
 # still running past 60 s; with the hypothesis split it closes instantly).
 # `decompose [and]` right after the `pose proof` costs a loop with a
 # one-conjunct conclusion nothing (`try`'d, and there is nothing to split).
+#
 # AND THE FRAME EQUATIONS MUST BE SUBSTITUTED, NOT MERELY AVAILABLE
 # (2026-09-18, a three-deep synthetic nest, MEASURED). A loop's frame
 # conjunct is `v' = v`, spelled with the loop's OWN input binder. In
@@ -10219,6 +10267,7 @@ def _declared(stmts: list) -> list:
 # body assigns every slot it has, leaving `frame` empty). One `subst`
 # per rebound name, right after the split, identifies the two and the
 # apply goes through.
+#
 # `subst {rebound names}`, never a blanket `subst`: a bare `subst` will
 # eliminate WHICHEVER side of an equation it likes, and at the final
 # Theorem a chain of two top-level loops spells the first loop's own exit
@@ -10355,7 +10404,7 @@ class _LoopGen:
         # at the entry state by `t_dis` like every other one, so a wrong
         # one makes the proof FAIL, never succeed wrongly -- but there is
         # no reason to emit one known to be false.
-        prev_assigned = loop_assigned(prev_straight)         # as in gen_loop
+        prev_assigned = loop_assigned(prev_straight)         # PREDICT T71, as in gen_loop
         extra_invs = [
             {"op": "==", "args": [{"var": s["var"]["name"]}, s["var"]["init"]]}
             for s in prev_straight
@@ -10437,6 +10486,7 @@ class _LoopGen:
             # invariant-preservation subgoal needs `t_q1_j >= s_len`, which
             # is exactly what `~ (t_q1_j < s_len /\ t_q1_r <> true)` plus
             # `t_q1_r <> true` gives, and it never got there).
+            #
             # So the conclusion also carries, per conjunct, the one-sided
             # implication "all the OTHER conjuncts held, therefore this one
             # did not". Each is a constructive consequence of `~ (A /\ B)`
@@ -10742,7 +10792,7 @@ def _loops_def(cx: Ctx, task: dict, body: list) -> str:
 
 
 def _dt_rec_requires_proof(task: dict, name: str, q: str, pargs: str, unf: str) -> str:
-    """a structurally recursive task with `requires` whose recursive calls change the other arguments
+    """PREDICT T66: a structurally recursive task with `requires` whose recursive calls change the other arguments
     (tree_insert's bounds, `bst(l, lo, v)`). The induction keeps every other parameter general: introduce them,
     revert all but the recursion's own, induct with each recursive field's hypothesis named, introduce again. After
     the case splits, each named hypothesis is instantiated at the arguments of a recursive call in the goal, and
@@ -10788,7 +10838,7 @@ Qed.
 
 
 def gen_dt_rec(cx: Ctx, body: list, q: str, counter: list) -> str:
-    """a task recursing on a datatype parameter `q`: the body is Rocq's own structural Fixpoint and the
+    """PREDICT T34: a task recursing on a datatype parameter `q`: the body is Rocq's own structural Fixpoint and the
     contract is proved by induction on `q`, every other parameter fixed (the tasks so far recurse with them
     unchanged), each case unfolded one step and split. An `if` the unfolding cannot pass (a recursive spec fun
     applied to `if x < v then .. else ..`, tree_insert) is destructed and the step repeated; the inductive
@@ -10924,6 +10974,7 @@ Qed.
 
 # --------------------------------------------------------------------------
 # Refutation certificates (ROADMAP 10.7: the ONE door to REFUTED).
+#
 # When the harness hands a measured twin witness, the twin file is lowered
 # as the twin PROGRAM (its definitions, unchanged) plus a single goal named
 # t_refutation_certificate: the spec instantiated at the concrete witness,
@@ -10936,6 +10987,7 @@ Qed.
 # witness kind this lowering cannot ground (an "undefined" twin, or a
 # value twin whose ensures still holds under the totalized seq model)
 # yields no certificate and the cell honestly reads verified/unproved.
+#
 # Witness kinds and their certificate statements:
 #   value        ~ (ensures at the concrete input, r := name_t <input>)
 #   exit         ~ (forall params state, lens -> requires -> surviving
@@ -10959,7 +11011,7 @@ T_FEED = r"""Ltac t_feed H :=
 
 
 def _seq_eq_order(fn_a: str, ln_a: str, fn_b: str, ln_b: str) -> tuple:
-    """one orientation for a seq `==` wherever it is stated (code, contract, certificate arm), the operand
+    """PREDICT T33: one orientation for a seq `==` wherever it is stated (code, contract, certificate arm), the operand
     whose rendered function sorts first leading. The closer ends a seq equality's false branch by `congruence` between
     the contract's forall and the code's negated fact, which must then be one term: rev_equal's code `u == b` and its
     contract `b == rev(a)` were the two orientations, and nothing closed it."""
@@ -10980,7 +11032,7 @@ def _glit(v, ty) -> str:
             "rocq lowering: _glit has no literal form for a nested seq; "
             "a nested value's witness goes through _nested_witness_pieces")
     if _dt_of(ty) is not None:
-        # the witness's own t text, or the interpreter's constructor value shown as that text, parsed
+        # PREDICT T34: the witness's own t text, or the interpreter's constructor value shown as that text, parsed
         import surface
         return _dt_gterm(surface.parse_expr(v if isinstance(v, str) else interp._j(v)))
     if isinstance(ty, dict):
@@ -10989,7 +11041,7 @@ def _glit(v, ty) -> str:
     if ty == "set":
         return _set_lit(v)   # SPEC.md "Finite sets" (2026-09-27)
     if ty == "seq":
-        # a seq inside a pair (the heap rewrite's `(result, array)` return) is one ((Z -> Z) * Z) value,
+        # PREDICT T53: a seq inside a pair (the heap rewrite's `(result, array)` return) is one ((Z -> Z) * Z) value,
         # the same two slots `default_term("seq")` gives it
         return f"({_seq_lambda(list(v))}, {_zlit(len(v))})"
     if ty == "bool":
@@ -11021,7 +11073,7 @@ def _to_interp_value(v, ty):
             "lists (interp.py's own tuple-of-tuples convention), never "
             "through this pair-shaped helper")
     if _dt_of(ty) is not None:
-        import surface                                     # the landing
+        import surface                                     # PREDICT T34
         return interp.ev(surface.parse_expr(v), {}, {}, interp.St())
     if isinstance(ty, dict):
         t1, t2 = ty["pair"]
@@ -11029,7 +11081,7 @@ def _to_interp_value(v, ty):
     if ty == "set":
         return frozenset(v)   # SPEC.md "Finite sets": interp's own set value
     if ty == "seq":
-        return tuple(v)       # interp's own runtime seq, inside a pair
+        return tuple(v)       # PREDICT T53: interp's own runtime seq, inside a pair
     return v
 
 
@@ -11092,7 +11144,7 @@ def _fv(e, bound: set) -> set:
             out |= _fv(a, bound)
         return out
     if "ctor" in e:
-        return set().union(*[_fv(a, bound) for a in e["ctor"]["args"]])   # the landing
+        return set().union(*[_fv(a, bound) for a in e["ctor"]["args"]])   # PREDICT T41
     if "field" in e:
         return _fv(e["field"]["of"], bound)
     if "match" in e:
@@ -11246,7 +11298,7 @@ def _witness_env(task: dict, witness: dict):
             vals = list(wv)
             # the interpreter's runtime seq is a tuple; a list made `s + [x]` raise inside _falsified_conjunct,
             # which skipped the conjunct and refused every certificate over a concatenation (measured 2026-10-06,
-            # sum_tail's twin)
+            # PREDICT T10: sum_tail's twin)
             env_py[v] = tuple(vals)
             et, defline, ptwl, setl, sargs = _seq_witness_pieces(v, vals)
             env_txt.update(et)
@@ -11262,7 +11314,7 @@ def _witness_env(task: dict, witness: dict):
             # shape); `_nested_witness_pieces` is `_seq_witness_pieces`'s
             # own two-level analogue.
             rows = [list(r) for r in wv]
-            env_py[v] = tuple(tuple(r) for r in rows)   # the interpreter's runtime nested seq 
+            env_py[v] = tuple(tuple(r) for r in rows)   # the interpreter's runtime nested seq (PREDICT T10)
             et, defline, ptwl, setl, sargs = _nested_witness_pieces(v, rows)
             env_txt.update(et)
             seq_defs.append(defline)
@@ -11677,7 +11729,7 @@ def _rec_def(cx, task, body):
         return None
     q = _dt_struct_param(task["decreases"], task["params"])
     if q is not None:
-        # the structural Fixpoint, which `cbv` evaluates at a ground witness
+        # PREDICT T34: the structural Fixpoint, which `cbv` evaluates at a ground witness
         cx.callpre[name] = f"{name}_t"
         env = exec_straight(cx, body, {ret: default}, {}, None, [], [])
         del cx.callpre[name]
@@ -11810,7 +11862,7 @@ def _loop_def(cx, task, prefix, w, suffix):
 def _value_cert(cx, task, body, witness, def_text, w=None):
     """Certificate chunk for a whole-program value witness, or None.
 
-    2026-09-10 (the coverage census's twelfth sweep, the two
+    2026-09-10 (COVERAGE-lifted-785.md's twelfth sweep, the two
     parameterless sole blockers, f1a__f and ghost__m): a param-less task
     was refused outright by the guard this replaces. Nothing downstream
     actually needs a param: `_witness_env` already returns empty
@@ -12106,7 +12158,7 @@ def _value_cert(cx, task, body, witness, def_text, w=None):
         # value" is not measured here, but `_pair_default_py` covers it the
         # same way "false"/0 already do for bool/int.
         if _dt_of(ret_t) is not None:
-            if not isinstance(tv, str):                     # a constructor value's t text
+            if not isinstance(tv, str):                     # PREDICT T34: a constructor value's t text
                 return None
         else:
             if tv == "no value":
@@ -12172,7 +12224,7 @@ def _value_cert(cx, task, body, witness, def_text, w=None):
                      "  end.\n")
         lines.append("  t_set_ground.\n")
     elif any(ret in _fv(e, set()) for e in task["ensures"]) and isinstance(ret_t, dict) and "seq" in ret_t.get("pair", ()):
-        # a pair holding a seq (the heap rewrite's `(result, array)`) carries a function, and the twin's
+        # PREDICT T53: a pair holding a seq (the heap rewrite's `(result, array)`) carries a function, and the twin's
         # computed function (updates over the input) is equal to a literal lambda only extensionally, never by
         # `reflexivity` (measured: scale_all's twin). Rocq normalizes the computed value itself instead.
         lines.append(f"  remember {applied} as t_out eqn:Ht_out.\n")
@@ -12594,6 +12646,7 @@ def _first_undef(e, env: dict, funs: dict):
 #   trip count a straight-line unrolling would need anyway). What was
 #   missing was never the loop replay itself -- it is two narrower gaps in
 #   the CLOSING proof script downstream of that already-correct value:
+#
 #   (1) filter_pos (no `return`): the seq branch's `repeat match` only
 #   recognized a falsified conjunct shaped `forall t_k, lo <= t_k < hi ->
 #   _ = _` (row_max_len/seq_max's own two-PARAM pointwise-equality shape);
@@ -12625,6 +12678,7 @@ def _first_undef(e, env: dict, funs: dict):
 #   `lia` alone stops closing that way; `congruence`/`intuition congruence`
 #   only fire once `lia` has already failed) so every existing seq-branch
 #   certificate (row_max_len, seq_max, swap) is untouched.
+#
 #   (2) is_prime (has a `return` in its loop): once `is_prime_t 3` is
 #   ground to `false` (`cbv; reflexivity`, unchanged), the certificate's
 #   goal is `~ (false = true <-> forall d, 2 <= d < 3 -> t_mod 3 d <> 0)`
@@ -12660,6 +12714,7 @@ def _first_undef(e, env: dict, funs: dict):
 #   own `_value_cert` call passes `w=None`, so `quants` is always `[]`
 #   there and its generated proof text is BYTE-IDENTICAL to before this
 #   change (confirmed by the regression bar's own byte-diff, this date).
+#
 #   `_undef_cert`'s own while-loop refusal (reverse's own regression,
 #   compare-flip: `s=[] -> twin at index -1 outside [0,0)`) is the THIRD
 #   and last piece, a narrower, separate gap from either of the above:
@@ -13049,9 +13104,9 @@ def _v0_cert(task: dict, body: list, witness: dict):
 
 
 def _comp_refusal(task: dict, body: list) -> None:
-    """Rocq carries a comprehension that is a map (no filter) over a seq or an int range, in the task's
+    """PREDICT T14: Rocq carries a comprehension that is a map (no filter) over a seq or an int range, in the task's
     requires, ensures and body. A filter, or a comprehension inside a spec_fun, method or lemma, refuses by name.
-    any/all over a comprehension keeps its own route (SPEC.md "Reductions (v1)")."""
+    any/all over a comprehension keeps its own route (SPEC.md "Reductions (v1)", PREDICT T10)."""
     def walk(x, inside_task: bool) -> None:
         if isinstance(x, dict):
             a = x.get("args", [])
@@ -13080,7 +13135,7 @@ def _comp_refusal(task: dict, body: list) -> None:
 # sites pass it; when a certificate can ground it, the twin file carries
 # t_refutation_certificate instead of an unprovable spec theorem.
 def lower(task: dict, body: list, witness: dict | None = None) -> str:
-    # the task's datatype declarations, for the module-level helpers, for exactly this call
+    # PREDICT T34: the task's datatype declarations, for the module-level helpers, for exactly this call
     prev = dict(_DTS)
     _DTS.clear()
     _DTS.update({d["name"]: d for d in task.get("datatypes", [])})
@@ -13095,14 +13150,14 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     import tshape
     task, body = tshape.desugar_seq_quants(task, body)   # SPEC.md "Quantifiers over a collection": seq ranges as indices
     import rocq_lib
-    task, body = tshape.desugar_par(task, body)          # a parallel loop as its sequential `for`
-    task, body = tshape.desugar_exits(task, body)        # break/continue rewritten; `while true` stays
-    task, body, witness = tshape.desugar_heap(task, body, witness)   # copy-in/copy-out
-    tshape.abstain_on_floats(task, body, "rocq")           # SPEC.md "Floats (v1)" 
+    task, body = tshape.desugar_par(task, body)          # PREDICT T47: a parallel loop as its sequential `for`
+    task, body = tshape.desugar_exits(task, body)        # PREDICT T44: break/continue rewritten; `while true` stays
+    task, body, witness = tshape.desugar_heap(task, body, witness)   # PREDICT T53: copy-in/copy-out
+    tshape.abstain_on_floats(task, body, "rocq")           # SPEC.md "Floats (v1)" (PREDICT T48)
     tshape.abstain_unless_carried(task, body, "rocq", carried={"comp-reduction", "comp", "exit"},
-                                  lib=rocq_lib.ROCQ_LIB)   # the library in Rocq
-    _comp_refusal(task, body)                              # maps carried, the rest refused by name
-    _dt_check(task)                                        # datatypes lowered; the rest by name
+                                  lib=rocq_lib.ROCQ_LIB)   # PREDICT T10: the library in Rocq
+    _comp_refusal(task, body)                              # PREDICT T14: maps carried, the rest refused by name
+    _dt_check(task)                                        # PREDICT T34: datatypes lowered; the rest by name
     # SPEC.md "Lemmas (v1)" (2026-09-27, the LEMMAS section before
     # `lower_v1`): a lemma call is a no-op at run time. The refutation
     # certificate (the one door to REFUTED) is still built from the body
@@ -13127,6 +13182,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     # moment `_ck` next saw it, exactly the failure this pass exists to
     # avoid. `task`/`body` are returned unchanged (`is`) when nothing
     # needs a rename, which is every previously-committed task.
+    #
     # `_v0_cert`/`_try_cert_v1` (below `lower_v0`/`lower_v1`) read the
     # witness `w` against this SAME renamed task/body, `w`'s own keys
     # already renamed to match (`t_names.remap_witness`) -- both build
@@ -13173,7 +13229,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
     task, renames = t_names.sanitize(
         task, t_names.KEYWORDS["rocq"] | prefix_bad,
         uppercase_ok=True, prefix="tn_")
-    # `buf_len` renamed is `tn_buf_len`, which still ends in `_len`. It can only capture the length
+    # PREDICT T69: `buf_len` renamed is `tn_buf_len`, which still ends in `_len`. It can only capture the length
     # binder of a seq named `tn_buf`, so that one case is refused by name (hygiene: a shadowing binder would change
     # the proof's meaning silently).
     for _new in renames.values():
@@ -13182,7 +13238,7 @@ def _lower(task: dict, body: list, witness: dict | None = None) -> str:
                 f"rocq lowering: the renamed {_new!r} would shadow the length binder of {_new[:-4]!r}")
     if task.get("datatypes"):
         _DTS.clear()
-        _DTS.update({d["name"]: d for d in task["datatypes"]})   # the renamed declarations
+        _DTS.update({d["name"]: d for d in task["datatypes"]})   # PREDICT T34: the renamed declarations
     # the twin body renamed under the same mapping, kept a separate
     # object from task["body"] (2026-09-11, names.rename_body's note)
     body = t_names.rename_body(twin_body, renames) if twin_body is not None else task["body"]

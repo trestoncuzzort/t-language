@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_audit.py: t/audit.py (D8), the specification audit. Every mutant lands in one class;
+"""test_audit.py: t/audit.py (NORTH-STAR.md target 3, D8), the specification audit. Every mutant lands in one class;
 a weak spec admits a survivor with a witness, the same routine under a strong spec admits none, a mutant that loops
 forever is classed apart from the spec, and the table and the CLI agree. Standard library only, no kernel runs."""
 from __future__ import annotations
@@ -96,3 +96,52 @@ if __name__ == "__main__":
         if name.startswith("test_") and callable(fn):
             fn()
             print(f"{name}: ok")
+
+
+# Named by the GPT-6 Astra review of 2026-10-13 and reproduced here before the fix: two task files whose stems
+# sanitize to the same name wrote the same kernel source path, so a parallel audit with a shared --out could read
+# the other task's verdict.
+
+def test_kernel_source_paths_do_not_collide(tmp_path):
+    from unittest.mock import patch
+    text = "t 1\ntask next_up(x: int) returns (r: int)\n  requires x >= 0\n  ensures r > x\n{\n  r := x + 1;\n}\n"
+    paths = []
+
+    def verdict(task, body, kernel, path):
+        paths.append(path)
+        return "abstain"
+    with patch.object(audit, "_kernel_verdict", side_effect=verdict):
+        for name in ("a-b.t", "a_b.t"):
+            (tmp_path / name).write_text(text, encoding="utf-8")
+            audit.audit_file(str(tmp_path / name), kernel="dafny", out_dir=str(tmp_path / "out"))
+    assert len(paths) == 2 and len(set(paths)) == 2, paths
+
+
+# Two more from the same review: a capped search is disclosed as incomplete; a lowering refusal keeps the construct name.
+
+
+def test_table_discloses_capped_search():
+    import audit
+
+    result = {
+        'name': 'f', 'status': 'ok', 'mutants': 1,
+        'same': 0, 'killed': 1, 'diverges': 0,
+        'survivors': [], 'ill_formed': 0,
+        'capped': True, 'proved_survivors': 0,
+    }
+    report = audit.table([result], None).lower()
+    assert any(word in report for word in ('capped', 'truncat', 'incomplete', 'partial')), report
+
+
+def test_lowering_refusal_preserves_construct_name():
+    from pathlib import Path
+    from types import SimpleNamespace
+    from unittest.mock import patch
+    import audit
+
+    def lower(task, body):
+        raise NotImplementedError('unsupported construct: choice_expression')
+
+    with patch.dict(audit.tlib._LOWER_MOD, {'audit_test': ('audit_test_lower', 'txt')}), patch.object(audit.importlib, 'import_module', return_value=SimpleNamespace(lower=lower)):
+        result = audit._kernel_verdict({'body': []}, [], 'audit_test', Path('unused.txt'))
+    assert 'choice_expression' in str(result), result

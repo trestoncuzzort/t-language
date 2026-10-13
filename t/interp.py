@@ -288,7 +288,7 @@ class MapV:
         d: dict = {}
         for k, v in pairs:            # the rightmost of two equal keys wins (SPEC.md "Maps (v1)")
             d[_tv(k)] = (k, v)
-        return MapV(tuple(d[key] for key in sorted(d, key=repr)))
+        return MapV(tuple(d[key] for key in sorted(d, key=_order_key)))
 
     def has(self, k) -> bool:
         tk = _tv(k)
@@ -703,7 +703,7 @@ def ev(e: dict, env: dict, funs: dict, st: St):
             raise Undef(f"{e['var']} read before assignment", expr=e)
         return v
     if "old" in e:
-        # SPEC.md "Heap (v1)" : e in the task's entry state, which the run that set OLD_KEY recorded
+        # SPEC.md "Heap (v1)" (PREDICT T46): e in the task's entry state, which the run that set OLD_KEY recorded
         o = env.get(OLD_KEY)
         if o is None:
             raise Budget("old(...) outside a task run that recorded its entry state")
@@ -774,7 +774,7 @@ def ev(e: dict, env: dict, funs: dict, st: St):
             # SPEC.md "Quantifiers over a collection" (2026-10-07): the elements of a set (in order) or of a seq
             # (in order, repeats included), the body defined at every one, as over a range
             coll = ev(q["in"], env, funs, st)
-            points = sorted(coll) if isinstance(coll, frozenset) else list(coll)
+            points = _in_order(coll) if isinstance(coll, frozenset) else list(coll)
         else:
             lo = ev(q["lo"], env, funs, st)
             hi = ev(q["hi"], env, funs, st)
@@ -1028,7 +1028,7 @@ def ev(e: dict, env: dict, funs: dict, st: St):
     if op == "endswith":
         return _str_endswith(a[0], a[1])
     if op in ("+", "-", "*", "div") and isinstance(a[0], float):
-        # SPEC.md "Floats (v1)" : binary64, rounded to nearest even (Python's float is exactly that);
+        # SPEC.md "Floats (v1)" (PREDICT T48): binary64, rounded to nearest even (Python's float is exactly that);
         # DEFINED IFF the result is finite: a zero divisor, an overflow or a NaN has no value, as SPARK makes each a
         # check
         x, y = a[0], a[1]
@@ -1103,7 +1103,9 @@ def ev(e: dict, env: dict, funs: dict, st: St):
     if op == "pow":
         if a[1] < 0:
             raise Undef("pow with a negative exponent", expr=e)
-        return a[0] ** a[1]
+        if type(a[0]) is int and abs(a[0]) > 1 and a[1] * (abs(a[0]).bit_length() - 1) > MAX_BITS:
+            raise Budget("magnitude cap")    # |b|^e has at least e*(bits(|b|)-1) bits: past the cap before it is built
+        return _bounded(a[0] ** a[1])
     if op == "isqrt":
         if a[0] < 0:
             raise Undef("isqrt of a negative", expr=e)
@@ -1182,7 +1184,7 @@ def exec_body(body: list, env: dict, funs: dict, st: St, hook=None,
             name, e = s["assign"]
             env[name] = ev(e, env, funs, st)
         elif "par" in s:
-            # SPEC.md "Concurrency (v1)" : the iterations in REVERSE order, a second schedule beside the
+            # SPEC.md "Concurrency (v1)" (PREDICT T47): the iterations in REVERSE order, a second schedule beside the
             # kernels' sequential one; `par-race` makes every schedule compute the same thing, so a disagreement
             # with a kernel would expose a gap in the rule
             w = s["par"]
@@ -1193,7 +1195,7 @@ def exec_body(body: list, env: dict, funs: dict, st: St, hook=None,
                 exec_body(w["body"], env, funs, st, hook, trace=trace, path=(*location, "par", "body"))
             env.pop(w["var"], None)
         elif "aset" in s:
-            # SPEC.md "Heap (v1)" : one element written; the array is a seq value replaced whole, which
+            # SPEC.md "Heap (v1)" (PREDICT T46): one element written; the array is a seq value replaced whole, which
             # is the same program as writing in place because nothing aliases it
             name, ie, ve = s["aset"]
             cur = env[name]
@@ -1326,7 +1328,8 @@ def funs_of(task: dict, body: list) -> dict:
                            "_requires": m["requires"]}
     if self_calls(body, task["name"]):
         funs[task["name"]] = {"params": task["params"],
-                              "_exec": (body, task["returns"][0]["name"])}
+                              "_exec": (body, task["returns"][0]["name"]),
+                              "_requires": task.get("requires", [])}
     if task.get("datatypes"):
         # SPEC.md "Datatypes (v2): fields" (2026-10-07): each constructor's field names in order, for `e.f` (ev's
         # "field" case); `$` is not a t name, so the key cannot collide with a spec_fun or method
@@ -1653,7 +1656,7 @@ DT_BOOL_VARIANTS_CAP = 3 * DT_SHAPE_CAP   # bool variants of the labelled shapes
 
 
 def _bool_variants(shapes: list, name: str, recs: list) -> list:
-    """SPEC.md "Datatypes (v3): recursion" : a labelled shape fixes every bool field at its ladder's first
+    """SPEC.md "Datatypes (v3): recursion" (PREDICT T38): a labelled shape fixes every bool field at its ladder's first
     value, so a red-black node is always black and no shape meets a red-child precondition (measured on
     llrbt_rotate_left: no input satisfied `requires`). For a recursive constructor with a bool field, each shape
     also enters with one node's bools flipped, every node in turn, then with all of them flipped; after the plain
@@ -1884,6 +1887,55 @@ def _j(v):
     return v
 
 
+def _no_signed_zero(tv):
+    """A tagged value with every float -0.0 read as 0.0 (the two are one key, so their renderings must agree) and
+    every frozenset rendered in a fixed order; for ordering only, never for equality."""
+    if isinstance(tv, tuple):
+        return tuple(_no_signed_zero(x) for x in tv)
+    if isinstance(tv, frozenset):
+        return ("frozenset", tuple(sorted((_no_signed_zero(x) for x in tv), key=repr)))
+    if isinstance(tv, float) and tv == 0.0:
+        return 0.0
+    return tv
+
+
+def _order_key(tv) -> str:
+    """A total order on tagged values, for the orderings of maps and sets: the rendering of the tagged value."""
+    return repr(_no_signed_zero(tv))
+
+
+def _in_order(s: frozenset) -> list:
+    """A set's elements in order: Python's own order when every element has one, else (pairs, tuples, maps, mixed
+    shapes, which have no `<`) the order of their tagged renderings, total over every t value."""
+    try:
+        return sorted(s)
+    except TypeError:
+        return sorted(s, key=lambda v: _order_key(_tv(v)))
+
+
+def as_declared(v, ty):
+    """`v` read at the declared t type `ty`: an int where the type says real is that real (Python's `sum` of an
+    empty seq is the int 0 whatever the seq's element type), recursively through seqs, sets, pairs, tuples and
+    maps. Anything else is returned as it is; `_tv` then keeps int and bool and the shapes apart."""
+    try:
+        if ty == "real":
+            return Fraction(v) if type(v) is int else v
+        if isinstance(ty, dict):
+            if "seq" in ty and isinstance(v, tuple):
+                return tuple(as_declared(x, ty["seq"]) for x in v)
+            if "set" in ty and isinstance(v, frozenset):
+                return frozenset(as_declared(x, ty["set"]) for x in v)
+            if "pair" in ty and isinstance(v, Pair):
+                return Pair(as_declared(v.a, ty["pair"][0]), as_declared(v.b, ty["pair"][1]))
+            if "tuple" in ty and isinstance(v, Tup):
+                return Tup(tuple(as_declared(x, t) for x, t in zip(v.items, ty["tuple"])))
+            if "map" in ty and isinstance(v, MapV):
+                return MapV.of((as_declared(k, ty["map"][0]), as_declared(x, ty["map"][1])) for k, x in v.items)
+    except (TypeError, ValueError, IndexError, KeyError):
+        pass
+    return v
+
+
 def _tv(v):
     """A value tagged with its t TYPE. Python makes True == 1, so a bare `!=`
     would call a bool-returning twin and an int-returning real body equal and
@@ -2036,7 +2088,8 @@ class Reference:
             except (Budget, RecursionError):
                 continue
             gh = self._heap(env)
-            if got is None or _tv(got) != _tv(real) or self._heap_differs(gh, k):
+            rty = self.task["returns"][0]["type"]
+            if got is None or _tv(as_declared(got, rty)) != _tv(as_declared(real, rty)) or self._heap_differs(gh, k):
                 w = _shown(env0)
                 w.update(_kind="value", _real=_j(real),
                          _twin="no value" if got is None else _j(got),
@@ -2202,7 +2255,7 @@ class _Admissible:
         self.cache: dict = {}
 
     def __bool__(self):
-        return bool(self.fixed)
+        return True                   # the filter always has something to say: whether the header is reached at all
 
     def _reachable(self, key: tuple) -> set:
         """The tuples of `fixed` values an actual run leaves at the header,
@@ -2230,10 +2283,13 @@ class _Admissible:
         return seen
 
     def ok(self, env: dict) -> bool:
-        if not self.fixed:
-            return True
         key = tuple(env[n] for n in self.params)
-        return tuple(env.get(n) for n in self.fixed) in self._reachable(key)
+        reached = self._reachable(key)
+        if not self.fixed:
+            # nothing but the params decides the state, and an enclosing branch may keep the loop from running at
+            # all for them: a state at a header no run reaches is one a kernel can rule out
+            return bool(reached)
+        return tuple(env.get(n) for n in self.fixed) in reached
 
 
 def continuation(body: list, loop: dict) -> list | None:
@@ -2358,7 +2414,21 @@ def invariant_witness(task: dict, loop: dict, kept: list,
                     return w
                 continue
             nxt = dict(env)
-            returned = exec_body(loop["body"], nxt, funs, st)
+            try:
+                returned = exec_body(loop["body"], nxt, funs, st)
+            except LoopExit as exc:
+                if exc.kind == "break":
+                    # the loop is left: the obligation is `ensures` after the continuation, as at the natural exit
+                    if cont is None:
+                        continue
+                    post = dict(nxt)
+                    exec_body(cont, post, funs, st)
+                    if not all(ev(c, post, funs, st) for c in ens):
+                        w = _shown(env)
+                        w["_kind"] = "exit"
+                        return w
+                    continue
+                returned = False      # a continue goes back to the guard: the survivors must hold there
             if returned:
                 if not all(ev(c, nxt, funs, st) for c in ens):
                     w = _shown(env)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""t/audit.py: how much room a specification leaves for wrong programs (D8).
+"""t/audit.py: how much room a specification leaves for wrong programs (NORTH-STAR.md target 3, D8).
 
 A kernel proves a program against its specification. Nothing in that proof says the specification can tell the
 program from a wrong one. This audit asks, for one task or a directory of them: of the one-edit mutants of the
@@ -34,6 +34,7 @@ finding independent of loop invariants. Bounded domain only: a difference outsid
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib
 import json
 import re
@@ -121,7 +122,8 @@ def _scan(ref, task: dict, mut: list) -> str:
         if got is None:
             return "killed"
         gh = ref._heap(env)
-        if interp._tv(got) != interp._tv(real) or ref._heap_differs(gh, k):
+        rty = task["returns"][0]["type"]
+        if interp._tv(interp.as_declared(got, rty)) != interp._tv(interp.as_declared(real, rty)) or ref._heap_differs(gh, k):
             if ref._breaks_ensures(env0, got, gh):
                 return "killed"
             differs = True
@@ -145,8 +147,9 @@ def _kernel_verdict(task: dict, body: list, kernel: str, path: Path) -> str:
     lmod, _suffix = tlib._LOWER_MOD[kernel]
     try:
         src = importlib.import_module(lmod).lower({**task, "body": body}, body)
-    except NotImplementedError:
-        return "abstain"
+    except NotImplementedError as e:                    # the refusal keeps the construct's name, as the lowering gave it
+        why = str(e).strip().replace("|", "\\|")[:120]
+        return f"abstain: {why}" if why else "abstain"
     except Exception:                                   # noqa: BLE001
         return "lower-error"
     path.write_text(src, encoding="utf-8", newline="\n")
@@ -174,7 +177,9 @@ def audit_file(path: str, kernel: str | None = None, seconds: int = TASK_SECONDS
         work = Path(out_dir or tempfile.mkdtemp(prefix="t-audit-"))
         work.mkdir(parents=True, exist_ok=True)
         _lmod, suffix = tlib._LOWER_MOD[kernel]
-        stem = re.sub(r"[^A-Za-z0-9_]", "_", Path(path).stem)
+        # the sanitized stem plus a hash of the path: `a-b.t` and `a_b.t` sanitize alike, and a parallel audit with a
+        # shared --out would otherwise write one source path for both and read the other task's verdict
+        stem = re.sub(r"[^A-Za-z0-9_]", "_", Path(path).stem) + "_" + hashlib.sha1(str(Path(path).resolve()).encode()).hexdigest()[:8]
         res["kernel"] = kernel
         res["real_verdict"] = _kernel_verdict(task, task["body"], kernel, work / f"{stem}.{suffix}")
         if res["real_verdict"] == "verified":
@@ -200,7 +205,8 @@ def _row(r: dict) -> str:
         ex = f"{s['op']}: {s['change']} at {s['witness']}".replace("|", "\\|")
     proved = str(r["proved_survivors"]) if "kernel" in r and r.get("real_verdict") == "verified" else (
         f"(real {r['real_verdict']})" if "kernel" in r else "")
-    return (f"| {r['name']} | {r['mutants']} | {r['killed']} | {r['same']} | {r['diverges']} | {len(sv)} | {proved} "
+    mutants = f"{r['mutants']} (capped)" if r.get("capped") else str(r["mutants"])
+    return (f"| {r['name']} | {mutants} | {r['killed']} | {r['same']} | {r['diverges']} | {len(sv)} | {proved} "
             f"| {ex} |")
 
 
@@ -219,6 +225,10 @@ def table(results: list[dict], kernel: str | None) -> str:
              f"- behaviour-changing mutants the specs kill: {killed} of {changing}"
              + (f" ({100 * killed / changing:.1f}%)" if changing else ""),
              f"- tasks whose spec admits a survivor: {len(with_sv)} of {len(ok)}"]
+    capped = [r for r in ok if r.get("capped")]
+    if capped:
+        lines.append(f"- tasks whose mutant search was capped at {harness.MAX_CANDIDATES} candidates, so not every "
+                     f"one-edit mutant was classed (an incomplete audit, marked `(capped)` in the table): {len(capped)} of {len(ok)}")
     if kernel:
         real_ok = [r for r in ok if r.get("real_verdict") == "verified"]
         proved = [r for r in real_ok if r["proved_survivors"]]

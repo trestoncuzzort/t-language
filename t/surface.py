@@ -124,7 +124,7 @@ Grammar, in the same EBNF dialect SYNTAX.md uses:
                | "(" Type ("," Type)+ ")" | Id          (* any depth since 2026-10-06 (SPEC.md "Compositional
                                                            types"); seq<int>, set<int> are spelled seq, set *)
     SpecFun  ::= "spec" "fun" Id "(" Params ")" ":" Type   (* any type since 2026-10-06 *)
-                 "decreases" Expr "=" Expr
+                 ("decreases" Expr)? "=" Expr          (* the measure iff the body self-calls, since 2026-10-13 *)
     InlineFun ::= "inline" "fun" Id "(" Params ")" ":" Type "=" Expr ";"?
     Block    ::= "{" Stmt* "}"
     Stmt     ::= Id ":=" Expr ";"?
@@ -586,11 +586,11 @@ class Parser:
             name = self.eat("id", production="Type").text
             return self.mark(start, {"datatype": name})
         if self.tok.kind == "id" and self.tok.text == "float" and "float" not in self.datatypes:
-            # SPEC.md "Floats (v1)" (2026-10-07): IEEE-754 binary64. Contextual, as `array` is
+            # SPEC.md "Floats (v1)" (2026-10-07, PREDICT T48): IEEE-754 binary64. Contextual, as `array` is
             self.eat("id", production="Type")
             return "float"
         if self.tok.kind == "id" and self.tok.text == "array" and "array" not in self.datatypes:
-            # SPEC.md "Heap (v1)" (2026-10-07): a seq of ints passed by reference; check_wf keeps it to
+            # SPEC.md "Heap (v1)" (2026-10-07, PREDICT T46): a seq of ints passed by reference; check_wf keeps it to
             # task parameters (`array-param-only`). Contextual, so an existing name `array` still reads as a name
             self.eat("id", production="Type")
             return "array"
@@ -698,7 +698,7 @@ class Parser:
                 self.tok.kind == "id" and self.tok.text == "modifies"):
             self.production = "Task"
             if self.tok.kind == "id":
-                # SPEC.md "Heap (v1)" : `modifies a, b`, the arrays the task may write (contextual)
+                # SPEC.md "Heap (v1)" (PREDICT T46): `modifies a, b`, the arrays the task may write (contextual)
                 mtok = self.eat("id")
                 if modifies is not None:
                     self.err(mtok, "a task has at most one modifies clause")
@@ -895,9 +895,9 @@ class Parser:
         # result is any t type (2026-09-27 had added the seq of ints).
         fn["result"] = self.ptype()
         self.production = "SpecFun"        # ptype() left it on "Type"
-        self.eat("kw", "decreases")
-        fn["decreases"] = self.expr()
-        self.production = "SpecFun"        # expr() left it on "Expr"
+        if self.opt("kw", "decreases"):    # required iff the body self-calls (check_wf's rule, 2026-10-13), as a
+            fn["decreases"] = self.expr()  # method's is; Dafny asks a measure of possibly recursive functions only
+            self.production = "SpecFun"    # expr() left it on "Expr"
         self.eat("sym", "=")
         fn["body"] = self.expr()
         self.production = "SpecFun"
@@ -966,7 +966,7 @@ class Parser:
             return self.mark(t, {"lemma": {"name": name, "args": args}})
         if (t.kind == "id" and t.text == "parallel" and self.i + 1 < len(self.toks)
                 and self.toks[self.i + 1].kind == "kw" and self.toks[self.i + 1].text == "for"):
-            # SPEC.md "Concurrency (v1)" : `parallel for i in [lo, hi) invariant ... { ... }`, contextual
+            # SPEC.md "Concurrency (v1)" (PREDICT T47): `parallel for i in [lo, hi) invariant ... { ... }`, contextual
             self.eat("id")
             self.eat("kw", "for")
             var = self.name("Stmt")
@@ -986,7 +986,7 @@ class Parser:
             return self.mark(t, {"par": {"var": var, "lo": lo, "hi": hi, "invariants": invs, "body": body}})
         if (t.kind == "id" and self.i + 1 < len(self.toks) and self.toks[self.i + 1].kind == "sym"
                 and self.toks[self.i + 1].text == "["):
-            # SPEC.md "Heap (v1)" : `a[i] := e;`, one element of an array written in place
+            # SPEC.md "Heap (v1)" (PREDICT T46): `a[i] := e;`, one element of an array written in place
             target = self.name()
             self.eat("sym", "[", "Stmt")
             idx = self.expr()
@@ -1669,7 +1669,7 @@ class Parser:
                                           for cp in self.eat("str").text]})
         if (t.kind == "id" and t.text == "old" and self.i + 1 < len(self.toks)
                 and self.toks[self.i + 1].kind == "sym" and self.toks[self.i + 1].text == "("):
-            # SPEC.md "Heap (v1)" : old(e), e in the task's entry state (contextual)
+            # SPEC.md "Heap (v1)" (PREDICT T46): old(e), e in the task's entry state (contextual)
             self.eat("id")
             self.eat("sym", "(")
             inner = self.expr()
@@ -2540,7 +2540,8 @@ def print_task(task: dict) -> str:
                         for p in fn["params"])
         lines.append("spec fun %s(%s): %s" % (_ident(fn["name"]), fps,
                                               _print_type(fn["result"])))
-        lines.append("  decreases %s" % pexpr(fn["decreases"]))
+        if "decreases" in fn:
+            lines.append("  decreases %s" % pexpr(fn["decreases"]))
         lines.append("= %s" % pexpr(fn["body"]))
     for lm in t.get("lemmas", []):
         lps = ", ".join("%s: %s" % (_ident(p["name"]), _print_type(p["type"]))

@@ -174,7 +174,7 @@ Stmt     ::= {"assign": [Id, Expr]}
 SpecFun  ::= {"name": Id,
               "params": [ {"name": Id, "type": Type}* ],       (* any type since 2026-10-06 *)
               "result": Type,                   (* any type since 2026-10-06 ("seq" since 2026-09-27) *)
-              "decreases": Expr,                (* int-valued, over the params *)
+              "decreases"?: Expr,               (* int-valued over the params; required iff the body self-calls (2026-10-13) *)
               "body": Expr}                     (* may call itself and EARLIER spec_funs *)
 
 Method   ::= {"name": Id, "params": [ {"name": Id, "type": Type}* ],
@@ -851,7 +851,8 @@ that expanded program, not the declarations: `parse(print(parse(source))) ==
 parse(source)`. As with string literal sugar, source spelling is not retained.
 The constrained grammar admits the structure; binding, typing and acyclicity
 are checked during elaboration. Unsupported expanded shapes remain unsupported
-by the same backends. See [the normative rules](SPEC.md#typed-inline-helpers-surface-v1).
+by the same backends. See [the normative rules](SPEC.md#typed-inline-helpers-surface-v1)
+and [the preregistered probes](https://github.com/trestoncuzzort/dawnr/blob/main/t/PREREG-inline-helpers-2026-09-19.md).
 
 ### Core scope
 

@@ -255,7 +255,7 @@ automatic inference find them, same as every previously committed seq
 task; `slice` itself needed no trigger case in `_has_indexable` or
 `_mod_div_trigger` since no committed quantifier body contains one.
 
-GUARD DEFINEDNESS (2026-09-09, the residual the coverage census names:
+GUARD DEFINEDNESS (2026-09-09, the residual t/COVERAGE-lifted-785.md names:
 "a `div`/`mod` in a loop guard is a definedness obligation ... verus ...
 doesn't lower yet"). `loop()` used to raise NotImplementedError outright
 whenever `defined(cond)` or `defined(decreases)` was non-trivial, which is
@@ -759,7 +759,7 @@ emitter's own statement walk, not a nested-seq defect, and not touched
 here. fz_p_nest_empty is unaffected and untouched, as expected (no
 comparison, arithmetic, or loop for any twin operator to apply to).
 
-SOLE BLOCKERS, THE FIVE (2026-09-10, the coverage census "Sole
+SOLE BLOCKERS, THE FIVE (2026-09-10, t/COVERAGE-lifted-785.md "Sole
 blockers": the five lifted tasks verus alone kept out of the seven-column
 bar). Measured first, not guessed: four read malformed/refuted (real
 rejected before proof), one unproved/refuted (real rejected by the
@@ -857,7 +857,7 @@ seq/pair/nested-seq/div-mod/loop shape) additionally re-run through
 `harness.run_task` into `out/agent-verus-spotcheck/`: all seven COUNT
 with the identical witnesses already on record.
 
-the coverage census's "Sole blockers" table is now stale for verus:
+t/COVERAGE-lifted-785.md's "Sole blockers" table is now stale for verus:
 all five tasks it named read verus verified/refuted, none malformed or
 unproved; regenerating that table is a coverage-script action, not a
 lowering one, so left for the sweep that next regenerates it.
@@ -1043,7 +1043,7 @@ scope (t/lower_verus.py only).
 
 2026-09-12, sweep r20's two malformed rows (ROADMAP 16.2, verus-2): 414
 anyValueExists and 603 lucidNumbers both read verus malformed/malformed
-(the coverage census). Measured directly (`verus --output-json
+(t/COVERAGE-lifted-785.md). Measured directly (`verus --output-json
 --no-cheating dafny_synthesis_task_id_414__anyValueExists.rs`): "error:
 Could not automatically infer triggers for this quantifier", at 414's
 own preservation-witness ensures (`result == (exists k| P(k) &&
@@ -1134,7 +1134,7 @@ reachable when a loop's `state` is empty, and no committed task has one;
 own `build_manifest`/`run_items`/`grade`, called directly, filtered to
 the verus column) reads 66 PASS / 0 FAIL both before and after this
 change, the identical 66 items; (3) all 75 dafny_synthesis rows of
-the coverage census, relowered through the SAME grade.py call
+t/COVERAGE-lifted-785.md, relowered through the SAME grade.py call
 before and after this change (verus + dafny, flake 3), produce a
 byte-identical table (only the run timestamp differs) -- no cell moved,
 including the ones that already read verified/refuted. See
@@ -1199,13 +1199,13 @@ quantifier has that shape; (2) the conformance suite restricted to verus
 alone (`conformance.build_manifest`/`run_items`/`grade`, filtered to the
 verus column) reads 66 PASS / 0 FAIL, matching t/CONFORMANCE.md's "every
 FAIL cell is in framac" baseline exactly; (3) all 84 dafny_synthesis rows
-of the coverage census that already read verus verified/refuted,
+of t/COVERAGE-lifted-785.md that already read verus verified/refuted,
 relowered through the same grade.py call (verus alone, flake 3), all 84
 still read verified/refuted, none moved; (4)
 t/test_lower_verus_refusals.py and t/test_lower_verus_nested_trigger.py:
 15 tests, all pass (`python3 -m unittest` from t/).
 
-2026-09-15 (verus-sole, ROADMAP 16.2, the coverage census's "Sole
+2026-09-15 (verus-sole, ROADMAP 16.2, t/COVERAGE-lifted-785.md's "Sole
 blockers"). The five rows verus alone blocked
 (dafny_exercises_..._exercisesquare_root__mroot1, formalmethods_..._ex1__
 mult, metodos_formais_..._aula_2_ex1__mult, metodos_formais_..._
@@ -1246,7 +1246,7 @@ identical to t/AGREEMENT.md's dafny and verus columns (compared
 programmatically); (3) the conformance suite restricted to verus alone
 (conformance.build_manifest/run_items/grade, verus column only): 66
 PASS / 0 FAIL, matching t/CONFORMANCE.md's verus column exactly; (4) all
-88 dafny_synthesis rows of the coverage census that read verus
+88 dafny_synthesis rows of t/COVERAGE-lifted-785.md that read verus
 verified/refuted, relowered through the identical grade.py call (verus +
 dafny, flake 3): all 88 unchanged (compared programmatically, 0 moved) --
 this is what caught, and this item's fix resolved, the two-row regression
@@ -1285,6 +1285,7 @@ from verifiers import verus as verus_backend     # noqa: E402
 # site asserts it before the value is used, so the y == 0 case is never
 # actually reached by a proof this lowering emits; the operator's own
 # totality is not relied on.
+#
 # The Euclidean defining law `x == (x div y) * y + (x mod y)` is native
 # for the RANGE half (`0 <= x%y`, `x%y < y || x%y < -y`: probe_range.rs,
 # 0 errors unaided) but NOT for the multiplicative half: Verus's default
@@ -1342,6 +1343,7 @@ TYPES = {"int": "int", "bool": "bool", "seq": "Seq<int>",
 # being built") since a *pure* recursive function has no mutable local to
 # fold into -- exactly interp.py's own `_str_split_ws`'s `cur`, turned
 # into a second formal parameter instead of a rebound local.
+#
 # TWO TERMINATION RESIDUALS, measured on 0.2026.08.30.b432e82
 # (probe2.rs): `t_str_find` and `t_str_replace`'s own recursive helpers
 # (`_from`/`_ne`) each need an explicit `if t.len() == 0` FIRST case
@@ -1358,6 +1360,7 @@ TYPES = {"int": "int", "bool": "bool", "seq": "Seq<int>",
 # semantic reason, not a termination one), never hit this. Once each
 # helper carried its own explicit `t.len() == 0` arm, both verified
 # (probe2.rs: 18/18, 0 errors) with no other change.
+#
 # LEMMAS: two of the three committed tasks' ensures need a proof beyond
 # the definitions' own unfolding. `word_count`'s (`r == len(t2.split())`,
 # `t2 := s[0..len(s)]`) needed none: `s.subrange(0, s.len())` and `s` are
@@ -1366,6 +1369,7 @@ TYPES = {"int": "int", "bool": "bool", "seq": "Seq<int>",
 # below to ANY seq-typed `==`, not only `Seq<Seq<int>>` -- see
 # `_assert_seq_eq`'s own docstring), so `split(t2) == split(s)` follows
 # from `t2 == s` by ordinary congruence, no lemma needed.
+#
 # `split_join`'s law, `[c].join(s.split(c)) == s`, is NOT free: it is an
 # induction over `s.len()`, proved once as `t_lemma_split_join_law` (with
 # two small helper lemmas, `t_lemma_split_c_nonempty` -- `split(s,c)`
@@ -1381,6 +1385,7 @@ TYPES = {"int": "int", "bool": "bool", "seq": "Seq<int>",
 # alike) and `emit()` calls the lemma once per distinct (S, C) pair found,
 # as the first statement of the task's own proof fn body, so its `ensures`
 # becomes an established fact for everything after.
+#
 # `count_vowels`'s own loop invariant (`r == count(s[0..i],[97]) + ... +
 # count(s[0..i],[117])`) is the one member NOT closed by a general lemma
 # here: it needs a fact relating `count(x ++ [y], [p])` to `count(x, [p])`
@@ -2352,7 +2357,7 @@ def _has_indexable(e: dict) -> bool:
 def _indexable_outside_nested(e: dict) -> bool:
     """True iff e has an `at` or a `call` that is not inside a nested forall/exists (its bounds included: in the
     emitted Rust they sit inside the nested quantifier too). Those are the only candidates Verus's own trigger
-    inference sees for the enclosing quantifier (2026-10-06)."""
+    inference sees for the enclosing quantifier (PREDICT T15, 2026-10-06)."""
     if "op" in e:
         if e["op"] == "at":
             return True
@@ -2393,7 +2398,7 @@ def _free_vars(e) -> set:
 
 
 def _nested_index_terms(e: dict, v: str, out: dict, inner: frozenset = frozenset(), depth: int = 0) -> None:
-    """the landing (2026-10-06): every `at(X, v)` inside a nested forall/exists (its bounds or its body) whose base X
+    """PREDICT T15 (2026-10-06): every `at(X, v)` inside a nested forall/exists (its bounds or its body) whose base X
     mentions no variable bound between the outer quantifier and the term, X any expression, keyed by its rendering.
     Three AlgoVeri quantifiers were MALFORMED for want of these (Verus: "Could not automatically infer triggers"):
     `A[i]` read only in an inner quantifier's bound `A[i].len()`, `fail[q]` only in an inner bound, and
@@ -2984,7 +2989,7 @@ def expr(e: dict, vty: str | None = None) -> str:
             # visible, auto-inferred candidate) changes.
             trig = "".join(f" #![trigger {expr(t)}]" for t in nested_roots.values())
         elif not _indexable_outside_nested(q["body"]) and _nested_terms_of(q["body"], v):
-            # INDEX ONLY INSIDE A NESTED QUANTIFIER (2026-10-06, Verus guide, "forall and triggers"): the
+            # INDEX ONLY INSIDE A NESTED QUANTIFIER (PREDICT T15, 2026-10-06; Verus guide, "forall and triggers"): the
             # bound variable is read only inside a nested quantifier, in its bounds or under a base that is not a plain
             # variable, so neither `roots` nor `nested_roots` above saw a usable candidate and Verus refused outright.
             # Fires only when the body has no indexable term outside nested quantifiers, i.e. when Verus's own
@@ -3078,6 +3083,7 @@ def expr(e: dict, vty: str | None = None) -> str:
         # rendered by `expr()` like any other operand, so a non-literal
         # element (filter_pos's `seq![s[i]]`) picks up the same suffixing
         # and indexing this file already emits everywhere else.
+        #
         # The empty case is ambiguous one type up (SPEC.md "Nested
         # sequences", 2026-09-10): `[]` typed Seq<Seq<int>> at its own use
         # site must spell "Seq::<Seq<int>>::empty()", not the flat default
@@ -3645,8 +3651,10 @@ def _spec_fn_domain_context(f: dict) -> list[dict]:
     itself already sufficient -- the base-case ite arm already gives
     `k>0` for free in the recursive branch, so only the UPPER bound was
     ever missing)."""
-    dec = f["decreases"]
+    dec = f.get("decreases")
     ctx = []
+    if dec is None:                     # a definition that never calls itself carries no measure to bound by
+        return ctx
     seq_params = {p["name"] for p in f["params"] if p["type"] == "seq"}
     seen: set = set()
     _walk_at_seq_params(f["body"], seq_params, seen)
@@ -4169,6 +4177,7 @@ def _dummy(ty) -> str:
 # first, by nonlinear_arith requiring the divisor nonzero, THEN the bound
 # itself, by nonlinear_arith over that identity plus the ordinary
 # hypotheses) -- verifies with no other assist.
+#
 # `_divisor_bound_target` recognizes the shape from the task's own AST
 # (identical to `lower_fstar.py`'s own function of the same name, kept as
 # a separate copy here since the two lowerings share no code -- see this
@@ -4383,6 +4392,7 @@ def _divisor_bound_verus_defs(task_name: str, plan: dict) -> str:
 # element `src[t_old_ctr]` (index `t_old_ctr`, newly in scope of `k < ctr`
 # now that `ctr` grew by one) needs its OWN proof, since it is not covered
 # by shifting an old witness forward at all.
+#
 # `_verus_closure_carry_target` recognizes this exact shape structurally
 # (never fires on a general shape it cannot fully verify): the invariant's
 # `exists` and the loop body's own `if`/`assign` pair must match a fixed
@@ -4392,6 +4402,7 @@ def _divisor_bound_verus_defs(task_name: str, plan: dict) -> str:
 # the same posture as the nonlinear_arith `bridge` above (never removes an
 # obligation, only closes one Verus's own quantifier heuristics could not
 # find alone) and the (2026-09-11) `ro_facts` addition in `loop()` below.
+#
 # The proof `_verus_closure_carry_assert` emits is a plain case split on
 # `k < t_old_ctr` (the OLD invariant instance, extracted via Verus's
 # `choose` from the OLD `dst`, then carried across the seq `+` append by a
@@ -4920,7 +4931,7 @@ class _V1:
             invs = invs + [{"op": "<=",
                              "args": [{"var": _dbt["i_name"]}, _n_bound]}]
 
-        # GUARD DEFINEDNESS (2026-09-09, the residual the coverage census
+        # GUARD DEFINEDNESS (2026-09-09, the residual COVERAGE-lifted-785.md
         # names: a `div`/`mod` in a loop guard -- `cond` or `decreases` --
         # is a definedness obligation neither of these two shared no-op
         # `TRUE` conditions the check used to require. `cond` and
@@ -5245,7 +5256,7 @@ class _V1:
             f"    decreases ({expr(dec)}) + (2int),\n"
             "{\n"
             + "".join(ln + "\n" for ln in _hof_lemma_lines("    "))   # SPEC.md "Higher-order calls (v1)"
-            + "".join(ln + "\n" for ln in _comp_lemma_lines("    ", loop=True))   # the landing
+            + "".join(ln + "\n" for ln in _comp_lemma_lines("    ", loop=True))   # PREDICT T45
             + f"{old_lets}{carry_pre}{shadows}{guard_pre}"
             f"    if {expr(cond)} {{\n"
             + "\n".join(inner) + "\n"
@@ -5374,13 +5385,14 @@ class _V1:
         for f in task.get("spec_funs", []):
             fps = ", ".join(f"{p['name']}: {_vty(p['type'])}"
                             for p in f["params"])
-            if defined(f["decreases"]) != TRUE:
+            if "decreases" in f and defined(f["decreases"]) != TRUE:
                 raise NotImplementedError(
                     "verus: definedness obligation on spec_fun decreases "
                     "not implemented")
+            measure = f"    decreases {expr(f['decreases'])},\n" if "decreases" in f else ""
             spec_blocks.append(
                 f"spec fn {f['name']}({fps}) -> {_vty(f['result'])}\n"
-                f"    decreases {expr(f['decreases'])},\n"
+                f"{measure}"
                 "{\n"
                 f"    {expr(f['body'])}\n"
                 "}\n")
@@ -5744,6 +5756,7 @@ class _V1:
         # `_uses_strlib` instead of `_has_nonlinear` so a task with no
         # string-library call (all 23 previously committed/measured
         # non-string tasks) never calls `_sym` here either.
+        #
         # REAL ONLY (measured 2026-09-11): a TWIN whose ensures reads
         # false at this same ground literal turned this bridge's own
         # assert into the failure -- verus reports "expression simplifies
@@ -5773,7 +5786,7 @@ class _V1:
             req = ("    requires\n        "
                    + ",\n        ".join(expr(e) for e in reqs) + ",\n")
         ens = ",\n        ".join(expr(e) for e in enss)
-        # a structurally recursive task's postcondition over a structurally recursive spec fn needs the
+        # PREDICT T60: a structurally recursive task's postcondition over a structurally recursive spec fn needs the
         # constructed value's children unfolded too (`bst(Node(x, Leaf, Leaf), lo, hi)` reads `bst(Leaf, ..)`), one
         # level past Verus's default, the same reveal a lemma's induction step gets above; it adds no assumption
         fuel = "".join(f"    reveal_with_fuel({f}, 2);\n" for f in _structural_rec_funs()
@@ -5806,6 +5819,7 @@ class _V1:
 # kernel evaluation with no SMT fallback, that the obligation fails there.
 # verifiers/verus.py mints REFUTED only when the kernel accepts that goal,
 # and a file carrying the goal's name can never mint VERIFIED.
+#
 # What each witness kind certifies:
 #   value (_ens True only): requires holds at the witness input and the
 #     ensures conjunction is false at (input, r := the twin's measured
@@ -5989,7 +6003,7 @@ def _gint(e) -> int:
     """Ground int value of a quantifier bound after witness substitution.
     Deliberately strict: anything unexpected raises, which refuses the
     certificate rather than emitting a wrong one."""
-    e = _proj_ground(e)              # first, so `fst(pair(1, s))` reaches the literal case below
+    e = _proj_ground(e)              # PREDICT T71: first, so `fst(pair(1, s))` reaches the literal case below
     if isinstance(e, dict) and "int" in e:
         return e["int"]
     op = e.get("op") if isinstance(e, dict) else None
@@ -6030,7 +6044,7 @@ def _gint(e) -> int:
 
 
 def _proj_ground(e):
-    """`fst`/`snd` of a pair literal is that component. A heap twin's certificate grounds the rewrite's
+    """PREDICT T53: `fst`/`snd` of a pair literal is that component. A heap twin's certificate grounds the rewrite's
     `t_out` as `pair(value, seq)`, so a bound such as `len(snd(t_out))` reaches `_gint` as a projection of a literal;
     anything that is not a literal pair is left as it is, and `_gint` still refuses it."""
     while (isinstance(e, dict) and e.get("op") in ("fst", "snd") and len(e.get("args", ())) == 1
@@ -6356,7 +6370,7 @@ def _undef_obligation(task: dict, twin_body: list, m: dict, names: dict,
     mechanism is not special-cased to the first) sees the concrete values
     of every name the twin already bound.
 
-    LOOP AND IF BODIES (2026-09-10, the coverage census's own
+    LOOP AND IF BODIES (2026-09-10, t/COVERAGE-lifted-785.md's own
     residual, this file's "LEFT, BY NAME" module-docstring entry above,
     and the v1def fuzz family's 033/049/143): this walk used to give up
     (return None) the moment it met an `if` or `while` BEFORE the failing
@@ -6635,7 +6649,7 @@ _VLIB["sort"] = (
 # SPEC.md "Comprehensions (v1)" (2026-10-06): one `spec fn` per comprehension, recursing from the end, with a broadcast
 # lemma carrying the ensures its shape admits (as t_rev_spec does), revealed with fuel inside the proof fn.
 _COMP_INDEX: dict = {}
-# the shapes some instance of which ranges over a prefix `s[0..e]`; each gets two more broadcast lemmas,
+# PREDICT T45: the shapes some instance of which ranges over a prefix `s[0..e]`; each gets two more broadcast lemmas,
 # `t_comp{k}_prefix` (the prefix of length n is the one of length n - 1 and the element at n - 1, under the subrange
 # extensionality that the drop_last recursion needs at every step) and `t_comp{k}_whole` (the prefix of the full
 # length is the whole), so a loop invariant over `s[0..i]` meets a postcondition over `s` (count_evens_skip)
@@ -6650,7 +6664,7 @@ def _comp_key(e: dict) -> str:
     element types would collide here (not seen; the first registered source types the function)."""
     import json
     c = e["comp"]
-    ren = {c["var"]: {"var": "$0"}}                  # up to the bound variable's name, as lower_lean's
+    ren = {c["var"]: {"var": "$0"}}                  # PREDICT T52: up to the bound variable's name, as lower_lean's
     return json.dumps({"cond": subst(c["cond"], ren), "body": subst(c["body"], ren), "range": "lo" in c},
                       sort_keys=True)
 
@@ -6762,7 +6776,7 @@ def _comp_blocks(task: dict, body: list) -> list:
             f"pub broadcast proof fn t_comp{k}_spec({', '.join(params)})\n    ensures {', '.join(ens)},\n    decreases {size},\n"
             f"{{ if !({base}) {{ {rec_call}; }} }}\n")
         if key in _COMP_PREFIX and "seq" in c:
-            # the landing (`_COMP_PREFIX`): the element at n - 1 named by a placeholder, as the filter's ensures does
+            # PREDICT T45 (`_COMP_PREFIX`): the element at n - 1 named by a placeholder, as the filter's ensures does
             fv_args = "".join(f", {n}" for n in fvs)
             fv_params = "".join(f", {n}: {_vty(hints[n])}" for n in fvs)
             at_last = {"op": "at", "args": [{"var": "t_s"}, {"op": "-", "args": [{"var": "t_n"}, {"int": 1}]}]}
@@ -7059,7 +7073,7 @@ def _hof_blocks(task: dict, body: list) -> list:
 
 def _comp_lemma_lines(ind: str, loop: bool = False) -> list:
     """The fuel and `broadcast use` lines a proof fn needs for the registered comprehensions. A loop's helper gets
-    them only for a shape over a prefix (`_COMP_PREFIX`): its invariant is where a prefix is read."""
+    them only for a shape over a prefix (PREDICT T45, `_COMP_PREFIX`): its invariant is where a prefix is read."""
     out = []
     for key, (k, _node) in sorted(_COMP_INDEX.items(), key=lambda kv: kv[1][0]):
         if loop and key not in _COMP_PREFIX:
@@ -7293,7 +7307,7 @@ def _ctor_depth(e) -> int:
 def _ground_certificate_comps(e, budget: list):
     """Expand unregistered ground integer comprehensions, retaining every filter
     and mapped expression for compute_only to check. Registered shapes keep
-    their existing proof route.
+    their existing proof route. See PREDICT-2026-10-10-certificate-sweep.md.
     """
     if isinstance(e, list):
         return [_ground_certificate_comps(v, budget) for v in e]
@@ -7419,11 +7433,11 @@ def lower(task: dict, body: list, witness: dict | None = None) -> str:
     # SPEC.md "Exact rationals (v1)" (2026-10-06): Verus has no reals; a task that names one abstains by name
     tshape.abstain_on_reals(task, body, "verus")
     tshape.abstain_on_library(task, body, "verus", carried=VERUS_LIB)   # SPEC.md "The library (v1)" (2026-10-06)
-    # `break` and `continue` rewritten into `return` and branches (tshape.desugar_exits); `while true` stays
-    task, body = tshape.desugar_par(task, body)          # a parallel loop as its sequential `for`
+    # PREDICT T44: `break` and `continue` rewritten into `return` and branches (tshape.desugar_exits); `while true` stays
+    task, body = tshape.desugar_par(task, body)          # PREDICT T47: a parallel loop as its sequential `for`
     task, body = tshape.desugar_exits(task, body)
-    task, body, witness = tshape.desugar_heap(task, body, witness)   # copy-in/copy-out
-    tshape.abstain_on_floats(task, body, "verus")        # SPEC.md "Floats (v1)" 
+    task, body, witness = tshape.desugar_heap(task, body, witness)   # PREDICT T53: copy-in/copy-out
+    tshape.abstain_on_floats(task, body, "verus")        # SPEC.md "Floats (v1)" (PREDICT T48)
     _comp_register(task, body)   # SPEC.md "Comprehensions (v1)" (2026-10-06)
     # NAMES (2026-09-11, ROADMAP 13.2): sanitize away any identifier that
     # collides with a Verus/Rust reserved word, before either lowering
