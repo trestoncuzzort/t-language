@@ -43,7 +43,7 @@ jobs:
           start=$(date +%s)
           docker run --rm -e T_MIN_KERNELS=7 --entrypoint sh t-proof-engine -c '
             mkdir /tmp/smoke && cp t/tasks/abs.t t/tasks/gcd.t t/tasks/reverse.t t/tasks/swap_at.t /tmp/smoke/ &&
-            t verify /tmp/smoke --jobs 2 --flake 1 --table /tmp/smoke.md; rc=$?; cat /tmp/smoke.md; exit $rc'
+            t verify /tmp/smoke --jobs 2 --flake 3 --table /tmp/smoke.md; rc=$?; cat /tmp/smoke.md; exit $rc'
           echo "verify took $(( $(date +%s) - start )) s"
           docker images t-proof-engine
 
