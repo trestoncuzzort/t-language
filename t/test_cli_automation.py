@@ -31,11 +31,15 @@ class DirectoryVerificationTests(unittest.TestCase):
         env_patch = patch.dict(os.environ, {"T_MIN_KERNELS": "2"})   # TestCase.enterContext needs Python 3.11
         env_patch.start()
         self.addCleanup(env_patch.stop)
-        self.probe = self.enterContext(patch.object(
+        probe_patch = patch.object(
             cli.run_par, "probe_backends", return_value=(
                 [("dafny", "test 1"), ("lean", "test 1"), ("rocq", "ABSENT: unavailable")],
-                [("dafny", None, "dfy"), ("lean", None, "lean")])))
-        self.enterContext(patch.object(cli.run_par, "lower_and_dispatch", self.dispatch))
+                [("dafny", None, "dfy"), ("lean", None, "lean")]))
+        self.probe = probe_patch.start()
+        self.addCleanup(probe_patch.stop)
+        dispatch_patch = patch.object(cli.run_par, "lower_and_dispatch", self.dispatch)
+        dispatch_patch.start()
+        self.addCleanup(dispatch_patch.stop)
 
     def dispatch(self, paths, present, jobs, flake):
         self.calls.append((paths, present, jobs, flake))
