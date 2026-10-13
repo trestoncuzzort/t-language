@@ -28,7 +28,9 @@ class DirectoryVerificationTests(unittest.TestCase):
         self.calls = []
         self.original_out = harness.OUT
         self.addCleanup(setattr, harness, "OUT", self.original_out)
-        self.enterContext(patch.dict(os.environ, {"T_MIN_KERNELS": "2"}))
+        env_patch = patch.dict(os.environ, {"T_MIN_KERNELS": "2"})   # TestCase.enterContext needs Python 3.11
+        env_patch.start()
+        self.addCleanup(env_patch.stop)
         self.probe = self.enterContext(patch.object(
             cli.run_par, "probe_backends", return_value=(
                 [("dafny", "test 1"), ("lean", "test 1"), ("rocq", "ABSENT: unavailable")],
