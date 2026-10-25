@@ -31,3 +31,26 @@ Before the repaired kernel runs, predict:
 The full column and native proof tests run on GitHub. Local checks cover syntax, name hygiene and printer
 behavior only. Results, including failures, will be appended here. No dawnr grading pin changes until the
 engine repair is validated; changed evaluator code will need a fresh matched dawnr baseline and control.
+
+## Result, 2026-10-25
+
+All four predictions held in [container run 40146610056](https://github.com/trestoncuzzort/t-language/actions/runs/40146610056),
+at repair revision `2cd6a8c43eb062b84d06d10d57251a6068bf8a82` against base
+`5828ed07aaba864a4dc4ae06ab20a4a01a5d686b`.
+
+1. The fresh nonzero example is verified/refuted with three agreeing repetitions per side; its kernel-printed
+   certificate passes the unchanged negation guard. All four binding tests ran and passed.
+2. All seven existing adapter-control tests ran and passed, including the three native negative probes for an
+   unrelated certificate, a vacuous precondition and an inconsistent definition. No test was skipped.
+3. Both full columns cover exactly the same 114 task names, matching every registered task file. Every cell is
+   unchanged: 71 verified/refuted, 42 abstain/abstain and one timeout/refuted (`double_all`). There are zero
+   agreement gains and zero losses in this column; the new regression supplies the positive repair evidence.
+4. The four-task control (`abs`, `gcd`, `reverse`, `swap_at`) remains 28 verified/refuted cells across all seven
+   kernels, with three repetitions per side.
+
+The artifact digest, complete column tables, native-control log and four-task table are retained in
+[`t/evidence/2026-10-25-framac-certificate-binding`](evidence/2026-10-25-framac-certificate-binding/receipt.json).
+The adapter file is byte-identical to the base. The Ubuntu/macOS Python 3.10/3.12 unit matrix also passed in
+[run 40146638952](https://github.com/trestoncuzzort/t-language/actions/runs/40146638952).
+This is a lowering repair with its existing-column behavior preserved. It changes neither the installed
+`AGREEMENT.md` nor README counts; downstream model results still require matched controls with this evaluator.
