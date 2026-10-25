@@ -4,6 +4,11 @@ name: container
 # every kernel. The image is built and checked here, not published.
 on:
   workflow_dispatch:
+    inputs:
+      framac_column:
+        description: 'Run certificate controls and both full Frama-C columns'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths: [Dockerfile, .dockerignore, .github/workflows/container.yml]
@@ -11,10 +16,13 @@ on:
 permissions:
   contents: read
 
+env:
+  FRAMAC_CONTROL_BASE: 5828ed07aaba864a4dc4ae06ab20a4a01a5d686b
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 330
     steps:
       - name: check out the repository
         uses: actions/checkout@v4
@@ -29,6 +37,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: build the image
+        id: image
         # the layers are cached between runs, so a change to t alone rebuilds only the last layer
         uses: docker/build-push-action@v6
         with:
@@ -46,6 +55,56 @@ jobs:
             t verify /tmp/smoke --jobs 2 --flake 3 --table /tmp/smoke.md; rc=$?; cat /tmp/smoke.md; exit $rc'
           echo "verify took $(( $(date +%s) - start )) s"
           docker images t-proof-engine
+
+      - name: unchanged negative controls and the new certificate proof
+        if: ${{ !cancelled() && inputs.framac_column && steps.image.outputs.imageid != '' }}
+        run: |
+          mkdir -p out/framac-binding
+          chmod a+rwx out/framac-binding
+          docker run --rm --memory=13g -e T_RUN_NATIVE_CERTIFICATE_TESTS=1 \
+            -e PYTHONDONTWRITEBYTECODE=1 --entrypoint bash t-proof-engine -c \
+            'python3 t/test_framac_certificate_binding.py && python3 t/test_framac_adapter_controls.py' \
+            > out/framac-binding/native-controls.log 2>&1
+
+      - name: check out the registered column baseline
+        if: ${{ !cancelled() && inputs.framac_column && steps.image.outputs.imageid != '' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FRAMAC_CONTROL_BASE }}
+          path: baseline-engine
+
+      - name: full Frama-C column before the repair
+        if: ${{ !cancelled() && inputs.framac_column && steps.image.outputs.imageid != '' }}
+        run: |
+          mkdir -p out/framac-binding && chmod a+rwx out/framac-binding
+          docker run --rm --memory=13g -e T_MIN_KERNELS=1 -e PYTHONDONTWRITEBYTECODE=1 \
+            -v "$PWD/baseline-engine:/control:ro" -v "$PWD/out/framac-binding:/evidence" \
+            -w /control --entrypoint bash t-proof-engine -c '
+              status=0
+              python3 t/cli.py verify t/tasks --kernels framac --jobs 1 --flake 3 \
+                --out /tmp/framac-base --table /evidence/baseline.md || status=$?
+              test "$status" -le 1 && test -s /evidence/baseline.md' \
+            > out/framac-binding/baseline.log 2>&1
+
+      - name: full Frama-C column with the repair
+        if: ${{ !cancelled() && inputs.framac_column && steps.image.outputs.imageid != '' }}
+        run: |
+          mkdir -p out/framac-binding && chmod a+rwx out/framac-binding
+          docker run --rm --memory=13g -e T_MIN_KERNELS=1 -e PYTHONDONTWRITEBYTECODE=1 \
+            -v "$PWD/out/framac-binding:/evidence" --entrypoint bash t-proof-engine -c '
+              status=0
+              python3 t/cli.py verify t/tasks --kernels framac --jobs 1 --flake 3 \
+                --out /tmp/framac-repair --table /evidence/repaired.md || status=$?
+              test "$status" -le 1 && test -s /evidence/repaired.md' \
+            > out/framac-binding/repaired.log 2>&1
+
+      - name: retain the column measurements
+        if: ${{ always() && inputs.framac_column }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: framac-certificate-binding
+          path: out/framac-binding
+          retention-days: 30
 
       - name: diagnose a failed cell
         if: failure()
